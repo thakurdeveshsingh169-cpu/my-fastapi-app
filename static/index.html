@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>𝕯𝖊𝕾𝖍 𝗔𝐢 𝙱𝚢 𝐃𝐒𝐑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 80px;
+    }
+    .header {
+      background-color: #fff6b2;
+      padding: 30px 25px;
+      border-radius: 25px;
+      margin-top: 10px;
+      margin: auto;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header h2 {
+      font-size: 20px;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      margin: 0;
+    }
+    .chat-wrapper {
+      width: 90%;
+      max-width: 800px;
+      padding: 20px 10px 10px 10px;
+      box-sizing: border-box;
+      margin: 0 auto;
+      overflow-y: auto;
+      max-height: calc(100vh - 160px);
+    }
+    #answer {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: black;
+      white-space: pre-wrap;
+    }
+    #youtube-results {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .youtube-video {
+      width: 180px;
+      cursor: pointer;
+    }
+    .youtube-video img {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .youtube-video p {
+      font-size: 14px;
+      color: #333;
+      margin: 5px 0 0;
+    }
+    img.generated-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+      display: block;
+      margin: 10px auto;
+    }
+    .download-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #bb00ff;
+      font-size: 15px;
+      text-decoration: underline;
+    }
+    .mobile-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      padding: 8px 0;
+      z-index: 100;
+    }
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .rgb-border {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(270deg, #ffd6d6, #e3fbff, #f0ffa4, #d5ff97,rgba(164, 209, 255, 0.964),rgb(168, 160, 255),rgba(255, 162, 236, 0.799));
+      background-size: 600% 600%;
+      animation: rgbFlow 5s linear infinite alternate;
+      padding: 4px;
+      border-radius: 30px;
+      box-shadow: 0 0 12px 4px rgba(252, 255, 159, 0.192);
+    }
+    @keyframes rgbFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-radius: 30px;
+      padding: 0 10px;
+      height: 45px;
+      width: 259px;
+    }
+    #question {
+      flex: 1;
+      padding: 12px 10px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      background: transparent;
+    }
+    /* Floating Mic Button like ChatGPT */
+    #micButton {
+      background-color: #dcdcdce6;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      
+      position: relative;
+      left: -10px;
+    }
+    #micButton svg {
+      width: 20px;
+      height: 25px;
+      fill: rgb(0, 0, 0);
+    }
+    #micButton.active {
+      animation: micPulse 1s infinite;
+    }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgb(6, 151, 255); }
+      70% { box-shadow: 0 0 0 10px rgba(13, 109, 253, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(13, 109, 253, 0); }
+    }
+    #searchBtn {
+      width: 25px;
+      height: 50px;
+      border-radius: 40%;
+      border: none;
+      background-color: black;
+      color: white;
+      font-size: 37px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+    #loading {
+      margin: 10px;
+      font-size: 24px;
+      height: 25px;
+      text-align: center;
+    }
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: black;
+      border-radius: 50%;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+    /* Scroll-to-bottom arrow above search box, right side */
+    #scrollToBottomBtn {
+      position: fixed;
+      bottom: 90px;
+      right: 270px;
+      background-color: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      font-size: 30px;
+      padding: 7px 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+      display: none;
+      z-index: 150;
+    }
+  </style>
+</head>
+<body>
+  
+
+  <div class="chat-wrapper" id="chatWrapper">
+    <div class="header">
+    <h2>𝕯𝖊𝕾𝖍 𝗔𝐢</h2>
+  </div>
+    <div id="answer"></div>
+
+    <!-- 🔹 PDF Button added here -->
+    <button onclick="downloadAndOpenPDF()" style="margin-top:10px; background:#000; color:#fff; padding:8px 15px; border:none; border-radius:8px; cursor:pointer;">
+      ⬇ Download Answer as PDF
+    </button>
+
+    <div id="youtube-results"></div>
+    <div id="loading"></div>
+  </div>
+
+  <!-- Scroll to bottom button -->
+  <button id="scrollToBottomBtn">⬇</button>
+
+  <div class="mobile-bar">
+    <div class="search-wrapper">
+      <div class="rgb-border">
+        <div class="input-container">
+          <input type="text" id="question" placeholder="Ask to 𝕯𝖊𝕾𝖍 𝗔𝐢... " onfocus="scrollIntoViewIfNeeded()">
+          <button id="micButton" onclick="startSpeech()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2z"/>
+              <path d="M19 11h2a9 9 0 0 1-18 0h2a7 7 0 0 0 14 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button id="searchBtn" onclick="askQuestion()">↑</button>
+    </div>
+  </div>
+
+  <script>
+    let lastAnswer = "";
+    let autoScroll = true;
+    const chatWrapper = document.getElementById('chatWrapper');
+    const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
+
+    // Show/hide arrow based on scroll
+    chatWrapper.addEventListener('scroll', () => {
+      const atBottom = chatWrapper.scrollHeight - chatWrapper.scrollTop <= chatWrapper.clientHeight + 50;
+      autoScroll = atBottom;
+      scrollToBottomBtn.style.display = atBottom ? 'none' : 'block';
+    });
+
+    scrollToBottomBtn.addEventListener('click', () => {
+      chatWrapper.scrollTop = chatWrapper.scrollHeight;
+      autoScroll = true;
+      scrollToBottomBtn.style.display = 'none';
+    });
+
+    async function askQuestion() {
+      const questionInput = document.getElementById('question');
+      const question = questionInput.value;
+      const answerDiv = document.getElementById('answer');
+      const loading = document.getElementById('loading');
+      const youtubeResults = document.getElementById('youtube-results');
+
+      answerDiv.innerHTML = "";
+      youtubeResults.innerHTML = "";
+      loading.innerHTML = '<div class="dot"></div>';
+
+      const response = await fetch("http://127.0.0.1:8000/ask", {
+
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question, last: lastAnswer })
+      });
+
+      const data = await response.json();
+      loading.innerHTML = "";
+
+      if (data.image_url) {
+        answerDiv.innerHTML = `
+          <div>Here is your HD image:</div>
+          <a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>
+        `;
+        lastAnswer = "";
+      } else {
+        const renderedHTML = marked.parse(data.answer || data.error || "No response received.");
+        typeWriterHTML(renderedHTML, answerDiv, async () => {
+          if (window.MathJax) await MathJax.typesetPromise();
+        });
+        lastAnswer = data.answer || "";
+      }
+
+      if (data.youtube_videos && Array.isArray(data.youtube_videos)) {
+        data.youtube_videos.forEach(video => {
+          const div = document.createElement('div');
+          div.className = 'youtube-video';
+          div.innerHTML = `
+            <a href="https://www.youtube.com/watch?v=${video.videoId}" target="_blank">
+              <img src="${video.thumbnail}" alt="Video thumbnail">
+              <p>${video.title}</p>
+            </a>
+          `;
+          youtubeResults.appendChild(div);
+        });
+      }
+
+      questionInput.value = "";
+      questionInput.blur();
+    }
+
+    function typeWriterHTML(html, element, callback) {
+      let i = 0;
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      const content = temp.innerHTML;
+
+      function typing() {
+        if (i < content.length) {
+          element.innerHTML = content.substring(0, i + 1);
+          if (autoScroll) chatWrapper.scrollTop = chatWrapper.scrollHeight;
+          i++;
+          setTimeout(typing, 10);
+        } else if (callback) callback();
+      }
+      typing();
+    }
+
+    function scrollIntoViewIfNeeded() {
+      const el = document.getElementById('question');
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+    }
+
+    function startSpeech() {
+      const micBtn = document.getElementById('micButton');
+      micBtn.classList.add('active');
+
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'hi-IN';
+      recognition.start();
+      recognition.onresult = function(event) {
+        micBtn.classList.remove('active');
+        document.getElementById('question').value = event.results[0][0].transcript;
+        askQuestion();
+      };
+      recognition.onerror = function(event) {
+        micBtn.classList.remove('active');
+        alert("Voice recognition error: " + event.error);
+      };
+      recognition.onend = function() {
+        micBtn.classList.remove('active');
+      };
+    }
+
+    /* 🔹 PDF Logic */
+    function downloadAndOpenPDF() {
+      fetch("/download-pdf")
+      .then(response => {
+        if (!response.ok) throw new Error("Network error");
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+
+        // Auto download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "answer.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Open in new tab
+        window.open(url, "_blank");
+      })
+      .catch(err => console.error("Error downloading PDF:", err));
+    }
+  </script>
+</body>
+</html>
