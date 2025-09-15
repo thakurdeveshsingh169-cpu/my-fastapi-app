@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>𝕯𝖊𝕾𝖍 𝗔𝐢 𝙱𝚢 𝐃𝐒𝐑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\👦', '\👦']],
+        displayMath: [['$$', '$$'], ['\👦', '\👦']]
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 100px;
+    }
+
+    .header {
+      background-color: #fff6b2;
+      padding: 30px 25px;
+      border-radius: 25px;
+      margin-top: 10px;
+      margin: auto;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header h2 {
+      font-size: 20px;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .chat-wrapper {
+      width: 90%;
+      max-width: 800px;
+      padding: 20px 10px 10px 10px;
+      box-sizing: border-box;
+      margin: 0 auto;
+      overflow-y: auto;
+      max-height: calc(100vh - 160px);
+    }
+
+    #answer {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: black;
+      white-space: pre-wrap;
+    }
+
+    #youtube-results {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .youtube-video {
+      width: 180px;
+      cursor: pointer;
+    }
+    .youtube-video img { width: 100%; border-radius: 12px; }
+    .youtube-video p { font-size: 14px; color: #333; margin: 5px 0 0; }
+
+    img.generated-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+      display: block;
+      margin: 10px auto;
+    }
+
+    .download-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #bb00ff;
+      font-size: 15px;
+      text-decoration: underline;
+    }
+
+    /* --- New AI Loading Circle --- */
+    #loading {
+      margin: 20px;
+      text-align: center;
+    }
+
+    .circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 30px 10px #ff00ff;
+      animation: pulse 0.8s infinite alternate;
+      margin: auto;
+    }
+    .circle span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      font-family: 'Times New Roman', cursive;
+    }
+    @keyframes pulse {
+      from { box-shadow: 0 0 15px 5px #ff00ff; }
+      to   { box-shadow: 0 0 50px 15px #ff00ff; }
+    }
+
+    .replying {
+      margin-top: 152px;
+      font-size: 18px;
+      font-weight: bold;
+      font-family: 'Times New Roman', serif;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .replying span {
+      animation: blink 1s infinite steps(1);
+    }
+    .replying span:nth-child(2) { animation-delay: 0.3s; }
+    .replying span:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes blink {
+      0%, 20% { opacity: 0; }
+      40%,100% { opacity: 1; }
+    }
+
+    /* --- Mobile bar and input --- */
+    .mobile-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      padding: 8px 0;
+      z-index: 100;
+    }
+    .search-wrapper { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .rgb-border {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(270deg, #ffd6d6,#e3fbff,#f0ffa4,#d5ff97,rgba(164,209,255,0.964),rgb(168,160,255),rgba(255,162,236,0.799));
+      background-size: 600% 600%;
+      animation: rgbFlow 5s linear infinite alternate;
+      padding: 4px;
+      border-radius: 30px;
+      box-shadow: 0 0 12px 4px rgba(252,255,159,0.192);
+    }
+    @keyframes rgbFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-radius: 30px;
+      padding: 0 10px;
+      height: 45px;
+      width: 259px;
+    }
+    #question {
+      flex: 1;
+      padding: 12px 10px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      background: transparent;
+    }
+
+    #micButton {
+      background-color: #dcdcdce6;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      position: relative;
+      left: -10px;
+    }
+    #micButton svg { width: 20px; height: 25px; fill: rgb(0,0,0); }
+    #micButton.active { animation: micPulse 1s infinite; }
+    @keyframes micPulse {
+      0% { box-shadow: 0 0 0 0 rgb(6,151,255); }
+      70% { box-shadow: 0 0 0 10px rgba(13,109,253,0); }
+      100% { box-shadow: 0 0 0 0 rgba(13,109,253,0); }
+    }
+
+    #searchBtn {
+      width: 25px;
+      height: 50px;
+      border-radius: 40%;
+      border: none;
+      background-color: black;
+      color: white;
+      font-size: 37px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+
+    #scrollToBottomBtn {
+      position: fixed;
+      bottom: 90px;
+      right: 270px;
+      background-color: black;
+      color: white;
+      font-size: 30px;
+      padding: 7px 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      z-index: 150;
+    }
+    #pauseResumeBtn, #pdfBtn {
+      position: fixed;
+      bottom: 80px;
+      width: 30px;
+      height: 30px;
+      border-radius: 40%;
+      background-color: #dbdbdb;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s, transform 0.1s;
+      z-index: 200;
+    }
+    #pauseResumeBtn { right: 450px; }
+    #pdfBtn {
+      right: 680px;
+      background: #000; color:#fff;
+      font-size: 12px; padding: 17px 55px;
+      white-space: nowrap; border-radius: 1%;
+    }
+    #pauseResumeBtn:hover { background-color:#fff; transform:scale(1.05); }
+    #pauseResumeBtn:active { transform:scale(0.95); }
+    #pdfBtn:hover { opacity:0.9; }
+  </style>
+</head>
+<body>
+  <div class="chat-wrapper" id="chatWrapper">
+    <div class="header"><h2>𝕯𝖊𝕾𝖍 𝗔𝐢</h2></div>
+    <div id="answer"></div>
+    <div id="youtube-results"></div>
+    <div id="loading"></div>
+  </div>
+
+  <button id="scrollToBottomBtn">⬇</button>
+  <button id="pauseResumeBtn">⏸</button>
+  <button id="pdfBtn" onclick="downloadAndOpenPDF()">Make PDF of Ans</button>
+
+  <div class="mobile-bar">
+    <div class="search-wrapper">
+      <div class="rgb-border">
+        <div class="input-container">
+          <input type="text" id="question" placeholder="Ask to 𝕯𝖊𝕾𝖍 𝗔𝐢..." onfocus="scrollIntoViewIfNeeded()">
+          <button id="micButton" onclick="startSpeech()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2z"/>
+              <path d="M19 11h2a9 9 0 0 1-18 0h2a7 7 0 0 0 14 0z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button id="searchBtn" onclick="askQuestion()">↑</button>
+    </div>
+  </div>
+
+  <script>
+    let lastAnswer = "", autoScroll = true, isPaused = false, typingInterval;
+    const chatWrapper=document.getElementById('chatWrapper'),
+          scrollToBottomBtn=document.getElementById('scrollToBottomBtn'),
+          pauseBtn=document.getElementById('pauseResumeBtn'),
+          pdfBtn=document.getElementById('pdfBtn');
+
+    chatWrapper.addEventListener('scroll',()=>{
+      const atBottom=chatWrapper.scrollHeight-chatWrapper.scrollTop<=chatWrapper.clientHeight+50;
+      autoScroll=atBottom; scrollToBottomBtn.style.display=atBottom?'none':'block';
+    });
+    scrollToBottomBtn.addEventListener('click',()=>{chatWrapper.scrollTop=chatWrapper.scrollHeight;autoScroll=true;scrollToBottomBtn.style.display='none';});
+    pauseBtn.addEventListener('click',()=>{isPaused=!isPaused;pauseBtn.innerHTML=isPaused?'▶':'⏸';});
+
+    async function askQuestion(){
+      const q=document.getElementById('question').value.trim();
+      if(!q)return;
+      const answerDiv=document.getElementById('answer'),
+            loading=document.getElementById('loading'),
+            youtube=document.getElementById('youtube-results');
+      answerDiv.innerHTML=""; youtube.innerHTML="";
+      loading.innerHTML='<div class="circle"><span>𝕯𝖊𝕾𝖍 𝗔𝐢</span></div><div class="replying">𝐑𝐞𝐩𝐥𝐲𝐢𝐧𝐠 𝐒𝐨𝐨𝐧<span>.</span><span>.</span><span>.</span></div>';
+      pauseBtn.style.display='flex'; pdfBtn.style.display='flex';
+
+      try{
+        const res=await fetch("https://desh-ai.onrender.com/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q})});
+        if(!res.ok)throw new Error(`Server error: ${res.status}`);
+        const data=await res.json();
+        loading.innerHTML="";
+
+        if(data.image_url){
+          answerDiv.innerHTML=`<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>`;
+          lastAnswer="";
+        }else{
+          const rendered=marked.parse(data.answer||"No response.");
+          typeWriterHTML(rendered,answerDiv,async()=>{if(window.MathJax)await MathJax.typesetPromise();pauseBtn.style.display='none';});
+          lastAnswer=data.answer||"";
+        }
+
+        if(data.youtube_videos) data.youtube_videos.forEach(v=>{
+          const div=document.createElement('div');
+          div.className='youtube-video';
+          div.innerHTML=`<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>`;
+          youtube.appendChild(div);
+        });
+
+      }catch(e){loading.innerHTML="";answerDiv.innerHTML="Error fetching answer.";console.error(e);pauseBtn.style.display='none';}
+      document.getElementById('question').value="";
+    }
+
+    function typeWriterHTML(html,el,cb){
+      let i=0,temp=document.createElement("div");temp.innerHTML=html;const content=temp.innerHTML;
+      (function typing(){if(!isPaused&&i<content.length){el.innerHTML=content.substring(0,i+1);if(autoScroll)chatWrapper.scrollTop=chatWrapper.scrollHeight;i++;typingInterval=setTimeout(typing,10);}else if(i<content.length){typingInterval=setTimeout(typing,50);}else if(cb)cb();})();}
+
+    function scrollIntoViewIfNeeded(){setTimeout(()=>document.getElementById('question').scrollIntoView({behavior:'smooth',block:'center'}),200);}
+    function startSpeech(){
+      const micBtn=document.getElementById('micButton');micBtn.classList.add('active');
+      const rec=new(window.SpeechRecognition||window.webkitSpeechRecognition)();rec.lang='hi-IN';rec.start();
+      rec.onresult=e=>{micBtn.classList.remove('active');document.getElementById('question').value=e.results[0][0].transcript;askQuestion();};
+      rec.onerror=e=>{micBtn.classList.remove('active');alert("Voice recognition error: "+e.error);};
+      rec.onend=()=>micBtn.classList.remove('active');
+    }
+    function downloadAndOpenPDF(){
+      fetch("https://desh-ai.onrender.com/download-pdf").then(r=>{if(!r.ok)throw new Error("Network error");return r.blob();}).then(b=>{
+        const url=URL.createObjectURL(b);const a=document.createElement("a");a.href=url;a.download="answer.pdf";document.body.appendChild(a);a.click();document.body.removeChild(a);window.open(url,"_blank");
+      }).catch(e=>console.error("PDF error:",e));
+    }
+  </script>
+</body>
+</html>
