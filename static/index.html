@@ -121,13 +121,13 @@
   display: inline-block;
   font-weight: bold;
   color: #000000;
-  text-shadow: 0 0 8px #000000, 0 0 20px #010101;
-  animation: blinkWord 0.9s infinite steps(1);
+  text-shadow: 0 0 8px #00000000, 0 0 20px #01010100;
+  animation: blinkWord 0.78s infinite steps(1);
 }
 
 @keyframes blinkWord {
   0%, 20% { opacity: 0.2; text-shadow: none; }
-  40%, 100% { opacity: 1; text-shadow: 0 0 8px #000000, 0 0 16px #000000,0 0 23px #000000 }
+  40%, 100% { opacity: 1; text-shadow: 0 0 8px #000000, 0 0 16px #ff1389c6,0 0 23px #00000000 }
 }
 
     .replying span { animation: blink 0.57s infinite steps(1); }
@@ -225,7 +225,7 @@
       border: none;
       background-color: black;
       color: white;
-      font-size: 25px;
+      font-size: 37px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -246,7 +246,7 @@
     }
 
     #scrollToBottomBtn {
-      bottom: 140px;
+      bottom: 155px;
       right: 20px;
       width: 40px;
       height: 55px;
@@ -272,8 +272,8 @@
       right: 750px;
       background-color: black;
       color: white;
-      font-size: 13px;
-      padding: 14px 30px;
+      font-size: 10px;
+      padding: 11px 16px;
       border-radius: 8px;
     }
 
@@ -284,9 +284,9 @@
 
     /* Responsive */
     @media (min-width: 768px) {
-      #scrollToBottomBtn { right: 750px; }
-      #pauseResumeBtn { left: 1100px; }
-      #pdfBtn { right: 950px; }
+      #scrollToBottomBtn { right: 570px; }
+      #pauseResumeBtn { left: 900px; }
+      #pdfBtn { right: 815px; }
     }
   </style>
 </head>
@@ -457,3 +457,5 @@
   </script>
 </body>
 </html>
+
+
