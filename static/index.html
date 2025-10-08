@@ -191,15 +191,17 @@
       outline: none;
       background: transparent;
       resize: none;
-      overflow: hidden;
+      overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-scrollbar { display: none;};
       line-height: 20px;
       min-height: 15px;      /* start from zero height */
       max-height: 65px;
       height: 19px;          /* start collapsed */
       
     }
-
     #micButton {
       background-color: #dcdcdc;
       border: none;
@@ -504,6 +506,7 @@ searchBtn.addEventListener("click", () => {
   </script>
 </body>
 </html>
+
 
 
 
