@@ -30,7 +30,7 @@ YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "AIzaSyCTYSeHgh3-zMOvoILD1WjBLj-s
 
 # Usage limits
 image_limit_per_day = 5
-question_limit_per_day = 15
+question_limit_per_day = 50
 ip_usage_tracker: Dict[str, Dict[str, int]] = {}
 chat_history: Dict[str, List[Dict[str, str]]] = {}
 last_answer: Dict[str, str] = {}   # 🆕 Store last answer per IP for PDF
@@ -255,4 +255,5 @@ async def download_pdf(request: Request):
 
     return StreamingResponse(buffer, media_type="application/pdf", headers={
         "Content-Disposition": "attachment; filename=chat_answer.pdf"
+
     })
