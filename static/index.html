@@ -192,11 +192,12 @@
       background: transparent;
       resize: none;
       overflow-x: hidden;
-      overflow-y: hidden; /* hide scrollbar initially */
+      overflow-y: auto; /* hide scrollbar initially */
       line-height: 20px;
       min-height: 15px;      /* start from zero height */
       max-height: 65px;
       height: 19px;          /* start collapsed */
+      
     }
 
     #micButton {
@@ -243,6 +244,8 @@
       align-items: center;
       transition: all 0.3s ease;
       z-index: 150;
+      background: rgb(228,228,228);
+      color: #000;
     }
 
     #scrollToBottomBtn {
@@ -250,26 +253,30 @@
       right: 20px;
       width: 40px;
       height: 55px;
-      background-color: rgb(228, 228, 228);
-      color: rgb(0, 0, 0);
+      color: rgb#000000;
       border-radius: 50%;
       font-size: 25px;
+      color: #ffffff;
     }
 
+    /* make pause button round and sized to fit SVG */
     #pauseResumeBtn {
       bottom: 120px;
-      left: 400px;
-      width: 30px;
-      height: 30px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background-color: #000000;
+      background-color: #ffffff;
       color: #ffffff;
-      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
     }
 
     #pdfBtn {
       bottom: 120px;
-      right: 750px;
+      left: 20px;
       background-color: black;
       color: white;
       font-size: 10px;
@@ -298,8 +305,15 @@
     <div id="loading"></div>
   </div>
 
-  <button id="scrollToBottomBtn">⬇</button>
-  <button id="pauseResumeBtn">⏸</button>
+  <button id="scrollToBottomBtn" aria-label="Scroll to bottom">⬇</button>
+  <!-- pauseResumeBtn now contains an inline SVG and will toggle between pause/play -->
+  <button id="pauseResumeBtn" aria-pressed="false" aria-label="Pause reply">
+    <!-- default: pause icon (two bars) -->
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+      <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+    </svg>
+  </button>
   <button id="pdfBtn" onclick="downloadAndOpenPDF()">Make PDF of Ans</button>
 
   <div class="mobile-bar">
@@ -336,9 +350,34 @@
       autoScroll=true;
       scrollBtn.style.display='none';
     });
+
+    // Update pause/play icon depending on isPaused
+    function updatePauseIcon(){
+      if(isPaused){
+        // show play triangle (resume)
+        pauseBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>`;
+        pauseBtn.setAttribute('aria-pressed','true');
+        pauseBtn.setAttribute('aria-label','Resume reply');
+      } else {
+        // show pause bars
+        pauseBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+            <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+          </svg>`;
+        pauseBtn.setAttribute('aria-pressed','false');
+        pauseBtn.setAttribute('aria-label','Pause reply');
+      }
+    }
+
     pauseBtn.addEventListener('click',()=>{
-      isPaused=!isPaused;
-      pauseBtn.textContent=isPaused?'▶':'⏸';
+      isPaused = !isPaused;
+      updatePauseIcon();
+      // text toggle (kept for backwards compatibility with existing logic)
+      // previously code used textContent '▶'/'⏸' — now we use SVGs only
     });
 
     async function askQuestion(){
@@ -454,6 +493,9 @@
 
     questionInput.addEventListener('input', () => autoResizeTextarea(questionInput));
     questionInput.addEventListener('focus', () => autoResizeTextarea(questionInput));
+
+    // make sure pause/play icon reflects initial state
+    updatePauseIcon();
   </script>
 </body>
 </html>
