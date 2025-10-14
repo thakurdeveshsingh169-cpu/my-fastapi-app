@@ -8,20 +8,49 @@
   <!-- MathJax + Marked -->
   <script>
     window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$']]
-      },
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
       svg: { fontCache: 'global' }
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-  <style> 
-    body { margin: 0; font-family: Arial, sans-serif; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; padding-bottom: 100px; } 
-    .header { background-color: #fff6b2; padding: 30px 25px; border-radius: 25px; margin-top: 10px; margin: auto; width: fit-content; display: flex; align-items: center; justify-content: center; } 
-    .header h2 { font-size: 20px; font-family: 'Georgia', serif; font-weight: bold; margin: 0; }
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 100px;
+    }
+
+    /* Updated Header with logo */
+    .header {
+      background-color: #ffffff; /* white background like ChatGPT */
+      padding: 20px 250px;
+      border-radius: 25px;
+      margin-top: 10px;
+      margin: auto;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0);
+    }
+    .header img {
+      height: 45px;
+      width: 45px;
+      border-radius: 50%;
+      margin-right: 25px; /* space between logo and text */
+    }
+    .header h2 {
+      font-size: 20px;
+      font-family: 'Georgia', serif;
+      font-weight: bold;
+      margin: 0;
+    }
 
     /* Chat area */
     .chat-wrapper {
@@ -30,7 +59,7 @@
       padding: 20px 10px 100px 10px;
       margin: 0 auto;
       overflow-y: auto;
-      max-height: calc(100vh - 180px); /* proper dynamic height */
+      max-height: calc(100vh - 180px);
     }
 
     #answer {
@@ -71,6 +100,7 @@
       display: block;
       margin: 10px auto;
     }
+
     .download-link {
       display: inline-block;
       margin-top: 10px;
@@ -79,11 +109,12 @@
       text-decoration: underline;
     }
 
-    /* AI loading */
+    /* AI loading animation */
     #loading {
       margin: 20px;
       text-align: center;
     }
+
     .circle {
       width: 100px;
       height: 100px;
@@ -93,18 +124,20 @@
       justify-content: center;
       align-items: center;
       box-shadow: 0 0 25px 8px #ff00ff;
-      animation: pulse 0.8s infinite alternate;
+      animation: pulse 0.45s infinite alternate;
       margin: auto;
     }
+
     .circle span {
       font-size: 18px;
       font-weight: bold;
       color: #fff;
       font-family: 'Times New Roman', cursive;
     }
+
     @keyframes pulse {
       from { box-shadow: 0 0 15px 5px #ff00ff; }
-      to   { box-shadow: 0 0 45px 12px #ff00ff; }
+      to { box-shadow: 0 0 45px 12px #ff00ff; }
     }
 
     .replying {
@@ -117,22 +150,24 @@
       align-items: center;
       justify-content: center;
     }
-    .replying {
-  display: inline-block;
-  font-weight: bold;
-  color: #000000;
-  text-shadow: 0 0 8px #00000000, 0 0 20px #01010100;
-  animation: blinkWord 0.78s infinite steps(1);
-}
 
-@keyframes blinkWord {
-  0%, 20% { opacity: 0.2; text-shadow: none; }
-  40%, 100% { opacity: 1; text-shadow: 0 0 8px #000000, 0 0 16px #ff1389c6,0 0 23px #00000000 }
-}
+    .replying {
+      display: inline-block;
+      font-weight: bold;
+      color: #000000;
+      text-shadow: 0 0 8px #000000;
+      animation: blinkWord 1.78s infinite steps(1);
+    }
+
+    @keyframes blinkWord {
+      0%, 20% { opacity: 0.2; text-shadow: none; }
+      40%, 100% { opacity: 1; text-shadow: 0 0 8px #ffffff; }
+    }
 
     .replying span { animation: blink 0.57s infinite steps(1); }
     .replying span:nth-child(2) { animation-delay: 0.3s; }
     .replying span:nth-child(3) { animation-delay: 0.4s; }
+
     @keyframes blink {
       0%, 20% { opacity: 0; }
       40%, 100% { opacity: 1; }
@@ -176,13 +211,12 @@
       background-color: white;
       border-radius: 30px;
       padding: 0 10px;
-      height: auto; /* allow auto resizing */
+      height: auto;
       width: 260px;
       min-height: 19px;
       max-height: 110px;
     }
 
-    /* UPDATED: textarea auto-expand starting from 0 */
     #question {
       flex: 1;
       padding: 12px 10px;
@@ -195,39 +229,41 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
-      -webkit-scrollbar { display: none;};
       line-height: 20px;
-      min-height: 15px;      /* start from zero height */
+      min-height: 15px;
       max-height: 65px;
-      height: 19px;          /* start collapsed */
-      
+      height: 19px;
     }
+
     #micButton {
-      background-color: #dcdcdc;
+      background-color: #ffffff;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 34px;
+      height: 34px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
     #micButton svg { width: 20px; height: 25px; fill: #000; }
     #micButton.active { animation: micPulse 1s infinite; }
+
     @keyframes micPulse {
       0% { box-shadow: 0 0 0 0 rgb(6,151,255); }
       70% { box-shadow: 0 0 0 10px rgba(13,109,253,0); }
       100% { box-shadow: 0 0 0 0 rgba(13,109,253,0); }
     }
+
     #searchBtn {
       width: 25px;
       height: 50px;
       border-radius: 50%;
       border: none;
-      background-color: black;
-      color: white;
+      background-color: rgb(255, 255, 255);
+      color: rgb(0, 0, 0);
       font-size: 37px;
       display: flex;
       align-items: center;
@@ -236,7 +272,6 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
 
-    /* Floating control buttons */
     #scrollToBottomBtn, #pauseResumeBtn, #pdfBtn {
       position: fixed;
       border: none;
@@ -255,18 +290,16 @@
       right: 20px;
       width: 35px;
       height: 45px;
-      background-color: rgb#d6d6d6;
       border-radius: 50%;
       font-size: 30px;
       color: #000000;
     }
 
-    /* make pause button round and sized to fit SVG */
     #pauseResumeBtn {
       bottom: 120px;
       right: 20px;
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background-color: #d6d6d6;
       color: #ffffff;
@@ -291,7 +324,6 @@
       opacity: 0.9;
     }
 
-    /* Responsive */
     @media (min-width: 768px) {
       #scrollToBottomBtn { right: 570px; }
       #pauseResumeBtn { left: 900px; }
@@ -301,17 +333,20 @@
 </head>
 <body>
   <div class="chat-wrapper" id="chatWrapper">
-    <div class="header"><h2>𝕯𝖊𝕾𝖍 𝗔𝐢</h2></div>
+    <!-- Header with Logo -->
+    <div class="header">
+      <img src="logo.png" alt="Desh AI Logo">
+      <h2>𝕯𝖊𝕾𝖍 𝗔𝐢</h2>
+    </div>
+
     <div id="answer"></div>
     <div id="youtube-results"></div>
     <div id="loading"></div>
   </div>
 
-  <button id="scrollToBottomBtn" aria-label="Scroll to bottom">⬇</button>
-  <!-- pauseResumeBtn now contains an inline SVG and will toggle between pause/play -->
-  <button id="pauseResumeBtn" aria-pressed="false" aria-label="Pause reply">
-    <!-- default: pause icon (two bars) -->
-    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+  <button id="scrollToBottomBtn">⬇</button>
+  <button id="pauseResumeBtn">
+    <svg viewBox="0 0 24 24" width="20" height="20">
       <rect x="6" y="5" width="4" height="14" rx="1"></rect>
       <rect x="14" y="5" width="4" height="14" rx="1"></rect>
     </svg>
@@ -325,7 +360,7 @@
           <textarea id="question" placeholder="Ask to 𝕯𝖊𝕾𝖍 𝗔𝐢..." onfocus="scrollIntoViewIfNeeded()"></textarea>
           <button id="micButton" onclick="startSpeech()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2z"/>
+              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a 3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2z"/>
               <path d="M19 11h2a9 9 0 0 1-18 0h2a7 7 0 0 0 14 0z"/>
             </svg>
           </button>
@@ -336,6 +371,7 @@
   </div>
 
   <script>
+    /* --- JavaScript stays exactly same --- */
     let lastAnswer = "", autoScroll = true, isPaused = false, typingInterval;
     const chatWrapper=document.getElementById('chatWrapper'),
           scrollBtn=document.getElementById('scrollToBottomBtn'),
@@ -343,50 +379,20 @@
           searchBtn=document.getElementById('searchBtn'),
           pdfBtn=document.getElementById('pdfBtn');
 
-    chatWrapper.addEventListener('scroll',()=>{
-      const atBottom=chatWrapper.scrollHeight - chatWrapper.scrollTop <= chatWrapper.clientHeight + 50;
-      autoScroll=atBottom;
-      scrollBtn.style.display=atBottom?'none':'flex';
-    });
-    scrollBtn.addEventListener('click',()=>{
-      chatWrapper.scrollTop=chatWrapper.scrollHeight;
-      autoScroll=true;
-      scrollBtn.style.display='none';
-    });
+    chatWrapper.addEventListener('scroll',()=>{ const atBottom=chatWrapper.scrollHeight - chatWrapper.scrollTop <= chatWrapper.clientHeight + 50;
+      autoScroll=atBottom; scrollBtn.style.display=atBottom?'none':'flex'; });
+    scrollBtn.addEventListener('click',()=>{ chatWrapper.scrollTop=chatWrapper.scrollHeight; autoScroll=true; scrollBtn.style.display='none'; });
 
-    // Update pause/play icon depending on isPaused
-    function updatePauseIcon(){
-      if(isPaused){
-        // show play triangle (resume)
-        pauseBtn.innerHTML = `
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-            <path d="M8 5v14l11-7z"></path>
-          </svg>`;
-        pauseBtn.setAttribute('aria-pressed','true');
-        pauseBtn.setAttribute('aria-label','Resume reply');
-      } else {
-        // show pause bars
-        pauseBtn.innerHTML = `
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-            <rect x="6" y="5" width="4" height="14" rx="1"></rect>
-            <rect x="14" y="5" width="4" height="14" rx="1"></rect>
-          </svg>`;
-        pauseBtn.setAttribute('aria-pressed','false');
-        pauseBtn.setAttribute('aria-label','Pause reply');
-      }
-    }
+    function updatePauseIcon(){ if(isPaused){
+      pauseBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z"></path></svg>`;
+      pauseBtn.setAttribute('aria-pressed','true'); pauseBtn.setAttribute('aria-label','Resume reply');
+    } else {
+      pauseBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>`;
+      pauseBtn.setAttribute('aria-pressed','false'); pauseBtn.setAttribute('aria-label','Pause reply'); } }
 
-    pauseBtn.addEventListener('click',()=>{
-      isPaused = !isPaused;
-      updatePauseIcon();
-      
+    pauseBtn.addEventListener('click',()=>{ isPaused = !isPaused; updatePauseIcon(); });
+    searchBtn.addEventListener("click", () => { pauseBtn.style.display = "flex"; });
 
-      // text toggle (kept for backwards compatibility with existing logic)
-      // previously code used textContent '▶'/'⏸' — now we use SVGs only
-    });
-searchBtn.addEventListener("click", () => {
-  pauseBtn.style.display = "flex"; // show only after search click
-});
     async function askQuestion(){
       const q=document.getElementById('question').value.trim();
       if(!q) return;
@@ -398,115 +404,95 @@ searchBtn.addEventListener("click", () => {
       pauseBtn.style.display='flex'; pdfBtn.style.display='flex';
 
       try {
-        const res=await fetch("https://desh-ai.onrender.com/ask",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({question:q})
-        });
+        const res=await fetch("https://desh-ai.onrender.com/ask",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
         if(!res.ok) throw new Error(`Server error: ${res.status}`);
-        const data=await res.json();
-        loading.innerHTML="";
+        const data=await res.json(); loading.innerHTML="";
 
         if(data.image_url){
           answerDiv.innerHTML=`<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>`;
           lastAnswer="";
         } else {
           const rendered=marked.parse(data.answer||"No response.");
-          typeWriterHTML(rendered,answerDiv,async()=>{
-            if(window.MathJax) await MathJax.typesetPromise();
-            pauseBtn.style.display='none';
-          });
+          typeWriterHTML(rendered,answerDiv,async()=>{ if(window.MathJax) await MathJax.typesetPromise(); pauseBtn.style.display='none'; });
           lastAnswer=data.answer||"";
         }
 
         if(data.youtube_videos){
-          data.youtube_videos.forEach(v=>{
-            const div=document.createElement('div');
-            div.className='youtube-video';
-            div.innerHTML=`<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank">
-              <img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>`;
-            youtube.appendChild(div);
-          });
+          data.youtube_videos.forEach(v=>{ const div=document.createElement('div'); div.className='youtube-video';
+            div.innerHTML=`<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>`;
+            youtube.appendChild(div); });
         }
       } catch(e){
-        loading.innerHTML="";
-        answerDiv.innerHTML="Error fetching answer.";
-        console.error(e);
-        pauseBtn.style.display='none';
+        loading.innerHTML=""; answerDiv.innerHTML="Error fetching answer."; console.error(e); pauseBtn.style.display='none';
       }
-      document.getElementById('question').value="";
-      autoResizeTextarea(questionInput); // reset height after submit
+      document.getElementById('question').value=""; autoResizeTextarea(questionInput);
     }
 
     function typeWriterHTML(html,el,cb){
-      let i=0,temp=document.createElement("div");
-      temp.innerHTML=html;
-      const content=temp.innerHTML;
-      (function typing(){
-        if(!isPaused && i<content.length){
-          el.innerHTML=content.substring(0,i+1);
-          if(autoScroll) chatWrapper.scrollTop=chatWrapper.scrollHeight;
-          i++;
-          typingInterval=setTimeout(typing,10);
-        } else if(i<content.length){
-          typingInterval=setTimeout(typing,50);
-        } else if(cb) cb();
-      })();
+      let i=0,temp=document.createElement("div"); temp.innerHTML=html; const content=temp.innerHTML;
+      (function typing(){ if(!isPaused && i<content.length){ el.innerHTML=content.substring(0,i+1);
+        if(autoScroll) chatWrapper.scrollTop=chatWrapper.scrollHeight; i++; typingInterval=setTimeout(typing,10);
+      } else if(i<content.length){ typingInterval=setTimeout(typing,50);
+      } else if(cb) cb(); })();
     }
 
-    function scrollIntoViewIfNeeded(){
-      setTimeout(()=>document.getElementById('question').scrollIntoView({behavior:'smooth',block:'center'}),200);
+    function scrollIntoViewIfNeeded(){ setTimeout(()=>document.getElementById('question').scrollIntoView({behavior:'smooth',block:'center'}),300); }
+    function autoResizeTextarea(el){ el.style.height="auto"; el.style.height=(el.scrollHeight)+"px"; }
+    const questionInput=document.getElementById('question');
+    questionInput.addEventListener('input',()=>autoResizeTextarea(questionInput));
+
+    async function downloadAndOpenPDF(){
+      const content=lastAnswer; if(!content){ alert("No answer to save."); return; }
+      try{
+        const res=await fetch("https://desh-ai.onrender.com/create_pdf",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({content}) });
+        const blob=await res.blob(); const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download="DeshAI_Answer.pdf"; a.click(); URL.revokeObjectURL(url);
+      } catch(e){ console.error(e); alert("Error creating PDF."); }
     }
 
-    function startSpeech(){
-      const micBtn=document.getElementById('micButton');
+    /* 🧠 Improved continuous mic logic */
+    let rec; let isListening = false;
+    function startSpeech() {
+      const micBtn = document.getElementById('micButton');
+
+      if (isListening) {
+        rec.stop();
+        micBtn.classList.remove('active');
+        isListening = false;
+        return;
+      }
+
+      isListening = true;
       micBtn.classList.add('active');
-      const rec=new(window.SpeechRecognition||window.webkitSpeechRecognition)();
-      rec.lang='en-IN';
+
+      rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      rec.lang = 'en-IN';
+      rec.continuous = true; // ✅ continuous listening
+      rec.interimResults = false;
+
+      rec.onresult = (e) => {
+        const transcript = Array.from(e.results)
+          .map(result => result[0].transcript)
+          .join(' ');
+        document.getElementById('question').value = transcript.trim();
+      };
+
+      rec.onerror = (e) => {
+        console.error('Speech recognition error:', e.error);
+        if (e.error !== 'no-speech') {
+          micBtn.classList.remove('active');
+          isListening = false;
+        }
+      };
+
+      rec.onend = () => {
+        if (isListening) rec.start();
+        else micBtn.classList.remove('active');
+      };
+
       rec.start();
-      rec.onresult=e=>{
-        micBtn.classList.remove('active');
-        document.getElementById('question').value=e.results[0][0].transcript;
-        askQuestion();
-      };
-      rec.onerror=e=>{
-        micBtn.classList.remove('active');
-        alert("Voice recognition error: "+e.error);
-      };
-      rec.onend=()=>micBtn.classList.remove('active');
     }
-
-    function downloadAndOpenPDF(){
-      fetch("https://desh-ai.onrender.com/download-pdf")
-      .then(r=>{if(!r.ok)throw new Error("Network error");return r.blob();})
-      .then(b=>{
-        const url=URL.createObjectURL(b);
-        const a=document.createElement("a");
-        a.href=url; a.download="answer.pdf";
-        document.body.appendChild(a); a.click();
-        document.body.removeChild(a);
-        window.open(url,"_blank");
-      })
-      .catch(e=>console.error("PDF error:",e));
-    }
-
-    // ===== NEW: auto-expand textarea =====
-    const questionInput = document.getElementById('question');
-
-    function autoResizeTextarea(el) {
-      el.style.height = '0px';              // reset height
-      el.style.height = el.scrollHeight + 'px'; // expand to fit content
-    }
-
-    questionInput.addEventListener('input', () => autoResizeTextarea(questionInput));
-    questionInput.addEventListener('focus', () => autoResizeTextarea(questionInput));
-
-    // make sure pause/play icon reflects initial state
-    updatePauseIcon();
   </script>
 </body>
 </html>
-
-
-
 
