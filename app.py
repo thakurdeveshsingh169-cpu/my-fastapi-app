@@ -1,40 +1,38 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse, JSONResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import os
-import requests
-import time
+import os, requests, time, langid, re, io
 from typing import Dict, List
-import langid
-import re
-import io
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-
+from gtts import gTTS   # 🆕 Google TTS import
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 # Load environment variables
 load_dotenv()
+
 # -------------------------
-# Groq API key for chat
+# API Keys
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "YOUR_KEY")
-GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
-
-# Hugging Face API key for images
 HF_API_KEY = os.getenv("HF_API_KEY", "YOUR_HF_KEY")
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "YOUR_YT_KEY")
+
+GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
+
 # -------------------------
-
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "AIzaSyCTYSeHgh3-zMOvoILD1WjBLj-sZl9PVDs")
-
-# Usage limits
+# Usage Limits & Storage
 image_limit_per_day = 5
-question_limit_per_day = 50
+question_limit_per_day = 200
 ip_usage_tracker: Dict[str, Dict[str, int]] = {}
 chat_history: Dict[str, List[Dict[str, str]]] = {}
-last_answer: Dict[str, str] = {}   # 🆕 Store last answer per IP for PDF
+last_answer: Dict[str, str] = {}  # Store last answer per IP for PDF & TTS
 
+# -------------------------
 # FastAPI setup
 app = FastAPI()
 app.add_middleware(
@@ -52,7 +50,8 @@ def serve_homepage():
 class Question(BaseModel):
     question: str
 
-# Convert verbal math phrases to LaTeX
+# -------------------------
+# Utility functions
 def convert_to_latex_math(text: str) -> str:
     replacements = {
         r'\b1\s+upon\s+2\b': r'\\frac{1}{2}',
@@ -110,8 +109,7 @@ def summarize_text(text: str, max_tokens: int = 1000) -> str:
     return ' '.join(words[:int(estimated_limit)]) + '... (summary)'
 
 # -------------------------
-# Helper: call Groq API (chat)
-# -------------------------
+# Groq API helper
 def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
     payload = {
         "model": "llama-3.1-8b-instant",
@@ -130,26 +128,20 @@ def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, tempera
         if "choices" in data and len(data["choices"]) > 0:
             return data["choices"][0]["message"]["content"]
         else:
-            return f"❌ No valid choice in Groq response: {data}"
+            return "❌ Invalid response from Groq API"
     except requests.exceptions.RequestException as e:
         return f"❌ Error calling Groq API: {str(e)}"
 
 # -------------------------
-# Helper: call Hugging Face API (image)
-# -------------------------
+# Hugging Face Image helper
 def generate_image_hf(prompt: str, ip: str):
     headers = {"Authorization": f"Bearer {HF_API_KEY}"}
     payload = {
         "inputs": prompt,
-        "parameters": {
-            "width": 1024,
-            "height": 768,
-            "num_inference_steps": 30
-        }
+        "parameters": {"width": 1024, "height": 768, "num_inference_steps": 30}
     }
     res = requests.post(HF_IMAGE_URL, headers=headers, json=payload, timeout=60)
     if res.status_code == 200:
-        # save image bytes
         image_bytes = res.content
         file_name = f"generated_{int(time.time())}.png"
         file_path = f"static/{file_name}"
@@ -157,94 +149,89 @@ def generate_image_hf(prompt: str, ip: str):
             f.write(image_bytes)
 
         ip_usage_tracker[ip]['img_count'] += 1
-
         notice = (
-            "🔴 To Download Your Image 📷, Follow Given Steps:\n"
-            "I) Click on the Link below 🔗\n"
-            "II) Press and hold the Image for 1–2 Seconds\n"
-            "III) Now, Click – Download Image Option there.\n\n"
-            f"⚠ Note: You can only generate {image_limit_per_day} images per day.\n\n"
+            "🖼 Your image is ready:\n"
+            f"[📥 Click to View Image](/static/{file_name})\n\n"
+            f"⚠ Limit: {image_limit_per_day} per day"
         )
-
-        reply = f"{notice}🖼 Your image is ready:\n\n[📥 Click to View Image](/static/{file_name})"
+        reply = notice
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
-    else:
-        return {"error": f"Image generation error: {res.text}", "youtube_videos": fetch_youtube_videos(prompt)}
+    return {"error": f"Image generation failed: {res.text}"}
 
 # -------------------------
-
+# Main Chat Route
 @app.post("/ask")
 async def ask_question(data: Question, request: Request):
     prompt = data.question.strip()
-    prompt_lower = prompt.lower()
     ip = request.client.host
     reset_if_new_day(ip)
 
     if ip_usage_tracker[ip]['count'] >= question_limit_per_day:
-        return {"answer": "❌ Hey Dear User!, You have reached your Daily limit of 15 questions. Try again tomorrow."}
+        return {"answer": f"❌ Limit reached ({question_limit_per_day}/day)"}
 
     ip_usage_tracker[ip]['count'] += 1
     detected_lang = detect_language(prompt)
+    prompt_lower = prompt.lower()
 
     founder_keywords = [
-        "founder of", "who is your founder", "who founded",
-        "who is your owner", "owner of", "who made desh ai",
-        "who created desh ai by dsr", "who developed desh ai", "who made you",
-        "who made Desh ai", "who made Deshai", "who created you",
-        "who create you", "who creates you", "who creates you Desh ai",
-        "who created you Deshai"
+        "founder of", "who is your founder", "who made desh ai", "who created you"
     ]
     if any(kw in prompt_lower for kw in founder_keywords):
-        reply = "𝕯𝖊𝕾𝖍 𝗔𝐢 is founded by 𝕯𝖊𝖛𝖊𝖘𝖍 𝚂𝚒𝚗𝚐𝚑 𝕽𝖆𝖏𝖕𝖚𝖙, a 15-year-old boy from Jaunpur, U.P."
+        reply = "🌟 Desh AI is founded by Devesh Singh Rajput, a 15-year-old from Jaunpur, U.P."
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
 
-    # -------------------------
-    # Image Generation Block (Hugging Face)
-    # -------------------------
     if any(word in prompt_lower for word in ["draw", "image", "picture", "generate"]):
         if ip_usage_tracker[ip]['img_count'] >= image_limit_per_day:
-            reply = f"❌ Hey Dear User!, You have reached your Daily limit of {image_limit_per_day} image generations. Try again tomorrow."
-            last_answer[ip] = reply
-            return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
+            return {"answer": f"❌ Image limit reached ({image_limit_per_day}/day)"}
         return generate_image_hf(prompt, ip)
 
-    # -------------------------
-    # Chat Completion (Groq)
-    # -------------------------
     explain_keywords = ["explain", "describe", "in brief", "long", "elaborate"]
     max_tokens = 650 if any(kw in prompt_lower for kw in explain_keywords) else 1500
 
     system_prompt = {
         "role": "system",
         "content": (
-            f"You are a smart assistant. The user is speaking in '{detected_lang}' language. Reply in the same language. "
-            "Add 5 to 20 meaningful emojis based on tone or topic. Use them naturally between answer. "
-            "Preserve user clarity and support LaTeX formatting if present."
+            f"You are Desh AI. Reply in {detected_lang} language, using emojis naturally."
         )
     }
 
     messages = [system_prompt] + chat_history.get(ip, [])[-10:] + [{"role": "user", "content": prompt}]
-
     try:
-        reply = ask_grok_api(messages=messages, max_tokens=max_tokens, temperature=0.7)
-        reply = ensure_token_safe_response(reply, max_tokens)
-        reply = convert_to_latex_math(reply)
-        if any(x in reply for x in ['\\(', '\\)', '\\[', '\\]', '^', '\\frac', '\\sqrt']):
-            reply = reply.strip()
+        reply = ask_grok_api(messages, max_tokens=max_tokens)
+        reply = ensure_token_safe_response(convert_to_latex_math(reply))
         chat_history[ip] = messages + [{"role": "assistant", "content": reply}]
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
     except Exception as e:
-        return {"error": "Error Fetching Answer", "details": str(e), "youtube_videos": fetch_youtube_videos(prompt)}
+        return {"error": f"Error fetching answer: {str(e)}"}
 
-# 🆕 PDF route (unchanged)
+# -------------------------
+# 🆕 TTS Route (gTTS integration)
+@app.post("/tts")
+async def text_to_speech(request: Request):
+    data = await request.json()
+    text = data.get("text", "")
+    if not text:
+        return JSONResponse({"error": "No text provided"}, status_code=400)
+
+    lang = detect_language(text)
+    if lang not in ["en", "hi"]:
+        lang = "en"
+
+    filename = "tts_output.mp3"
+    tts = gTTS(text=text, lang=lang, slow=False)
+    tts.save(filename)
+    return FileResponse(filename, media_type="audio/mpeg", filename=filename)
+
+# -------------------------
+# PDF Route
 @app.get("/download-pdf")
 async def download_pdf(request: Request):
     ip = request.client.host
     if ip not in last_answer or not last_answer[ip].strip():
-        return {"error": "❌ No answer available to convert into PDF."}
+        return {"error": "❌ No answer available for PDF."}
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer)
@@ -253,7 +240,19 @@ async def download_pdf(request: Request):
     doc.build(story)
     buffer.seek(0)
 
-    return StreamingResponse(buffer, media_type="application/pdf", headers={
-        "Content-Disposition": "attachment; filename=chat_answer.pdf"
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=chat_answer.pdf"}
+    )
 
-    })
+@app.get("/numpuzz")
+def serve_numpuzz():
+    return FileResponse("static/numpuzz.html")
+@app.get("/calculator")
+def serve_numpuzz():
+    return FileResponse("static/calculator.html")
+@app.get("/snake")
+def serve_numpuzz():
+    return FileResponse("static/snake.html")
+
