@@ -1,0 +1,289 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Numpuzz — Wooden Sliding Puzzle</title>
+  <style>
+    :root{
+      --board-size: 360px;
+      --tile-gap: 12px;
+      --tile-radius: 14px;
+      --bg-wood: #6b3f22;
+      --frame-wood: linear-gradient(180deg,#c78f53,#a96735);
+      --tile-wood: linear-gradient(180deg,#ffdca8,#e6b77a);
+      --tile-number: rgba(50,30,20,0.95);
+    }
+    html,body{height:100%;margin:0;font-family: 'Segoe UI', Roboto, Arial; background: linear-gradient(180deg,#4a2b18,#2f1a11); color: #fff; display:flex;align-items:center;justify-content:center}
+    .wrap{width:100%;max-width:460px;padding:28px;box-sizing:border-box}
+    .card{background:var(--frame-wood);padding:18px;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.6), inset 0 6px 14px rgba(255,255,255,0.02)}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    h1{font-size:18px;margin:0;color:#ffdca8;letter-spacing:1px}
+    .controls{display:flex;gap:10px}
+    button{background:rgba(0,0,0,0.12);border:none;padding:8px 12px;border-radius:10px;color:#fff;font-weight:600;cursor:pointer;backdrop-filter: blur(2px)}
+    button:active{transform:translateY(1px)}.board-frame{width:var(--board-size);height:var(--board-size);margin:0 auto;background:linear-gradient(180deg,#8b5a3a,#6d3f26);padding:18px;border-radius:16px;box-shadow:inset 0 6px 10px rgba(0,0,0,0.45)}
+.board{width:100%;height:100%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:var(--tile-gap);position:relative}
+.tile{
+  display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:var(--tile-number);
+  border-radius:var(--tile-radius);user-select:none;cursor:pointer;box-shadow:0 6px 10px rgba(0,0,0,0.45), inset 0 2px 0 rgba(255,255,255,0.06);
+  transition:transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 120ms;
+  background:var(--tile-wood);
+  border: 1px solid rgba(0,0,0,0.06);
+  transform-origin:center;
+}
+.tile:active{transform:scale(0.98)}
+.empty{background:transparent;box-shadow:none;cursor:default}
+
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;color:#ffe9c9}
+.tip{font-size:14px;color:#f8e9cf}
+
+/* congratulations overlay */
+.overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:40}
+.overlay.show{display:flex}
+.congrats{background:rgba(255,255,255,0.98);color:#2b1a12;padding:28px;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.6);text-align:center;max-width:92%;}
+.congrats h2{margin:0 0 8px;font-size:22px}
+.congrats p{margin:0 0 16px;color:#6b4b36}
+.btn-primary{background:linear-gradient(180deg,#ffd27f,#f6b24f);color:#3a2108;padding:10px 14px;border-radius:10px;font-weight:700}
+
+/* small mobile tweaks */
+@media (max-width:420px){:root{--board-size:320px}}
+
+/* decorative title area */
+.big-title{font-weight:900;font-size:26px;color:#ffd36f;text-align:center;margin-bottom:12px}
+
+/* subtle wood texture using SVG background (keeps self-contained) */
+.board-frame::before{content:'';position:absolute;left:50%;transform:translateX(-50%);top:10px;width:84%;height:88%;border-radius:12px;pointer-events:none;background-image:linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px);opacity:0.06}
+
+/* small move counter */
+.counter{font-weight:800;color:#eae0d1}
+
+canvas.confetti{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:50}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <h1>Numpuzz — Wooden Sliding Puzzle</h1>
+        <div class="controls">
+          <button id="shuffleBtn">Shuffle</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+      </header><div class="big-title">Arrange numbers 1 → 8</div>
+
+  <div class="board-frame">
+    <div id="board" class="board"></div>
+  </div>
+
+  <div class="meta">
+    <div class="tip">Click a tile next to empty space to slide</div>
+    <div class="counter">Moves: <span id="moves">0</span></div>
+  </div>
+</div>
+
+  </div>  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="congrats" role="dialog" aria-modal="true">
+      <h2>Congratulations!</h2>
+      <p>You solved the puzzle.</p>
+      <div><button class="btn-primary" id="playAgain">Play again</button></div>
+    </div>
+  </div><canvas id="confetti" class="confetti"></canvas>
+
+  <script>
+    // Simple 3x3 sliding puzzle implementation with wooden theme and congrats animation
+    (function(){
+      const boardEl = document.getElementById('board');
+      const shuffleBtn = document.getElementById('shuffleBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const movesEl = document.getElementById('moves');
+      const overlay = document.getElementById('overlay');
+      const playAgain = document.getElementById('playAgain');
+
+      let state = [1,2,3,4,5,6,7,8,0]; // 0 is empty
+      let moves = 0;
+
+      function render(){
+        boardEl.innerHTML = '';
+        state.forEach((v, idx) => {
+          const tile = document.createElement('div');
+          tile.className = 'tile';
+          if(v === 0){ tile.classList.add('empty'); tile.textContent = ''; }
+          else tile.textContent = v;
+          // set custom position styles via grid
+          tile.style.gridColumn = (idx % 3) + 1;
+          tile.style.gridRow = Math.floor(idx/3) + 1;
+
+          // make tile clickable
+          tile.addEventListener('click', ()=> onTileClick(idx));
+
+          boardEl.appendChild(tile);
+        });
+      }
+
+      function indexToCoord(i){ return {r: Math.floor(i/3), c: i%3}; }
+      function coordToIndex(r,c){ return r*3 + c; }
+
+      function isAdjacent(i1,i2){
+        const a = indexToCoord(i1), b = indexToCoord(i2);
+        const dr = Math.abs(a.r - b.r), dc = Math.abs(a.c - b.c);
+        return (dr+dc) === 1;
+      }
+
+      function onTileClick(idx){
+        const emptyIdx = state.indexOf(0);
+        if(isAdjacent(idx, emptyIdx)){
+          // swap
+          [state[idx], state[emptyIdx]] = [state[emptyIdx], state[idx]];
+          moves++;
+          movesEl.textContent = moves;
+          animateSwap(idx, emptyIdx);
+          setTimeout(()=>{
+            render();
+            if(isSolved()) showCongrats();
+          }, 220);
+        }
+      }
+
+      function animateSwap(idx1, idx2){
+        // create visual animation by translating the tile element
+        const tiles = boardEl.querySelectorAll('.tile');
+        const t1 = tiles[idx1];
+        const t2 = tiles[idx2];
+        if(!t1 || !t2) return;
+        const rect1 = t1.getBoundingClientRect();
+        const rect2 = t2.getBoundingClientRect();
+
+        const dx = rect2.left - rect1.left;
+        const dy = rect2.top - rect1.top;
+
+        // animate t1 to t2
+        t1.style.transition = 'transform 220ms cubic-bezier(.2,.9,.2,1)';
+        t1.style.transform = `translate(${dx}px, ${dy}px)`;
+        // t2 is empty - animate a subtle lift
+        t2.style.transition = 'opacity 180ms';
+        t2.style.opacity = 0.6;
+
+        // cleanup after
+        setTimeout(()=>{
+          t1.style.transition = '';
+          t1.style.transform = '';
+          t2.style.opacity = '';
+        }, 240);
+      }
+
+      function shuffle(movesCount = 120){
+        // perform legal random moves to guarantee solvable shuffle
+        let lastEmpty = state.indexOf(0);
+        for(let i=0;i<movesCount;i++){
+          const neighbors = getNeighbors(lastEmpty);
+          // choose random neighbor (avoid undo by choosing different than previous moved tile sometimes)
+          const choice = neighbors[Math.floor(Math.random()*neighbors.length)];
+          [state[lastEmpty], state[choice]] = [state[choice], state[lastEmpty]];
+          lastEmpty = choice;
+        }
+        moves = 0;
+        movesEl.textContent = moves;
+        render();
+      }
+
+      function getNeighbors(emptyIdx){
+        const {r,c} = indexToCoord(emptyIdx);
+        const arr = [];
+        if(r>0) arr.push(coordToIndex(r-1,c));
+        if(r<2) arr.push(coordToIndex(r+1,c));
+        if(c>0) arr.push(coordToIndex(r,c-1));
+        if(c<2) arr.push(coordToIndex(r,c+1));
+        return arr;
+      }
+
+      function isSolved(){
+        for(let i=0;i<8;i++) if(state[i] !== i+1) return false;
+        return state[8] === 0;
+      }
+
+      function reset(){ state = [1,2,3,4,5,6,7,8,0]; moves=0; movesEl.textContent = moves; render(); }
+
+      shuffleBtn.addEventListener('click', ()=>{ shuffle(100 + Math.floor(Math.random()*50)) });
+      resetBtn.addEventListener('click', reset);
+      playAgain.addEventListener('click', ()=>{ overlay.classList.remove('show'); reset(); stopConfetti(); });
+
+      // initial render
+      render();
+
+      // start with a shuffled board for better demo
+      shuffle(180);
+
+      /* ---------- Congrats + Confetti ---------- */
+      const confettiCanvas = document.getElementById('confetti');
+      confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight;
+      const ctx = confettiCanvas.getContext('2d');
+      let confettiParticles = [];
+      let confettiRunning = false;
+
+      function makeParticle(x,y){
+        return {
+          x,y,
+          vx: (Math.random()-0.5)*6,
+          vy: Math.random()*-6 - 2,
+          w: 6 + Math.random()*8,
+          h: 8 + Math.random()*10,
+          rot: Math.random()*360,
+          vr: (Math.random()-0.5)*12,
+          color: `hsl(${Math.floor(Math.random()*360)},70%,50%)`,
+          life: 80 + Math.random()*40
+        }
+      }
+
+      function startConfetti(){
+        confettiParticles = [];
+        for(let i=0;i<160;i++){
+          confettiParticles.push(makeParticle(Math.random()*confettiCanvas.width, confettiCanvas.height * 0.2 + Math.random()*80));
+        }
+        if(!confettiRunning) confettiRunning = true, requestAnimationFrame(confettiLoop);
+      }
+      function stopConfetti(){ confettiRunning = false; confettiParticles = []; clearCanvas(); }
+
+      function confettiLoop(){
+        if(!confettiRunning) return clearCanvas();
+        ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+        for(let i=confettiParticles.length-1;i>=0;i--){
+          const p = confettiParticles[i];
+          p.vy += 0.3; // gravity
+          p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life--;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot * Math.PI / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+
+          if(p.y > confettiCanvas.height + 30 || p.life <= 0){
+            // respawn at top for continuous effect
+            confettiParticles.splice(i,1);
+          }
+        }
+        if(confettiParticles.length < 80){
+          // add a few more to maintain
+          for(let k=0;k<6;k++) confettiParticles.push(makeParticle(Math.random()*confettiCanvas.width, -20));
+        }
+        requestAnimationFrame(confettiLoop);
+      }
+
+      function clearCanvas(){ ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height); }
+
+      function showCongrats(){
+        overlay.classList.add('show');
+        overlay.setAttribute('aria-hidden','false');
+        startConfetti();
+      }
+
+      // handle resize for canvas
+      window.addEventListener('resize', ()=>{
+        confettiCanvas.width = innerWidth; confettiCanvas.height = innerHeight;
+      });
+
+    })();
+  </script></body>
+</html>
