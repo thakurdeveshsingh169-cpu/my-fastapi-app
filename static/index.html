@@ -37,7 +37,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      box-shadow: 0 0 12px rgba(28, 19, 19, 0);
+      box-shadow: 0 0 4px rgba(184, 184, 184, 0.212);
     }
     .header img {
       height: 45px;
@@ -192,12 +192,12 @@
       gap: 8px;
     }
     .rgb-border {
-      background: linear-gradient(270deg,#ffd6d6,#e3fbff,#f0ffa4,#d5ff97,rgba(164,209,255,0.964),rgb(168,160,255),rgba(255,162,236,0.799));
+      background: linear-gradient(270deg,#ff0048ef,#f01cff,#af00e5,#6b21ff);
       background-size: 600% 600%;
-      animation: rgbFlow 5s linear infinite alternate;
+      animation: rgbFlow 2.78s linear infinite alternate;
       padding: 4px;
       border-radius: 30px;
-      box-shadow: 0 0 12px 4px rgba(252,255,159,0.192);
+      box-shadow: 0 0 3px 4px rgba(255, 255, 255, 0);
     }
     @keyframes rgbFlow {
       0% { background-position: 0% 50%; }
@@ -369,6 +369,74 @@
       <button id="searchBtn" onclick="askQuestion()">↑</button>
     </div>
   </div>
+  <!-- 🌐 Hamburger Menu Button -->
+<div id="menuBtn" onclick="toggleMenu()">
+  ☰
+</div>
+
+<!-- 🧭 Side Navigation Panel -->
+<div id="sideMenu">
+  <h3>Our Products</h3>
+  <a href="/calculator">Calculator</a>
+  <a href="/numpuzz">Numpuzz</a>
+  <a href="/snake">Snake Game</a>
+  <a href="#">More Coming Soon...</a>
+</div>
+
+<style>
+/* --- Hamburger Icon --- */
+#menuBtn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 28px;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  z-index: 1001;
+  transition: background 0.3s;
+}
+#menuBtn:hover { background: #ffffff; }
+
+/* --- Side Menu Panel --- */
+#sideMenu {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 240px;
+  height: 100%;
+  background-color: #878787;
+  color: white;
+  overflow-x: hidden;
+  transition: 0.4s;
+  padding-top: 60px;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(255, 255, 255, 0.4);
+}
+#sideMenu h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+#sideMenu a {
+  display: block;
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+#sideMenu a:hover {
+  background: #ffffff;
+}
+</style>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("sideMenu");
+  menu.style.left = (menu.style.left === "0px") ? "-260px" : "0px";
+}
+</script>
 
   <script>
     /* --- JavaScript stays exactly same --- */
@@ -384,10 +452,19 @@
     scrollBtn.addEventListener('click',()=>{ chatWrapper.scrollTop=chatWrapper.scrollHeight; autoScroll=true; scrollBtn.style.display='none'; });
 
     function updatePauseIcon(){ if(isPaused){
-      pauseBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z"></path></svg>`;
+      pauseBtn.innerHTML = `
+  <svg viewBox="0 0 24 24" width="20" height="20">
+    <path d="M8 5v14l11-7z"></path>
+  </svg>`;
+
       pauseBtn.setAttribute('aria-pressed','true'); pauseBtn.setAttribute('aria-label','Resume reply');
     } else {
-      pauseBtn.innerHTML = `<svg viewBox="0 0 24 24" width="20" height="20"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>`;
+      pauseBtn.innerHTML = `
+  <svg viewBox="0 0 24 24" width="20" height="20">
+    <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+    <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+  </svg>`;
+
       pauseBtn.setAttribute('aria-pressed','false'); pauseBtn.setAttribute('aria-label','Pause reply'); } }
 
     pauseBtn.addEventListener('click',()=>{ isPaused = !isPaused; updatePauseIcon(); });
@@ -405,11 +482,11 @@
 
       try {
         const res=await fetch("https://desh-ai.onrender.com/ask",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
-        if(!res.ok) throw new Error(`Server error: ${res.status}`);
+        if(!res.ok) throw new Error(Server error: ${res.status});
         const data=await res.json(); loading.innerHTML="";
 
         if(data.image_url){
-          answerDiv.innerHTML=`<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>`;
+          answerDiv.innerHTML=<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>;
           lastAnswer="";
         } else {
           const rendered=marked.parse(data.answer||"No response.");
@@ -419,7 +496,7 @@
 
         if(data.youtube_videos){
           data.youtube_videos.forEach(v=>{ const div=document.createElement('div'); div.className='youtube-video';
-            div.innerHTML=`<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>`;
+            div.innerHTML=<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>;
             youtube.appendChild(div); });
         }
       } catch(e){
@@ -495,5 +572,4 @@
   </script>
 </body>
 </html>
-
 
