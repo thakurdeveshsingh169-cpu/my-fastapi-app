@@ -8,7 +8,7 @@ import os, requests, time, langid, re, io
 from typing import Dict, List
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-from gtts import gTTS   # 🆕 Google TTS import
+
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -255,4 +255,5 @@ def serve_numpuzz():
 @app.get("/snake")
 def serve_numpuzz():
     return FileResponse("static/snake.html")
+
 
