@@ -249,11 +249,10 @@ async def download_pdf(request: Request):
 @app.get("/numpuzz")
 def serve_numpuzz():
     return FileResponse("static/numpuzz.html")
-@app.get("/calculator")
-def serve_numpuzz():
-    return FileResponse("static/calculator.html")
+
 @app.get("/snake")
 def serve_numpuzz():
     return FileResponse("static/snake.html")
+
 
 
