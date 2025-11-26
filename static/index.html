@@ -477,16 +477,16 @@ function toggleMenu() {
             loading=document.getElementById('loading'),
             youtube=document.getElementById('youtube-results');
       answerDiv.innerHTML=""; youtube.innerHTML="";
-      loading.innerHTML='<div class="circle"><span>𝕯𝖊𝕾𝖍 𝗔𝐢</span></div><div class="replying">𝐑𝐞𝐩𝐥𝐲𝐢𝐧𝐠 𝐒𝐨𝐨𝐧<span>.</span><span>.</span><span>.</span></div>';
+      loading.innerHTML=`<div class="circle"><span>𝕯𝖊𝕾𝖍 𝗔𝐢</span></div><div class="replying">𝐑𝐞𝐩𝐥𝐲𝐢𝐧𝐠 𝐒𝐨𝐨𝐧<span>.</span><span>.</span><span>.</span></div>`;
       pauseBtn.style.display='flex'; pdfBtn.style.display='flex';
 
       try {
         const res=await fetch("https://desh-ai.onrender.com/ask",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
-        if(!res.ok) throw new Error(Server error: ${res.status});
+        if(!res.ok) throw new Error(`Server error: ${res.status}`);
         const data=await res.json(); loading.innerHTML="";
 
         if(data.image_url){
-          answerDiv.innerHTML=<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>;
+          answerDiv.innerHTML=`<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>`;
           lastAnswer="";
         } else {
           const rendered=marked.parse(data.answer||"No response.");
@@ -496,7 +496,7 @@ function toggleMenu() {
 
         if(data.youtube_videos){
           data.youtube_videos.forEach(v=>{ const div=document.createElement('div'); div.className='youtube-video';
-            div.innerHTML=<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>;
+            div.innerHTML=`<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>`;
             youtube.appendChild(div); });
         }
       } catch(e){
@@ -572,5 +572,6 @@ function toggleMenu() {
   </script>
 </body>
 </html>
+
 
 
