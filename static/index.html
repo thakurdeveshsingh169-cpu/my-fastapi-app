@@ -502,7 +502,7 @@ function toggleMenu() {
       } catch(e){
         loading.innerHTML=""; answerDiv.innerHTML="Error fetching answer."; console.error(e); pauseBtn.style.display='none';
       }
-      document.getElementById('question').value=""; autoResizeTextarea(questionInput);
+      document.getElementById('question').value=""; autoResizeTextarea(document.getElementById('question'));
     }
 
     function typeWriterHTML(html,el,cb){
@@ -572,4 +572,5 @@ function toggleMenu() {
   </script>
 </body>
 </html>
+
 
