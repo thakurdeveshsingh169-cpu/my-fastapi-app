@@ -254,5 +254,10 @@ def serve_numpuzz():
 def serve_numpuzz():
     return FileResponse("static/snake.html")
 
+@app.get("/calculator")
+def serve_numpuzz():
+    return FileResponse("static/calculator.html")
+
+
 
 
