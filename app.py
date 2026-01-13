@@ -259,5 +259,11 @@ def serve_numpuzz():
     return FileResponse("static/calculator.html")
 
 
+@app.get("/BMI (Ai Integrated)")
+def serve_numpuzz():
+    return FileResponse("static/BMI (Ai Integrated).html")
+
+
+
 
 
