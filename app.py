@@ -265,6 +265,13 @@ def serve_numpuzz():
 
 
 
+@app.get("/Dictionary")
+def serve_numpuzz():
+    return FileResponse("static/Dictionary.html")
+
+
+
+
 
 
 
