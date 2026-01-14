@@ -3,18 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𝕯𝖊𝕾𝖍 𝗔𝐢 Snake</title>
 
-<title>𝕯𝖊𝕾𝖍 𝗔𝐢 Snake Game</title>
-
-<!-- DESHEI Font -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#0f0f0f;
-  --card:#1c1c1c;
-  --text:#ffffff;
-  --accent:#00ff99;
+  --bg:#ffffff;
+  --card:#2dff50;
+  --text:#000000;
+  --accent:#ffffff;
 }
 
 body{
@@ -28,24 +26,15 @@ body{
   height:100vh;
 }
 
-/* Screens */
-.screen{
-  display:none;
-  width:100%;
-  max-width:400px;
-  text-align:center;
-}
-
+.screen{ display:none; max-width:400px; width:100%; text-align:center; }
 .active{ display:block; }
 
-/* Card */
 .card{
   background:var(--card);
   padding:20px;
   border-radius:16px;
 }
 
-/* Buttons */
 button{
   width:100%;
   padding:12px;
@@ -56,45 +45,57 @@ button{
   color:#000;
   font-size:16px;
   font-weight:600;
+  box-shadow: 0 0 2px rgb(0, 0, 0);
 }
 
-/* Canvas */
 canvas{
-  background:#111;
+  background:#949494;
   border:3px solid var(--accent);
   margin-top:10px;
 }
 
-/* Controls */
-.controls{
-  margin-top:12px;
-}
 .controls button{
   width:60px;
   height:60px;
+  font-size:52px;
   margin:5px;
-  font-size:22px;
-  border-radius:12px;
 }
 
-/* Footer */
-footer{
-  position:fixed;
-  bottom:10px;
-  width:100%;
-  text-align:center;
-  font-family:Orbitron, sans-serif;
-  letter-spacing:2px;
-  opacity:0.6;
-}
-
-/* Select */
 select{
   width:100%;
   padding:10px;
   margin:6px 0;
   border-radius:8px;
   border:none;
+}
+
+footer{
+  position:fixed;
+  bottom:04px;
+  width:100%;
+  text-align:center;
+  font-family:Orbitron;
+  opacity:.6;
+}
+.controls{
+  margin-top:10px;
+}
+
+.controls .row{
+  display:flex;
+  justify-content:center;
+}
+
+.controls button{
+  width:60px;
+  height:60px;
+  font-size:22px;
+  margin:6px;
+  border-radius:14px;
+}
+
+.controls .empty{
+  visibility:hidden;
 }
 </style>
 </head>
@@ -123,10 +124,10 @@ select{
 
     <label>Difficulty</label>
     <select id="difficulty">
-      
-      <option value="150">Easy</option>
-      <option value="110">Medium</option>
-      <option value="80">Hard</option>
+     
+      <option value="220">Easy</option>
+      <option value="150">Medium</option>
+      <option value="90">Hard</option>
     </select>
 
     <label>Snake Skin</label>
@@ -134,11 +135,11 @@ select{
       <option value="#00ff99">Green</option>
       <option value="#ffffff">White</option>
       <option value="#000000">Black</option>
-      <option value="#f1c27d">Skin Color</option>
+      <option value="#f1c27d">Skin</option>
     </select>
 
     <label>Theme</label>
-    <select id="theme" onchange="changeTheme(this.value)">
+    <select onchange="changeTheme(this.value)">
       <option value="dark">Dark</option>
       <option value="light">Light</option>
     </select>
@@ -152,18 +153,29 @@ select{
   <h3 id="countdown"></h3>
   <canvas id="game" width="300" height="300"></canvas>
 
-  <!-- ON-SCREEN CONTROLS -->
   <div class="controls">
-    <button onclick="setDir('UP')">⬆️</button><br>
-    <button onclick="setDir('LEFT')">⬅️</button>
-    <button onclick="setDir('DOWN')">⬇️</button>
-    <button onclick="setDir('RIGHT')">➡️</button>
+  <div class="row">
+    <button class="empty"></button>
+    <button onclick="setDir('UP')">↑</button>
+    <button class="empty"></button>
+  </div>
+
+  <div class="row">
+    <button onclick="setDir('LEFT')">←</button>
+    <button class="empty"></button>
+    <button onclick="setDir('RIGHT')">→</button>
+  </div>
+
+  <div class="row">
+    <button class="empty"></button>
+    <button onclick="setDir('DOWN')">↓</button>
+    <button class="empty"></button>
   </div>
 </div>
 
-<footer>by 𝕯𝖊𝕾𝖍 𝗔𝐢</footer>
 
 
+<footer>by 𝕯𝖊𝕾𝖍 𝗔𝐢(Shreya_Thakur_4777)</footer>
 
 <script>
 const screens=document.querySelectorAll('.screen');
@@ -172,11 +184,10 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-/* THEME */
 function changeTheme(t){
   if(t==='light'){
     document.documentElement.style.setProperty('--bg','#f5f5f5');
-    document.documentElement.style.setProperty('--card','#ffffff');
+    document.documentElement.style.setProperty('--card','#fff');
     document.documentElement.style.setProperty('--text','#000');
   }else{
     document.documentElement.style.setProperty('--bg','#0f0f0f');
@@ -185,7 +196,15 @@ function changeTheme(t){
   }
 }
 
-/* COUNTDOWN */
+/* GAME */
+const canvas=document.getElementById('game');
+const ctx=canvas.getContext('2d');
+
+let snake, food;
+let dir='RIGHT', nextDir='RIGHT';
+let lastTime=0, delay=150;
+let running=false;
+
 function startCountdown(){
   showScreen('gameScreen');
   let c=3;
@@ -202,26 +221,58 @@ function startCountdown(){
   },1000);
 }
 
-/* GAME LOGIC */
-let canvas=document.getElementById('game');
-let ctx=canvas.getContext('2d');
-let snake,food,dir,loop;
-
 function startGame(){
-  clearInterval(loop);
   snake=[{x:140,y:140}];
-  dir='RIGHT';
   food=randomFood();
-  const speed=document.getElementById('difficulty').value;
-  if(speed==0) return;
-  loop=setInterval(draw,speed);
+  dir=nextDir='RIGHT';
+
+  delay=parseInt(document.getElementById('difficulty').value);
+  if(delay===0) return;
+
+  running=true;
+  lastTime=0;
+  requestAnimationFrame(loop);
+}
+
+function loop(time){
+  if(!running) return;
+  if(time-lastTime>delay){
+    update();
+    draw();
+    lastTime=time;
+  }
+  requestAnimationFrame(loop);
 }
 
 function randomFood(){
   return {
     x:Math.floor(Math.random()*15)*20,
     y:Math.floor(Math.random()*15)*20
+  };
+}
+
+function update(){
+  dir=nextDir;
+  let h={...snake[0]};
+
+  if(dir==='LEFT')h.x-=20;
+  if(dir==='RIGHT')h.x+=20;
+  if(dir==='UP')h.y-=20;
+  if(dir==='DOWN')h.y+=20;
+
+  if(document.getElementById('mode').value==='wall'){
+    if(h.x<0||h.y<0||h.x>=300||h.y>=300){ gameOver(); return; }
+  }else{
+    h.x=(h.x+300)%300;
+    h.y=(h.y+300)%300;
   }
+
+  if(snake.some(p=>p.x===h.x&&p.y===h.y)){ gameOver(); return; }
+
+  if(h.x===food.x&&h.y===food.y) food=randomFood();
+  else snake.pop();
+
+  snake.unshift(h);
 }
 
 function draw(){
@@ -229,62 +280,33 @@ function draw(){
   const color=document.getElementById('skin').value;
 
   snake.forEach((p,i)=>{
-    ctx.fillStyle=i?color:'#ff4444';
+    ctx.fillStyle=i?'#ffffff':color;
     ctx.fillRect(p.x,p.y,20,20);
   });
 
   ctx.fillStyle='red';
   ctx.fillRect(food.x,food.y,20,20);
-
-  let head={...snake[0]};
-  if(dir==='LEFT')head.x-=20;
-  if(dir==='RIGHT')head.x+=20;
-  if(dir==='UP')head.y-=20;
-  if(dir==='DOWN')head.y+=20;
-
-  if(head.x===food.x && head.y===food.y){
-    food=randomFood();
-  }else{
-    snake.pop();
-  }
-
-  if(document.getElementById('mode').value==='wall'){
-    if(head.x<0||head.y<0||head.x>=300||head.y>=300){
-      gameOver(); return;
-    }
-  }else{
-    head.x=(head.x+300)%300;
-    head.y=(head.y+300)%300;
-  }
-
-  if(snake.some(p=>p.x===head.x&&p.y===head.y)){
-    gameOver(); return;
-  }
-
-  snake.unshift(head);
 }
 
 function gameOver(){
-  clearInterval(loop);
+  running=false;
   alert("Game Over");
   location.reload();
 }
 
-/* KEYBOARD CONTROLS */
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowLeft'&&dir!=='RIGHT')dir='LEFT';
-  if(e.key==='ArrowRight'&&dir!=='LEFT')dir='RIGHT';
-  if(e.key==='ArrowUp'&&dir!=='DOWN')dir='UP';
-  if(e.key==='ArrowDown'&&dir!=='UP')dir='DOWN';
-});
-
-/* BUTTON CONTROLS */
 function setDir(d){
-  if(d==='LEFT' && dir!=='RIGHT') dir='LEFT';
-  if(d==='RIGHT' && dir!=='LEFT') dir='RIGHT';
-  if(d==='UP' && dir!=='DOWN') dir='UP';
-  if(d==='DOWN' && dir!=='UP') dir='DOWN';
+  if(d==='LEFT' && dir!=='RIGHT') nextDir='LEFT';
+  if(d==='RIGHT' && dir!=='LEFT') nextDir='RIGHT';
+  if(d==='UP' && dir!=='DOWN') nextDir='UP';
+  if(d==='DOWN' && dir!=='UP') nextDir='DOWN';
 }
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft') setDir('LEFT');
+  if(e.key==='ArrowRight') setDir('RIGHT');
+  if(e.key==='ArrowUp') setDir('UP');
+  if(e.key==='ArrowDown') setDir('DOWN');
+});
 </script>
 
 </body>
