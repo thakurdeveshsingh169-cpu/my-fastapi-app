@@ -29,7 +29,7 @@
     /* Updated Header with logo */
     .header {
       background-color: #ffffff00; /* white background like ChatGPT */
-      padding: 20px 50px;
+      padding: 20px 25px;
       border-radius: 25px;
       margin-top: 10px;
       margin: auto;
@@ -37,7 +37,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      box-shadow: 0 0 4px rgba(184, 184, 184, 0.212);
+      box-shadow: 0 0 4px rgb(0, 0, 0);
     }
     .header img {
       height: 45px;
@@ -192,7 +192,7 @@
       gap: 8px;
     }
     .rgb-border {
-      background: linear-gradient(270deg,#ff0048ef,#f01cff,#af00e5,#6b21ff);
+      background: linear-gradient(270deg,#ff0048ef,#ffd91c,#00e52a,#2197ff,#00e52a,#ffd91c);
       background-size: 600% 600%;
       animation: rgbFlow 2.78s linear infinite alternate;
       padding: 4px;
@@ -246,15 +246,15 @@
       justify-content: center;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0);
     }
     #micButton svg { width: 20px; height: 25px; fill: #000; }
     #micButton.active { animation: micPulse 1s infinite; }
 
     @keyframes micPulse {
       0% { box-shadow: 0 0 0 0 rgb(6,151,255); }
-      70% { box-shadow: 0 0 0 10px rgba(13,109,253,0); }
-      100% { box-shadow: 0 0 0 0 rgba(13,109,253,0); }
+      70% { box-shadow: 0 0 0 04px rgba(124, 1, 255, 0.717); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 195, 0.422); }
     }
 
     #searchBtn {
@@ -271,6 +271,7 @@
       cursor: pointer;
       box-shadow: 0 0 8px rgba(0,0,0,0.2);
     }
+
 
     #scrollToBottomBtn, #pauseResumeBtn, #pdfBtn {
       position: fixed;
@@ -376,13 +377,33 @@
 
 <!-- 🧭 Side Navigation Panel -->
 <div id="sideMenu">
-  <h3>Our Products</h3>
-  <a href="/calculator">Calculator</a>
-  <a href="/numpuzz">Numpuzz</a>
-  <a href="/snake">Snake Game</a>
-  <a href="/Dictionary">Dictionary (Ai Integrated)</a>
-  <a href="/BMI">BMI (Ai Integrated)</a>
+
+  <!-- 🔹 OUR PRODUCTS -->
+  <div class="menu-section">
+    <div class="menu-header" onclick="toggleSection(this)">
+      🚀 Our Products
+    </div>
+    <div class="menu-content">
+      <a href="/calculator">Calculator</a>
+      <a href="/Dictionary">Dictionary (AI Integrated)</a>
+      <a href="/BMI">BMI (AI Integrated)</a>
+    </div>
+  </div>
+
+  <!-- 🎮 GAMES -->
+  <div class="menu-section">
+    <div class="menu-header" onclick="toggleSection(this)">
+      🎮 Games
+    </div>
+    <div class="menu-content">
+      <a href="/numpuzz">Numpuzz</a>
+      <a href="/snake">Snake Game</a>
+      <!-- Add unlimited games here -->
+    </div>
+  </div>
+
 </div>
+
 
 <style>
 /* --- Hamburger Icon --- */
@@ -394,7 +415,7 @@
   cursor: pointer;
   color: rgb(0, 0, 0);
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 6px 12px;
   z-index: 1001;
   transition: background 0.3s;
@@ -404,17 +425,17 @@
 /* --- Side Menu Panel --- */
 #sideMenu {
   position: fixed;
-  top: 0;
+  top: 0px;
   left: -260px;
   width: 240px;
   height: 100%;
-  background-color: #878787;
-  color: white;
+  background-color: #383838;
+  color: rgb(0, 0, 0);
   overflow-x: hidden;
   transition: 0.4s;
-  padding-top: 60px;
+  padding-top: 85px;
   z-index: 1000;
-  box-shadow: 2px 0 10px rgba(255, 255, 255, 0.4);
+  box-shadow: 2px 0 10px rgb(253, 255, 105);
 }
 #sideMenu h3 {
   text-align: center;
@@ -423,19 +444,80 @@
 #sideMenu a {
   display: block;
   padding: 10px 20px;
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
   transition: background 0.3s;
 }
 #sideMenu a:hover {
-  background: #ffffff;
+  background: #e52d2d;
 }
+.menu-section {
+  margin-bottom: 20px;
+}
+
+.menu-section h3 {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+#sideMenu hr {
+  border: none;
+  border-top: 1px solid rgba(104, 104, 104, 0.701);
+  margin: 15px 10px;
+}
+/* Section wrapper */
+.menu-section {
+  margin-bottom: 10px;
+}
+
+/* Clickable header */
+.menu-header {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  background: rgb(255, 255, 255);
+  user-select: none;
+}
+
+/* Hidden content (default closed) */
+.menu-content {
+  max-height: 0;
+  overflow-y: auto;
+  transition: max-height 0.35s ease;
+  background: rgba(253, 255, 165, 0.906);
+}
+
+/* Scroll when items are many */
+.menu-content.open {
+  max-height: 180px; /* scroll starts after this */
+}
+
+/* Links */
+.menu-content a {
+  display: block;
+  padding: 10px 25px;
+  color: white;
+  text-decoration: none;
+}
+
+.menu-content a:hover {
+  background: rgba(255,255,255,0.25);
+}
+
 </style>
 
 <script>
 function toggleMenu() {
   const menu = document.getElementById("sideMenu");
   menu.style.left = (menu.style.left === "0px") ? "-260px" : "0px";
+}
+</script>
+<script>
+function toggleSection(header) {
+  const content = header.nextElementSibling;
+  content.classList.toggle("open");
 }
 </script>
 
@@ -573,6 +655,13 @@ function toggleMenu() {
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
