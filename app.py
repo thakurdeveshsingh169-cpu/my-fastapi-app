@@ -270,6 +270,9 @@ def serve_numpuzz():
     return FileResponse("static/Dictionary.html")
 
 
+@app.get("/desh.html")
+def serve_numpuzz():
+    return FileResponse("static/desh.html")
 
 
 
