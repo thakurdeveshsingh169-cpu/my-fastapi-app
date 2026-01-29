@@ -54,13 +54,6 @@ canvas{
   margin-top:10px;
 }
 
-.controls button{
-  width:60px;
-  height:60px;
-  font-size:52px;
-  margin:5px;
-}
-
 select{
   width:100%;
   padding:10px;
@@ -77,6 +70,7 @@ footer{
   font-family:Orbitron;
   opacity:.6;
 }
+
 .controls{
   margin-top:10px;
 }
@@ -102,12 +96,17 @@ footer{
 
 <body>
 
+<!-- SOUNDS -->
+<audio id="eatSound" src="eat.mp3" preload="auto"></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+<audio id="gameOverSound" src="gameover.mp3" preload="auto"></audio>
+
 <!-- DASHBOARD -->
 <div id="dashboard" class="screen active">
   <div class="card">
     <h2>🐍 Snake Game</h2>
-    <button onclick="startCountdown()">PLAY</button>
-    <button onclick="showScreen('settings')">SETTINGS</button>
+    <button onclick="playClick(); startCountdown()">PLAY</button>
+    <button onclick="playClick(); showScreen('settings')">SETTINGS</button>
   </div>
 </div>
 
@@ -117,21 +116,20 @@ footer{
     <h3>⚙️ Settings</h3>
 
     <label>Game Mode</label>
-    <select id="mode">
+    <select id="mode" onchange="playClick()">
       <option value="free">Free World</option>
       <option value="wall">Wall Kills</option>
     </select>
 
     <label>Difficulty</label>
-    <select id="difficulty">
-     
+    <select id="difficulty" onchange="playClick()">
       <option value="220">Easy</option>
       <option value="150">Medium</option>
       <option value="90">Hard</option>
     </select>
 
     <label>Snake Skin</label>
-    <select id="skin">
+    <select id="skin" onchange="playClick()">
       <option value="#00ff99">Green</option>
       <option value="#ffffff">White</option>
       <option value="#000000">Black</option>
@@ -139,12 +137,12 @@ footer{
     </select>
 
     <label>Theme</label>
-    <select onchange="changeTheme(this.value)">
+    <select onchange="playClick(); changeTheme(this.value)">
       <option value="dark">Dark</option>
       <option value="light">Light</option>
     </select>
 
-    <button onclick="showScreen('dashboard')">BACK</button>
+    <button onclick="playClick(); showScreen('dashboard')">BACK</button>
   </div>
 </div>
 
@@ -154,31 +152,48 @@ footer{
   <canvas id="game" width="300" height="300"></canvas>
 
   <div class="controls">
-  <div class="row">
-    <button class="empty"></button>
-    <button onclick="setDir('UP')">↑</button>
-    <button class="empty"></button>
-  </div>
+    <div class="row">
+      <button class="empty"></button>
+      <button onclick="playClick(); setDir('UP')">↑</button>
+      <button class="empty"></button>
+    </div>
 
-  <div class="row">
-    <button onclick="setDir('LEFT')">←</button>
-    <button class="empty"></button>
-    <button onclick="setDir('RIGHT')">→</button>
-  </div>
+    <div class="row">
+      <button onclick="playClick(); setDir('LEFT')">←</button>
+      <button class="empty"></button>
+      <button onclick="playClick(); setDir('RIGHT')">→</button>
+    </div>
 
-  <div class="row">
-    <button class="empty"></button>
-    <button onclick="setDir('DOWN')">↓</button>
-    <button class="empty"></button>
+    <div class="row">
+      <button class="empty"></button>
+      <button onclick="playClick(); setDir('DOWN')">↓</button>
+      <button class="empty"></button>
+    </div>
   </div>
 </div>
-
-
 
 <footer>by 𝕯𝖊𝕾𝖍 𝗔𝐢(Shreya_Thakur_4777)</footer>
 
 <script>
 const screens=document.querySelectorAll('.screen');
+
+const eatSound=document.getElementById("eatSound");
+const clickSound=document.getElementById("clickSound");
+const gameOverSound=document.getElementById("gameOverSound");
+
+function playClick(){
+  clickSound.currentTime=0;
+  clickSound.play();
+}
+function playEat(){
+  eatSound.currentTime=0;
+  eatSound.play();
+}
+function playGameOver(){
+  gameOverSound.currentTime=0;
+  gameOverSound.play();
+}
+
 function showScreen(id){
   screens.forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -225,10 +240,7 @@ function startGame(){
   snake=[{x:140,y:140}];
   food=randomFood();
   dir=nextDir='RIGHT';
-
   delay=parseInt(document.getElementById('difficulty').value);
-  if(delay===0) return;
-
   running=true;
   lastTime=0;
   requestAnimationFrame(loop);
@@ -261,37 +273,45 @@ function update(){
   if(dir==='DOWN')h.y+=20;
 
   if(document.getElementById('mode').value==='wall'){
-    if(h.x<0||h.y<0||h.x>=300||h.y>=300){ gameOver(); return; }
+    if(h.x<0||h.y<0||h.x>=300||h.y>=300){
+      gameOver(); return;
+    }
   }else{
     h.x=(h.x+300)%300;
     h.y=(h.y+300)%300;
   }
 
-  if(snake.some(p=>p.x===h.x&&p.y===h.y)){ gameOver(); return; }
+  if(snake.some(p=>p.x===h.x&&p.y===h.y)){
+    gameOver(); return;
+  }
 
-  if(h.x===food.x&&h.y===food.y) food=randomFood();
-  else snake.pop();
-
+  if(h.x===food.x&&h.y===food.y){
+    playEat();
+    food=randomFood();
+  }else{
+    snake.pop();
+  }
   snake.unshift(h);
 }
 
 function draw(){
   ctx.clearRect(0,0,300,300);
   const color=document.getElementById('skin').value;
-
   snake.forEach((p,i)=>{
     ctx.fillStyle=i?'#ffffff':color;
     ctx.fillRect(p.x,p.y,20,20);
   });
-
   ctx.fillStyle='red';
   ctx.fillRect(food.x,food.y,20,20);
 }
 
 function gameOver(){
   running=false;
-  alert("Game Over");
-  location.reload();
+  playGameOver();
+  setTimeout(()=>{
+    alert("Game Over");
+    location.reload();
+  },300);
 }
 
 function setDir(d){
@@ -311,3 +331,4 @@ document.addEventListener('keydown',e=>{
 
 </body>
 </html>
+
