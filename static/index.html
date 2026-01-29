@@ -37,7 +37,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      box-shadow: 0 0 4px rgb(0, 0, 0);
+      box-shadow: 0 0 4px rgb(255, 174, 0);
     }
     .header img {
       height: 45px;
@@ -119,7 +119,7 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      background: black;
+      background: rgb(255, 174, 0);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -136,8 +136,8 @@
     }
 
     @keyframes pulse {
-      from { box-shadow: 0 0 15px 5px #ff00ff; }
-      to { box-shadow: 0 0 45px 12px #ff00ff; }
+      from { box-shadow: 0 0 25px 10px #e3e3e3; }
+      to { box-shadow: 0 0 45px 12px #84ff00; }
     }
 
     .replying {
@@ -192,9 +192,9 @@
       gap: 8px;
     }
     .rgb-border {
-      background: linear-gradient(270deg,#ff0048ef,#ffd91c,#00e52a,#2197ff,#00e52a,#ffd91c);
+      background: linear-gradient(270deg,#00d12d,#77ff00,#e7e7e7,rgb(255, 174, 0),rgb(255, 174, 0));
       background-size: 600% 600%;
-      animation: rgbFlow 2.78s linear infinite alternate;
+      animation: rgbFlow 08s linear infinite alternate;
       padding: 4px;
       border-radius: 30px;
       box-shadow: 0 0 3px 4px rgba(255, 255, 255, 0);
@@ -215,6 +215,7 @@
       width: 260px;
       min-height: 19px;
       max-height: 110px;
+    
     }
 
     #question {
@@ -246,7 +247,7 @@
       justify-content: center;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0);
+      box-shadow: 0 0 4px rgb(255, 174, 0);
     }
     #micButton svg { width: 20px; height: 25px; fill: #000; }
     #micButton.active { animation: micPulse 1s infinite; }
@@ -259,17 +260,17 @@
 
     #searchBtn {
       width: 25px;
-      height: 50px;
+      height: 36px;
       border-radius: 50%;
       border: none;
       background-color: rgb(255, 255, 255);
       color: rgb(0, 0, 0);
-      font-size: 37px;
+      font-size: 27px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      box-shadow: 0 0 4px rgb(255, 187, 0);
     }
 
 
@@ -284,6 +285,7 @@
       z-index: 150;
       background: rgb(228,228,228);
       color: #000;
+      box-shadow: 0 0 4px rgb(255, 174, 0);
     }
 
     #scrollToBottomBtn {
@@ -302,7 +304,7 @@
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      background-color: #d6d6d6;
+      background-color: #fffcfc;
       color: #ffffff;
       display: none;
       align-items: center;
@@ -337,7 +339,7 @@
     <!-- Header with Logo -->
     <div class="header">
       <img src="/static/logo.png" alt="Desh AI Logo">
-      <h2>𝕯𝖊𝕾𝖍 𝗔𝐢</h2>
+      <h2>𝕯𝖊𝕾𝖍 𝐀𝖎 </h2>
     </div>
 
     <div id="answer"></div>
@@ -377,23 +379,31 @@
 
 <!-- 🧭 Side Navigation Panel -->
 <div id="sideMenu">
+<a href="/desh.html" class="menu-single">
+  𝕯𝖊𝖘𝖍 𝐀𝖎 
+  <span class="pro-badge">PRO</span>
+</a>
 
   <!-- 🔹 OUR PRODUCTS -->
+    <!-- 🔹 OUR PRODUCTS -->
   <div class="menu-section">
     <div class="menu-header" onclick="toggleSection(this)">
-      🚀 Our Products
+      Our Products
     </div>
     <div class="menu-content">
       <a href="/calculator">Calculator</a>
-      <a href="/Dictionary">Dictionary (AI Integrated)</a>
-      <a href="/BMI">BMI (AI Integrated)</a>
+      <a href="/Dictionary">Dictionary (𝐀𝖎  Integrated)</a>
+      <a href="/BMI">BMI (𝐀𝖎  Integrated)</a>
     </div>
   </div>
+
+
+  
 
   <!-- 🎮 GAMES -->
   <div class="menu-section">
     <div class="menu-header" onclick="toggleSection(this)">
-      🎮 Games
+      Games
     </div>
     <div class="menu-content">
       <a href="/numpuzz">Numpuzz</a>
@@ -401,12 +411,42 @@
       <!-- Add unlimited games here -->
     </div>
   </div>
-
 </div>
 
 
 <style>
 /* --- Hamburger Icon --- */
+
+.pro-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #2196f3;
+  border: 1.6px solid #2196f3;
+  border-radius: 999px;
+  background: rgba(33,150,243,0.12);
+  box-shadow: 0 0 6px rgba(33,150,243,0.6);
+}
+
+
+.menu-single {
+  display: block;
+  padding: 14px 20px;
+  font-weight: bold;
+  background: rgba(237, 237, 237, 0.781);
+  color: black;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.menu-single:hover {
+  background: #f9ffa5;
+}
+
 #menuBtn {
   position: fixed;
   top: 15px;
@@ -414,11 +454,12 @@
   font-size: 28px;
   cursor: pointer;
   color: rgb(0, 0, 0);
-  background: #ffffff;
+  background: #ffffff00;
   border-radius: 4px;
   padding: 6px 12px;
   z-index: 1001;
   transition: background 0.3s;
+  box-shadow: 0 0 4px rgb(255, 174, 0);
 }
 #menuBtn:hover { background: #ffffff; }
 
@@ -429,13 +470,13 @@
   left: -260px;
   width: 240px;
   height: 100%;
-  background-color: #383838;
+  background-color: #ffffff;
   color: rgb(0, 0, 0);
   overflow-x: hidden;
   transition: 0.4s;
   padding-top: 85px;
   z-index: 1000;
-  box-shadow: 2px 0 10px rgb(253, 255, 105);
+  box-shadow: 02px 0 3px  rgba(255, 174, 0, 0.982);
 }
 #sideMenu h3 {
   text-align: center;
@@ -449,7 +490,7 @@
   transition: background 0.3s;
 }
 #sideMenu a:hover {
-  background: #e52d2d;
+  background: #b4b4b48f;
 }
 .menu-section {
   margin-bottom: 20px;
@@ -464,7 +505,7 @@
 
 #sideMenu hr {
   border: none;
-  border-top: 1px solid rgba(104, 104, 104, 0.701);
+  border-top: 1px solid rgba(239, 1, 1, 0.701);
   margin: 15px 10px;
 }
 /* Section wrapper */
@@ -477,7 +518,7 @@
   padding: 12px 20px;
   cursor: pointer;
   font-weight: bold;
-  background: rgb(255, 255, 255);
+  background: rgba(137, 137, 137, 0.781);
   user-select: none;
 }
 
@@ -486,7 +527,7 @@
   max-height: 0;
   overflow-y: auto;
   transition: max-height 0.35s ease;
-  background: rgba(253, 255, 165, 0.906);
+  background: rgba(228, 228, 228, 0.776);
 }
 
 /* Scroll when items are many */
@@ -498,12 +539,12 @@
 .menu-content a {
   display: block;
   padding: 10px 25px;
-  color: white;
+  color: rgb(255, 255, 255);
   text-decoration: none;
 }
 
 .menu-content a:hover {
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 </style>
@@ -655,6 +696,10 @@ function toggleSection(header) {
   </script>
 </body>
 </html>
+
+
+
+
 
 
 
