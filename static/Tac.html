@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Alpha AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;900&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #020617;
+            color: white;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        .cell {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cell.x { color: #3b82f6; text-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        .cell.o { color: #ef4444; text-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+        .modal-blur {
+            backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.85);
+        }
+        .disabled { pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950">
+        <div class="text-center p-8 max-w-sm w-full">
+            <div class="text-7xl mb-6">🎮</div>
+            <h1 class="text-4xl font-black mb-4 tracking-tighter uppercase">Tic Tac <span class="text-blue-500">Toe</span></h1>
+            <p class="text-white/50 mb-10 text-sm">Do you want to start the game?</p>
+            <button id="realStartBtn" class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-2xl shadow-lg shadow-blue-500/20 transition-all active:scale-95">
+                YES, START
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Game UI -->
+    <div class="relative w-full max-w-md p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-black italic tracking-tighter text-white/80">ULTIMATE AI</h1>
+            <button id="settingsBtn" class="p-2 hover:bg-white/10 rounded-full transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+        </div>
+
+        <div id="status" class="text-center mb-8 text-xl font-black uppercase tracking-widest text-blue-400">X's Turn</div>
+
+        <div id="board" class="grid grid-cols-3 gap-3 bg-white/5 p-3 rounded-[2rem] border border-white/10">
+            <div data-index="0" class="cell rounded-2xl"></div>
+            <div data-index="1" class="cell rounded-2xl"></div>
+            <div data-index="2" class="cell rounded-2xl"></div>
+            <div data-index="3" class="cell rounded-2xl"></div>
+            <div data-index="4" class="cell rounded-2xl"></div>
+            <div data-index="5" class="cell rounded-2xl"></div>
+            <div data-index="6" class="cell rounded-2xl"></div>
+            <div data-index="7" class="cell rounded-2xl"></div>
+            <div data-index="8" class="cell rounded-2xl"></div>
+        </div>
+
+        <div class="mt-8 flex justify-between px-2 text-[10px] text-white/40 font-black tracking-[0.3em] uppercase">
+            <span id="modeDisplay">VS AI</span>
+            <span id="diffDisplay">HARD MODE</span>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="settingsModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-blur p-4">
+        <div class="bg-slate-900 p-8 rounded-[2.5rem] border border-white/10 w-full max-w-xs shadow-2xl">
+            <h2 class="text-xl font-black mb-8 text-center text-blue-500 uppercase">Settings</h2>
+            <div class="space-y-6">
+                <div>
+                    <label class="text-[10px] font-black text-white/40 uppercase mb-3 block">Opponent</label>
+                    <div class="flex bg-black/40 p-1 rounded-xl">
+                        <button id="setAI" class="flex-1 py-2 rounded-lg bg-blue-600 text-xs font-black">AI</button>
+                        <button id="setPlayer" class="flex-1 py-2 rounded-lg text-xs font-black">PLAYER</button>
+                    </div>
+                </div>
+                <div id="difficultySection">
+                    <label class="text-[10px] font-black text-white/40 uppercase mb-3 block">Difficulty</label>
+                    <select id="difficultySelect" class="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm focus:outline-none">
+                        <option value="easy">Easy (Moderate)</option>
+                        <option value="medium">Medium (Hard)</option>
+                        <option value="hard" selected>Hard (Very Tough)</option>
+                    </select>
+                </div>
+            </div>
+            <button id="closeSettings" class="w-full mt-10 py-4 bg-white text-black font-black text-xs rounded-2xl uppercase tracking-widest">OK</button>
+        </div>
+    </div>
+
+    <div id="winModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-blur p-4">
+        <div class="bg-slate-900 p-10 rounded-[3rem] border border-white/10 text-center w-full max-w-xs shadow-2xl">
+            <div id="winIcon" class="text-7xl mb-6">🏆</div>
+            <h2 id="winMessage" class="text-3xl font-black mb-2 uppercase text-blue-500">Winner!</h2>
+            <p id="winSubtext" class="text-white/40 mb-10 text-sm italic">"Tu gaya bete"</p>
+            <button id="restartBtn" class="w-full py-5 bg-blue-600 text-white font-black rounded-2xl shadow-xl">RESTART</button>
+        </div>
+    </div>
+
+    <script>
+        const AUDIO_PATHS = {
+            userInput: 'userinput.mp3',
+            aiInput: 'aiinput.mp3',
+            win: 'wininput.mp3',
+            loser: 'loser.mp3'
+        };
+
+        const taunts = {
+            move: ["Ab tu gaya bete.", "Ruk abhi bataata hoon.", "Beta baap se panga nahi.", "Ye kya move hai? Rehne de.", "Dimaag ghar chhod ke aaya hai kya?"],
+            win: ["Hahaha! Bola tha na tu gaya bete.", "Beta, main tera baap hoon.", "Ab jaa ke doodh pee le."],
+            loss: ["Tukke se jeet gaya tu.", "System error tha, varna marta tu.", "Agli baar dekh lunga bete."],
+            draw: ["Bach gaya tu iss baar.", "Chalo draw hi sahi, dumm hai toh phir se khel."]
+        };
+
+        const cells = document.querySelectorAll('.cell');
+        const statusText = document.getElementById('status');
+        const startScreen = document.getElementById('startScreen');
+        const realStartBtn = document.getElementById('realStartBtn');
+        const winModal = document.getElementById('winModal');
+        
+        let currentPlayer = "X";
+        let gameState = Array(9).fill("");
+        let gameActive = false;
+        let isAiThinking = false; // Prevent player from clicking during AI turn
+        let gameMode = 'ai';
+        let difficulty = 'hard';
+
+        const playFile = (path) => {
+            const audio = new Audio(path);
+            audio.play().catch(() => {}); 
+        };
+
+        const speak = (text) => {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = window.speechSynthesis.getVoices();
+            const maleVoice = voices.find(v => (v.lang.includes('hi') || v.lang.includes('en')) && v.name.toLowerCase().includes('male')) 
+                             || voices.find(v => v.lang.includes('hi')) || voices[0];
+            utterance.voice = maleVoice;
+            utterance.rate = 0.9; 
+            utterance.pitch = 0.8; 
+            utterance.lang = 'hi-IN';
+            window.speechSynthesis.speak(utterance);
+        };
+
+        realStartBtn.onclick = () => {
+            startScreen.classList.add('hidden');
+            gameActive = true;
+            speak("Abhi bataata hoon tujhe, chal shuru kar.");
+        };
+
+        function handleCellClick(e) {
+            if (!gameActive || isAiThinking) return;
+            const idx = e.target.dataset.index;
+            if (gameState[idx] !== "") return;
+
+            makeMove(idx);
+            
+            if (gameActive && gameMode === 'ai' && currentPlayer === 'O') {
+                isAiThinking = true;
+                setTimeout(aiLogic, 800);
+            }
+        }
+
+        function makeMove(idx) {
+            gameState[idx] = currentPlayer;
+            cells[idx].innerText = currentPlayer;
+            cells[idx].classList.add(currentPlayer.toLowerCase());
+            
+            if (currentPlayer === "X") playFile(AUDIO_PATHS.userInput);
+            else playFile(AUDIO_PATHS.aiInput);
+
+            if (checkEnd()) return;
+
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+            statusText.innerText = `${currentPlayer}'s Turn`;
+            statusText.style.color = currentPlayer === "X" ? "#3b82f6" : "#ef4444";
+        }
+
+        function aiLogic() {
+            let move;
+            // Easy mode is now "Moderate"
+            if (difficulty === 'easy') {
+                // 40% chance to play perfect, 60% random
+                move = Math.random() > 0.6 ? minimax(gameState, "O").index : getRandomMove();
+            } 
+            // Medium mode is now "Hard"
+            else if (difficulty === 'medium') {
+                // 80% chance to play perfect
+                move = Math.random() > 0.2 ? minimax(gameState, "O").index : getRandomMove();
+            } 
+            // Hard mode is now "Very Tough" (Perfect)
+            else {
+                move = minimax(gameState, "O").index;
+            }
+
+            makeMove(move);
+            isAiThinking = false;
+            if (gameActive) speak(taunts.move[Math.floor(Math.random() * taunts.move.length)]);
+        }
+
+        function getRandomMove() {
+            const av = gameState.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+            return av[Math.floor(Math.random() * av.length)];
+        }
+
+        function minimax(board, p) {
+            const av = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+            if (checkWin(board, "X")) return { score: -10 };
+            if (checkWin(board, "O")) return { score: 10 };
+            if (av.length === 0) return { score: 0 };
+            
+            const moves = [];
+            for (let i = 0; i < av.length; i++) {
+                let m = { index: av[i] };
+                board[av[i]] = p;
+                m.score = minimax(board, p === "O" ? "X" : "O").score;
+                board[av[i]] = "";
+                moves.push(m);
+            }
+            return moves.reduce((best, m) => (p === "O" ? m.score > best.score : m.score < best.score) ? m : best, p === "O" ? {score:-100} : {score:100});
+        }
+
+        const checkWin = (b, p) => [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(c => c.every(i => b[i] === p));
+
+        function checkEnd() {
+            let res = null;
+            if (checkWin(gameState, "X")) res = "X";
+            else if (checkWin(gameState, "O")) res = "O";
+            else if (!gameState.includes("")) res = "draw";
+
+            if (res) {
+                gameActive = false;
+                isAiThinking = false;
+                winModal.classList.remove('hidden');
+                const title = document.getElementById('winMessage');
+                const icon = document.getElementById('winIcon');
+                
+                if (res === 'draw') {
+                    speak(taunts.draw[Math.floor(Math.random()*taunts.draw.length)]);
+                    title.innerText = "DRAW!";
+                    title.style.color = "#94a3b8";
+                    icon.innerText = "🤝";
+                } else if (res === 'O' && gameMode === 'ai') {
+                    playFile(AUDIO_PATHS.loser);
+                    speak(taunts.win[Math.floor(Math.random()*taunts.win.length)]);
+                    title.innerText = "LOOOSER!";
+                    title.style.color = "#ef4444";
+                    icon.innerText = "💀";
+                } else {
+                    playFile(AUDIO_PATHS.win);
+                    if (gameMode === 'ai') speak(taunts.loss[0]);
+                    title.innerText = "YOU WON!";
+                    title.style.color = "#3b82f6";
+                    icon.innerText = "🏆";
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function restart() {
+            gameState.fill("");
+            gameActive = true;
+            isAiThinking = false;
+            currentPlayer = "X";
+            statusText.innerText = "X's Turn";
+            statusText.style.color = "#3b82f6";
+            cells.forEach(c => { c.innerText = ""; c.className = 'cell rounded-2xl'; });
+            winModal.classList.add('hidden');
+        }
+
+        document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
+        document.getElementById('setAI').onclick = () => { gameMode='ai'; document.getElementById('setAI').classList.add('bg-blue-600'); document.getElementById('setPlayer').classList.remove('bg-blue-600'); document.getElementById('difficultySection').style.display='block'; };
+        document.getElementById('setPlayer').onclick = () => { gameMode='player'; document.getElementById('setPlayer').classList.add('bg-blue-600'); document.getElementById('setAI').classList.remove('bg-blue-600'); document.getElementById('difficultySection').style.display='none'; };
+        document.getElementById('closeSettings').onclick = () => {
+            difficulty = document.getElementById('difficultySelect').value;
+            document.getElementById('modeDisplay').innerText = gameMode === 'ai' ? 'VS AI' : 'VS PLAYER';
+            document.getElementById('diffDisplay').innerText = gameMode === 'ai' ? `${difficulty.toUpperCase()} MODE` : '';
+            document.getElementById('settingsModal').classList.add('hidden');
+            restart();
+        };
+
+        cells.forEach(c => c.onclick = handleCellClick);
+        document.getElementById('restartBtn').onclick = restart;
+        window.speechSynthesis.onvoiceschanged = () => {};
+    </script>
+</body>
+</html>
