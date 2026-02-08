@@ -24,7 +24,7 @@
 
       --ai-bubble: #f1f3f4;
 
-      --user-purple: #7b42f5;
+      --user-purple: #f5b342;
 
       --text-main: #1a1a1a;
 
@@ -45,8 +45,38 @@
       background-color: var(--bg-white); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
 
     }
+/* Logo system */
+.logo-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
 
-    .header { padding: 12px 20px; border-bottom: 1px solid var(--border); background: #fff; text-align: center; }
+.logo-char-img {
+  height: 34px;          /* matches text height */
+  width: auto;
+  object-fit: contain;
+  margin-right: -6px;    /* tight D + esh spacing */
+}
+body {
+  padding-top: 20px; /* 👈 pushes header down */
+}
+
+.brand-text-rest {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #5742f5, #ff04ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1;
+}
+
+    .header { padding: 12px 20px; border-bottom: 1px solid var(--border); background: #ffffff; text-align: center; border-radius: 15px;box-shadow: 0 0 4px rgb(255, 187, 0);padding: 20px 25px;
+      border-radius: 25px;
+      margin-top: 20px;
+      margin: auto;}
 
     .logo-text { font-size: 22px; font-weight: 800; margin: 0; background: linear-gradient(90deg, #5742f5, #ff04ff,#ff007b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
@@ -64,8 +94,7 @@
 
     .edit-btn-popup { position: absolute; top: -35px; background: #000000; color: white; padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; z-index: 10; }
 
-    .ai-msg-wrapper { align-self: flex-start; width: 100%; display: flex; flex-direction: column; }
-
+    .ai-msg-wrapper { align-self: flex-start; width: 100%; display: flex; flex-direction: column;}
     .ai-content { background: var(--ai-bubble); padding: 16px; border-radius: 18px; line-height: 1.5; font-size: 15px; min-height: 20px; }
 
     /* Scroll Bottom Button */
@@ -74,13 +103,13 @@
 
       position: fixed; bottom: 100px; right: 20px; width: 40px; height: 40px; background: white;
 
-      border: 1px solid var(--border); border-radius: 50%; display: none; align-items: center;
+      border: 1px solid var(--border); border-radius: 50%; display: none; align-items: center;box-shadow: 0 0 4px rgb(255, 187, 0);
 
       justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100;
 
     }
 
-    #scrollTopBtn svg { width: 20px; height: 20px; fill: var(--user-purple); }
+    #scrollTopBtn svg { width: 20px; height: 20px; fill: var(--user-purple);  }
 
     /* Jumping Dots */
 
@@ -98,6 +127,7 @@
     .img-download-btn {
   background: #22c55e; /* green */
   border-radius: 8px;
+  box-shadow: 0 0 4px rgb(255, 187, 0);
 }
 
 .img-download-btn svg {
@@ -108,10 +138,12 @@
   background: #16a34a; /* darker green on hover */
 }
 
+/* Mic border glow (no color change, no animation) */
 
     .image-status { font-size: 14px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
 
     .dot-blink { width: 4px; height: 4px; background: currentColor; border-radius: 50%; opacity: 0; animation: seqBlink 1.2s infinite; }
+
 
     .dot-blink:nth-child(2) { animation-delay: 0.3s; }
 
@@ -123,6 +155,7 @@
 
     .image-card { width: 100%; max-width: 400px; aspect-ratio: 1/1; border-radius: 18px; overflow: hidden; position: relative; background: #eee; }
 
+
     .gradient-motion { position: absolute; inset: -40%; background: linear-gradient(120deg, #f7d6c9, #f5c7f3, #e9ecff, #fde1cc); background-size: 300% 300%; filter: blur(40px); animation: grad 2s infinite; }
 
     @keyframes grad { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
@@ -130,10 +163,77 @@
     .gen-img { width: 100%; height: 100%; object-fit: cover; display: none; position: relative; z-index: 2; }
 
     /* Action Row with SVGs Only */
+#question {
+  flex: 1;
+}
+/* mic active state */
+.mic-btn.active {
+  box-shadow:
+    0 0 0 2px rgba(255,145,0,0.9),
+    0 0 12px rgba(255,145,0,0.6);
+}
+
+.mic-btn.active svg {
+  fill: #ff0000;
+}
+
+/* soft pulse */
+.mic-btn.active {
+  animation: micPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes micPulse {
+  0%   { box-shadow: 0 0 0 2px rgba(255,145,0,0.7); }
+  50%  { box-shadow: 0 0 0 6px rgba(255,145,0,0.3); }
+  100% { box-shadow: 0 0 0 2px rgba(255,145,0,0.7); }
+}
+
+.input-box {
+  width: 100%;
+  max-width: 700px;
+  background: #f1f3f4;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  padding: 5px 12px;
+  transition: box-shadow 1.5s ease;
+}
+
+#question {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 10px;
+  font-size: 16px;
+  resize: none;
+}
+
+.icon-btn {
+  background: white;
+  border: none;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 6px rgb(255, 187, 0)
+}
+
+#sendBtn {
+  background: #000;
+}
+
+
+#sendBtn svg {
+  fill: #000000;
+}
 
     .action-row { display: flex; gap: 12px; margin-top: 8px; }
 
-    .icon-action-btn { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s; }
+    .icon-action-btn { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; transition: 0.2s;box-shadow: 0 0 4px rgb(255, 187, 0) }
 
     .icon-action-btn:hover { background: #eee; }
 
@@ -144,14 +244,42 @@
     .bottom-bar { padding: 15px 20px 30px; background: white; border-top: 1px solid var(--border); display: flex; justify-content: center; position: relative; }
 
     .input-box { width: 100%; max-width: 700px; background: #f1f3f4; border-radius: 28px; display: flex; align-items: center; padding: 5px 12px; }
+.input-box{
+  width: 100%;
+  max-width: 700px;
+  background: #f1f3f4;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  padding: 5px 12px;
+  transition: box-shadow 1.5s ease;
+  
+
+}
+
+/* 🔥 glow ON state */
+.input-box.glow{
+  box-shadow:
+    0 0 0 2.3px rgb(255, 145, 0),
+    0 0 10px rgba(255, 166, 0, 0.651);
+}
+.input-box {
+  align-items: flex-end;
+  transition: padding 0.2s ease;
+}
+#question {
+  max-height: 140px;
+  overflow-y: auto;
+  transition: height 0.2s ease;
+}
 
     #question { flex: 1; border: none; outline: none; background: transparent; padding: 10px; font-size: 16px; resize: none; max-height: 100px; }
 
     .icon-btn { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; border-radius: 50%; }
 
-    #sendBtn { background: #000; }
+    #sendBtn { background: #ffffff; }
 
-    #sendBtn svg { fill: #fff; width: 20px; height: 20px; }
+    #sendBtn svg { fill: #000000; width: 20px; height: 20px; }
 
   </style>
 
@@ -159,7 +287,14 @@
 
 <body>
 
-  <header class="header"><h1 class="logo-text">𝕯𝖊𝕾𝖍 𝗔𝗶</h1></header>
+  <header class="header">
+  <div class="logo-brand">
+    <!-- Logo image acts as the "𝕯" -->
+    <img src="logo.png" alt="Desh AI Logo" class="logo-char-img">
+    <span class="brand-text-rest">𝖊𝕾𝖍 𝗔𝗶</span>
+  </div>
+</header>
+
 
   <main id="chatContainer"></main>
 
@@ -167,19 +302,35 @@
 
   <div id="scrollTopBtn"><svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg></div>
 
-  <div class="bottom-bar">
 
-    <div class="input-box">
+<div class="bottom-bar">
+  <div class="input-box" id="inputBox">
 
-      <button class="icon-btn"><svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg></button>
+    <!-- MIC -->
+    <button class="icon-btn mic-btn" id="micBtn">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+      </svg>
+    </button>
 
-      <textarea id="question" placeholder="Ask 𝕯𝖊𝕾𝖍 𝗔𝗶 ..." rows="1"></textarea>
+    <!-- TEXT -->
+    <textarea
+      id="question"
+      placeholder="Ask 𝕯𝖊𝕾𝖍..."
+      rows="1">
+    </textarea>
 
-      <button id="sendBtn" class="icon-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
-
-    </div>
+    <!-- SEND -->
+    <button id="sendBtn" class="icon-btn">
+      <svg viewBox="0 0 24 24">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      </svg>
+    </button>
 
   </div>
+</div>
+
 
   <script>
 
@@ -188,6 +339,75 @@
     const input = document.getElementById('question');
 
     const sendBtn = document.getElementById('sendBtn');
+const inputBox = document.querySelector('.input-box');
+let glowTimer = null;
+const micBtn = document.getElementById('micBtn');
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition = null;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+} else {
+  console.warn("SpeechRecognition not supported");
+}
+
+let micActive = false;
+
+micBtn.addEventListener('click', async () => {
+  if (!recognition) {
+    alert("Mic not supported in this browser. Use Chrome or Edge.");
+    return;
+  }
+
+  micActive = !micActive;
+
+  micBtn.classList.toggle('active', micActive);
+  inputBox.classList.toggle('glow', micActive);
+
+  if (micActive) {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      recognition.start();
+      console.log("🎙️ Mic listening...");
+    } catch (err) {
+      console.error("Mic permission denied", err);
+      micActive = false;
+      micBtn.classList.remove('active');
+      inputBox.classList.remove('glow');
+    }
+  } else {
+    recognition.stop();
+    console.log("🛑 Mic stopped");
+  }
+});
+recognition.continuous = false;
+recognition.interimResults = true;
+
+recognition.onend = () => {
+  if (micActive) {
+    micActive = false;
+    micBtn.classList.remove('active');
+    inputBox.classList.remove('glow');
+  }
+};
+
+recognition.onresult = (event) => {
+  let transcript = '';
+
+  for (let i = event.resultIndex; i < event.results.length; i++) {
+    transcript += event.results[i][0].transcript;
+  }
+
+  input.value = transcript;
+  input.dispatchEvent(new Event('input')); // keeps auto-grow working
+};
+
+
 
     const scrollBtn = document.getElementById('scrollTopBtn');
 
@@ -206,14 +426,25 @@
     };
 
     scrollBtn.onclick = () => chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+micBtn.addEventListener('click', () => {
+  console.log("Mic active:", micActive);
+});
 
-    input.addEventListener('input', () => {
+    input.addEventListener('keydown', () => {
+  // If mic is ON, do NOT interfere
+  if (micActive) return;
 
-      input.style.height = 'auto';
+  inputBox.classList.remove('glow');
 
-      input.style.height = input.scrollHeight + 'px';
+  clearTimeout(glowTimer);
 
-    });
+  glowTimer = setTimeout(() => {
+    // remove glow ONLY if mic still OFF
+    if (!micActive) {
+      inputBox.classList.remove('glow');
+    }
+  }, 2000);
+});
 
     async function handleRequest() {
 
@@ -283,6 +514,14 @@
       };
 
     }
+function autoGrowTextarea(el) {
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+}
+
+input.addEventListener("input", () => {
+  autoGrowTextarea(input);
+});
 
     async function handleText(q) {
 
@@ -316,7 +555,7 @@
 
         loader.remove();
 
-        appendMsg('ai', "Neural link offline.");
+        appendMsg('ai', "Desh Ai Currently offline, Try after a while.");
 
       }
 
@@ -493,4 +732,5 @@
 </body>
 
 </html>
+
 
