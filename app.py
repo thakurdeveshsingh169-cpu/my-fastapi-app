@@ -283,9 +283,11 @@ def serve_numpuzz():
 @app.get("/Tac")
 def serve_numpuzz():
     return FileResponse("static/Tac.html")
-    @app.get("/50")
+
+@app.get("/50")
 def serve_numpuzz():
     return FileResponse("static/50.html")
+
 
 
 
