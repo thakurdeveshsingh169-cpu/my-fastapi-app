@@ -54,17 +54,17 @@
 }
 
 .logo-char-img {
-  height: 34px;          /* matches text height */
+  height: 40px;          /* matches text height */
   width: auto;
   object-fit: contain;
-  margin-right: -6px;    /* tight D + esh spacing */
+  margin-right: -10px;    /* tight D + esh spacing */
 }
 body {
-  padding-top: 20px; /* 👈 pushes header down */
+  padding-top: 30px; /* 👈 pushes header down */
 }
 
 .brand-text-rest {
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 800;
   background: linear-gradient(90deg, #5742f5, #ff04ff);
   -webkit-background-clip: text;
@@ -78,7 +78,7 @@ body {
       margin-top: 20px;
       margin: auto;}
 
-    .logo-text { font-size: 22px; font-weight: 800; margin: 0; background: linear-gradient(90deg, #5742f5, #ff04ff,#ff007b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo-text { font-size: 32px; font-weight: 800; margin: 0; background: linear-gradient(90deg, #5742f5, #ff04ff,#ff007b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
     #chatContainer {
 
@@ -244,25 +244,42 @@ body {
     .bottom-bar { padding: 15px 20px 30px; background: white; border-top: 1px solid var(--border); display: flex; justify-content: center; position: relative; }
 
     .input-box { width: 100%; max-width: 700px; background: #f1f3f4; border-radius: 28px; display: flex; align-items: center; padding: 5px 12px; }
-.input-box{
-  width: 100%;
-  max-width: 700px;
-  background: #f1f3f4;
-  border-radius: 28px;
-  display: flex;
-  align-items: center;
-  padding: 5px 12px;
-  transition: box-shadow 1.5s ease;
-  
 
+/* 🎙️ mic glow (strong & permanent) */
+.input-box.glow-mic {
+  box-shadow:
+    0 0 0 2.5px rgba(255,145,0,1),
+    0 0 14px rgba(255,145,0,0.9);
+}
+
+/* ⌨️ typing glow (soft & temporary) */
+.input-box.glow-type {
+  box-shadow:
+    0 0 0 2px rgba(255,145,0,0.7),
+    0 0 8px rgba(255,166,0,0.5);
+}
+@keyframes glowRamp {
+  0% {
+    box-shadow:
+      0 0 0 0.8px rgba(255,145,0,0.4),
+      0 0 3px rgba(255,145,0,0.2);
+  }
+  100% {
+    box-shadow:
+      0 0 0 2.5px rgba(255,145,0,1),
+      0 0 14px rgba(255,145,0,0.9);
+  }
+}
+.input-box.glow-type {
+  animation: glowRamp 1.35s ease-out forwards;
+}
+.input-box.glow-mic {
+  animation: glowRamp 1.25s ease-out forwards;
 }
 
 /* 🔥 glow ON state */
-.input-box.glow{
-  box-shadow:
-    0 0 0 2.3px rgb(255, 145, 0),
-    0 0 10px rgba(255, 166, 0, 0.651);
-}
+
+
 .input-box {
   align-items: flex-end;
   transition: padding 0.2s ease;
@@ -355,46 +372,59 @@ if (SpeechRecognition) {
 } else {
   console.warn("SpeechRecognition not supported");
 }
+input.addEventListener('input', () => {
+  // ⛔ do NOT touch mic glow
+  if (micActive) return;
+
+  inputBox.classList.add('glow-type');
+
+  clearTimeout(glowTimer);
+
+  glowTimer = setTimeout(() => {
+    if (!micActive) {
+      inputBox.classList.remove('glow-type');
+    }
+  }, 1500);
+});
 
 let micActive = false;
 
 micBtn.addEventListener('click', async () => {
   if (!recognition) {
-    alert("Mic not supported in this browser. Use Chrome or Edge.");
+    alert("Mic not supported in this browser.");
     return;
   }
 
   micActive = !micActive;
 
   micBtn.classList.toggle('active', micActive);
-  inputBox.classList.toggle('glow', micActive);
+
+  // 🎙️ mic glow control
+  inputBox.classList.toggle('glow-mic', micActive);
 
   if (micActive) {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       recognition.start();
-      console.log("🎙️ Mic listening...");
     } catch (err) {
-      console.error("Mic permission denied", err);
       micActive = false;
       micBtn.classList.remove('active');
-      inputBox.classList.remove('glow');
+      inputBox.classList.remove('glow-mic');
     }
   } else {
     recognition.stop();
-    console.log("🛑 Mic stopped");
   }
 });
+
 recognition.continuous = false;
 recognition.interimResults = true;
 
 recognition.onend = () => {
-  if (micActive) {
-    micActive = false;
-    micBtn.classList.remove('active');
-    inputBox.classList.remove('glow');
-  }
+  micActive = false;
+  micBtn.classList.remove('active');
+  inputBox.classList.remove('glow-mic');
 };
+
 
 recognition.onresult = (event) => {
   let transcript = '';
@@ -732,6 +762,8 @@ input.addEventListener("input", () => {
 </body>
 
 </html>
+
+
 
 
 
