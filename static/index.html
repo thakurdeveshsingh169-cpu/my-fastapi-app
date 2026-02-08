@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -427,47 +428,78 @@
   padding: 3px 8px;
   font-size: 11px;
   font-weight: bold;
-  color: #2196f3;
-  border: 1.6px solid #2196f3;
+  color: #f32121;
+  border: 1.6px solid #f32121;
   border-radius: 999px;
-  background: rgba(33,150,243,0.12);
-  box-shadow: 0 0 6px rgba(33,150,243,0.6);
+  background: rgba(243, 33, 33, 0);
+  box-shadow: 0 0 3px rgb(255, 0, 0);
 }
 
 
+/* 🔥 DESH AI PRO – same hover animation as menu headers */
 .menu-single {
-  display: block;
-  padding: 14px 20px;
-  font-weight: bold;
-  background: rgba(237, 237, 237, 0.781);
-  color: black;
-  text-decoration: none;
-  margin-bottom: 10px;
+  position: relative;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    padding-left 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
+/* Hover effect */
 .menu-single:hover {
-  background: #f9ffa5;
+  background: linear-gradient(90deg, #fff7cc, #ffffff);
+  color: #000;
+  padding-left: 28px;
+  box-shadow: inset 4px 0 0 rgb(255, 174, 0);
 }
+
+/* Underline animation */
+.menu-single::after {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  left: 20px;
+  width: 0;
+  height: 2px;
+  background: rgb(255, 174, 0);
+  transition: width 0.3s ease;
+}
+
+.menu-single:hover::after {
+  width: 70%;
+}
+
+/* PRO badge glow on hover */
+.menu-single:hover .pro-badge {
+  color: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.8);
+  background: rgba(255, 0, 0, 0.08);
+}
+
 
 #menuBtn {
   position: fixed;
+
   top: 15px;
   left: 15px;
   font-size: 28px;
   cursor: pointer;
   color: rgb(0, 0, 0);
   background: #ffffff00;
-  border-radius: 4px;
+  border-radius: 11px;
   padding: 6px 12px;
   z-index: 1001;
   transition: background 0.3s;
   box-shadow: 0 0 4px rgb(255, 174, 0);
 }
-#menuBtn:hover { background: #ffffff; }
+#menuBtn:hover { background: #e8e8e8c0; }
 
 /* --- Side Menu Panel --- */
 #sideMenu {
   position: fixed;
+  
   top: 0px;
   left: -260px;
   width: 240px;
@@ -492,7 +524,8 @@
   transition: background 0.3s;
 }
 #sideMenu a:hover {
-  background: #b4b4b48f;
+  background: #b4b4b400;
+  
 }
 .menu-section {
   margin-bottom: 20px;
@@ -520,16 +553,19 @@
   padding: 12px 20px;
   cursor: pointer;
   font-weight: bold;
-  background: rgba(137, 137, 137, 0.781);
+  background: rgb(255, 255, 255);
   user-select: none;
 }
-
+.menu-content {
+  background: rgb(145, 145, 145);
+}
 /* Hidden content (default closed) */
 .menu-content {
   max-height: 0;
   overflow-y: auto;
   transition: max-height 0.35s ease;
-  background: rgba(228, 228, 228, 0.776);
+  background: rgba(233, 233, 233, 0.797);
+  
 }
 
 /* Scroll when items are many */
@@ -545,8 +581,41 @@
   text-decoration: none;
 }
 
-.menu-content a:hover {
-  background: rgba(255, 255, 255, 0.25);
+.menu-content :hover {
+  background: rgb(145, 145, 145);
+}
+/* 🔥 Hover effect for Our Products & Games */
+.menu-header {
+  position: relative;
+  transition: 
+    background 0.3s ease,
+    color 0.3s ease,
+    padding-left 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Hover animation */
+.menu-header:hover {
+  background: linear-gradient(90deg, #fff7cc, #ffffff);
+  color: #000;
+  padding-left: 28px;
+  box-shadow: inset 4px 0 0 rgb(255, 174, 0);
+}
+
+/* Optional underline glow */
+.menu-header::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 20px;
+  width: 0;
+  height: 2px;
+  background: rgb(255, 174, 0);
+  transition: width 0.3s ease;
+}
+
+.menu-header:hover::after {
+  width: 60%;
 }
 
 </style>
@@ -698,6 +767,10 @@ function toggleSection(header) {
   </script>
 </body>
 </html>
+
+
+
+
 
 
 
