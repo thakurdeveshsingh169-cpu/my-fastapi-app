@@ -276,9 +276,10 @@ def serve_numpuzz():
 
 
 
-@app.get("/Tic)
+@app.get("/Tic")
 def serve_numpuzz():
     return FileResponse("static/Tic.html")
+
 
 
 
