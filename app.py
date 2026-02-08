@@ -280,6 +280,11 @@ def serve_numpuzz():
 def serve_numpuzz():
     return FileResponse("static/Tic.html")
 
+@app.get("/Tac")
+def serve_numpuzz():
+    return FileResponse("static/Tac.html")
+
+
 
 
 
