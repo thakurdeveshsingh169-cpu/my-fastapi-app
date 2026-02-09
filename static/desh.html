@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>𝕯𝖊𝕾𝖍 𝗔𝗶 Pro</title>
+  <title>𝕯𝖊𝕾𝖍 𝗔𝗶 - Neural Supreme</title>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -54,20 +54,22 @@
 }
 
 .logo-char-img {
-  height: 42px;          /* matches text height */
+  height: 39px;          /* matches text height */
   width: auto;
   object-fit: contain;
-  margin-right: -11px;    /* tight D + esh spacing */
+  margin-right: -10px;    /* tight D + esh spacing */
+  
+
 }
 body {
-  padding-top: 30px; /* 👈 pushes header down */
-  padding-bottom: 35px;
+  padding-top: 10px; /* 👈 pushes header down */
+  padding-bottom: 10px;
 }
 
 .brand-text-rest {
   font-size: 25px;
   font-weight: 800;
-  background: linear-gradient(90deg, #5742f5, #ff04ff);
+  background: linear-gradient(90deg, #000000, #000000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: 'Segoe UI', sans-serif;
@@ -298,6 +300,38 @@ body {
     #sendBtn { background: #ffffff; }
 
     #sendBtn svg { fill: #000000; width: 20px; height: 20px; }
+/* Send button dual state */
+#waveIcon,
+#sendIcon {
+  width: 20px;
+  height: 20px;
+  fill: #000;
+  position: absolute;
+}
+
+/* default = wave visible */
+#waveIcon { display: block; }
+#sendIcon { display: none; }
+
+/* when typing */
+#sendBtn.send-mode #waveIcon { display: none; }
+#sendBtn.send-mode #sendIcon { display: block; }
+
+/* subtle wave animation */
+#waveIcon rect {
+  animation: none;
+}
+
+#waveIcon rect:nth-child(1) { animation-delay: 0s; }
+#waveIcon rect:nth-child(2) { animation-delay: .1s; }
+#waveIcon rect:nth-child(3) { animation-delay: .2s; }
+#waveIcon rect:nth-child(4) { animation-delay: .3s; }
+#waveIcon rect:nth-child(5) { animation-delay: .4s; }
+
+@keyframes waveMove {
+  0%,100% { transform: scaleY(0.7); opacity: 0.6; }
+  50% { transform: scaleY(1.2); opacity: 1; }
+}
 
   </style>
 
@@ -308,8 +342,8 @@ body {
   <header class="header">
   <div class="logo-brand">
     <!-- Logo image acts as the "𝕯" -->
-    <img src="static/logo.png" alt="Desh AI Logo" class="logo-char-img">
-    <span class="brand-text-rest">𝖊𝕾𝖍 𝗔𝗶</span>
+    <img src="logo.png" alt="Desh AI Logo" class="logo-char-img">
+    <span class="brand-text-rest">𝖊𝕾𝖍 𝐀𝖎</span>
   </div>
 </header>
 
@@ -335,16 +369,27 @@ body {
     <!-- TEXT -->
     <textarea
       id="question"
-      placeholder="Ask 𝕯𝖊𝕾𝖍..."
+      placeholder="Ask 𝕯𝖊𝕾𝖍 𝐀𝖎..."
       rows="1">
     </textarea>
 
     <!-- SEND -->
-    <button id="sendBtn" class="icon-btn">
-      <svg viewBox="0 0 24 24">
-        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-      </svg>
-    </button>
+    <button id="sendBtn" class="icon-btn wave-mode">
+  <!-- WAVE ICON -->
+  <svg id="waveIcon" viewBox="0 0 24 24">
+    <rect x="3"  y="10" width="2" height="4" rx="1"/>
+    <rect x="7"  y="8"  width="2" height="8" rx="1"/>
+    <rect x="11" y="5"  width="2" height="14" rx="1"/>
+    <rect x="15" y="8"  width="2" height="8" rx="1"/>
+    <rect x="19" y="10" width="2" height="4" rx="1"/>
+  </svg>
+
+  <!-- SEND ICON -->
+  <svg id="sendIcon" viewBox="0 0 24 24">
+    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+  </svg>
+</button>
+
 
   </div>
 </div>
@@ -438,6 +483,15 @@ recognition.onresult = (event) => {
   input.dispatchEvent(new Event('input')); // keeps auto-grow working
 };
 
+function updateSendButtonState() {
+  if (input.value.trim().length > 0) {
+    sendBtn.classList.add('send-mode');
+  } else {
+    sendBtn.classList.remove('send-mode');
+  }
+}
+
+input.addEventListener('input', updateSendButtonState);
 
 
     const scrollBtn = document.getElementById('scrollTopBtn');
@@ -754,7 +808,15 @@ input.addEventListener("input", () => {
 
     window.copyText = (id) => navigator.clipboard.writeText(document.getElementById(id).innerText);
 
-    sendBtn.onclick = handleRequest;
+    sendBtn.onclick = () => {
+  if (input.value.trim().length === 0) {
+    // 🔥 NO TEXT → open neon.html
+    window.location.href = "neon.html";
+  } else {
+    // ✉️ TEXT PRESENT → send message
+    handleRequest();
+  }
+};
 
     input.onkeydown = (e) => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); handleRequest(); }};
 
@@ -763,10 +825,4 @@ input.addEventListener("input", () => {
 </body>
 
 </html>
-
-
-
-
-
-
 
