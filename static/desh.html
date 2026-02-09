@@ -342,7 +342,7 @@ body {
   <header class="header">
   <div class="logo-brand">
     <!-- Logo image acts as the "𝕯" -->
-    <img src="logo.png" alt="Desh AI Logo" class="logo-char-img">
+    <img src="static/logo.png" alt="Desh AI Logo" class="logo-char-img">
     <span class="brand-text-rest">𝖊𝕾𝖍 𝐀𝖎</span>
   </div>
 </header>
@@ -811,7 +811,7 @@ input.addEventListener("input", () => {
     sendBtn.onclick = () => {
   if (input.value.trim().length === 0) {
     // 🔥 NO TEXT → open neon.html
-    window.location.href = "neon.html";
+    window.location.href = "/neon";
   } else {
     // ✉️ TEXT PRESENT → send message
     handleRequest();
@@ -825,4 +825,5 @@ input.addEventListener("input", () => {
 </body>
 
 </html>
+
 
