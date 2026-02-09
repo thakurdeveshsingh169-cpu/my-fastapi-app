@@ -288,6 +288,11 @@ def serve_numpuzz():
 def serve_numpuzz():
     return FileResponse("static/50.html")
 
+@app.get("/neon")
+def serve_numpuzz():
+    return FileResponse("static/neon.html")
+
+
 
 
 
