@@ -1,378 +1,229 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<title>Desh AI Human</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
-body{
-
-  background:white;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  height:100vh;
-
-  margin:0;
-
-  font-family:Arial, sans-serif;
-
-  user-select:none;
-
-}
-
-/* ================= FACE ================= */
-
-.human{ position:relative; width:260px; height:360px; }
-
-.hair{
-
-  position:absolute; top:0; width:100%; height:95px;
-
-  background:#111; border-radius:130px 130px 60px 60px; z-index:5;
-
-}
-
-.face{
-
-  position:absolute; top:55px; width:100%; height:280px;
-
-  background:#f1c9a5; border-radius:130px;
-
-}
-
-.ear{
-
-  position:absolute; top:120px; width:28px; height:50px;
-
-  background:#f1c9a5; border-radius:50%;
-
-}
-
-.ear.left{ left:-20px; }
-
-.ear.right{ right:-20px; }
-
-.eye{
-
-  position:absolute; top:90px; width:32px; height:18px;
-
-  background:white; border-radius:50%; overflow:hidden;
-
-  animation: blink 1.5s infinite;
-
-}
-
-.eye.left{ left:65px; }
-
-.eye.right{ right:65px; }
-
-.pupil{
-
-  position:absolute; width:10px; height:10px;
-
-  background:#000; border-radius:50%;
-
-  top:4px; left:11px;
-
-}
-
-@keyframes blink{
-
-  0%,96%,100%{ height:18px; }
-
-  97%,99%{ height:2px; }
-
-}
-
-.nose{
-
-  position:absolute; top:135px; left:50%;
-
-  transform:translateX(-50%);
-
-  width:16px; height:24px;
-
-  background:#e0b08c; border-radius:10px;
-
-}
-
-.mouth{
-
-  position:absolute; bottom:70px; left:50%;
-
-  transform:translateX(-50%);
-
-  width:80px; height:14px;
-
-  background:#600; border-radius:0 0 40px 40px;
-
-  overflow:hidden;
-
-  transition:height 0.3s ease-in-out;
-
-}
-
-.mouth.open{ height:34px; }
-
-.teeth{
-
-  position:absolute; top:0; width:100%; height:14px;
-
-  background:#fff; border-bottom:2px solid #ccc;
-
-}
-
-.tongue{
-
-  position:absolute; bottom:2px; left:50%;
-
-  transform:translateX(-50%);
-
-  width:36px; height:16px;
-
-  background:#d66; border-radius:50%;
-
-}
-
-/* ================= NEON BUTTON ================= */
-
-#neonBtn{
-
-  position:fixed;
-
-  bottom:20px;
-
-  left:20px;
-
-  width:60px;
-
-  height:60px;
-
-  border-radius:50%;
-
-  border:none;
-
-  cursor:pointer;
-
-  background:#00faff;
-
-  box-shadow: 0 0 15px #00faff;
-
-  transition:0.3s;
-
-}
-
-#neonBtn.on{
-
-  background:#ff2d2d;
-
-  box-shadow:
-
-    0 0 10px #ff2d2d,
-
-    0 0 25px #ff2d2d,
-
-    0 0 50px #ff2d2d;
-
-  animation:pulse 1.5s infinite;
-
-}
-
-@keyframes pulse{
-
-  0%{ box-shadow:0 0 10px #ff2d2d; }
-
-  50%{ box-shadow:0 0 40px #ff2d2d; }
-
-  100%{ box-shadow:0 0 10px #ff2d2d; }
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desh AI Human Pro - Optimized Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --skin: #f8d4b8; --skin-dark: #e5b391; --ear-shadow: #d4a381; --chandan-border: #ff4500; --mouth-inner: #8a2a2b; }
+        body { background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100vh; margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+
+        .human-container { position: relative; width: 100%; height: 750px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; margin-top: 10px; }
+        
+        .hair-realistic { 
+            position: absolute; 
+            top: -30px; width: 230px; height: 100px; 
+            background: linear-gradient(135deg, #111 0%, #000 100%);
+            border-radius: 120px 120px 40px 40px; z-index: 11;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .head-group { position: relative; width: 220px; height: 290px; z-index: 10; margin-top: 10px; }
+        .face { width: 100%; height: 100%; background: var(--skin); border-radius: 110px 110px 100px 100px; position: relative; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.05); }
+        
+        .chandan-btn { 
+            position: absolute; top: 85px; left: 50%; transform: translateX(-50%); 
+            width: 15px; height: 45px; background: var(--skin); border: 5px solid var(--chandan-border); 
+
+            z-index: 30; cursor: pointer; border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+        }
+        .chandan-active { background: var(--chandan-border) !important; }
+
+        /* Brows */
+        .brow-container { position: absolute; top: 125px; width: 100%; display: flex; justify-content: space-around; padding: 0 40px; z-index: 13; }
+        .brow { width: 42px; height: 6px; background: #222; border-radius: 10px; transition: transform 0.1s ease-out; }
+
+        /* Ears */
+        .ear { position: absolute; top: 130px; width: 28px; height: 55px; background: var(--skin); border-radius: 35% 65% 60% 40%; z-index: 5; border: 1px solid rgba(0,0,0,0.1); }
+        .ear.left { left: -18px; transform: rotate(-8deg); }
+        .ear.right { right: -18px; transform: rotate(8deg) scaleX(-1); }
+        .ear-fold { position: absolute; top: 8px; left: 5px; width: 14px; height: 32px; border-left: 3px solid var(--ear-shadow); border-top: 2px solid var(--ear-shadow); border-radius: 50%; opacity: 0.5; }
+        .ear-inner-bump { position: absolute; bottom: 12px; right: 5px; width: 8px; height: 8px; background: var(--ear-shadow); border-radius: 50%; opacity: 0.4; }
+
+        /* Eyes */
+        .eye { position: absolute; top: 140px; width: 42px; height: 26px; background: #fff; border-radius: 50%; overflow: hidden; z-index: 12; }
+        .eye.left { left: 45px; } .eye.right { right: 45px; }
+        .pupil-outer { position: absolute; width: 16px; height: 16px; top: 5px; left: 13px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .pupil-glint { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; top: 3px; left: 4px; opacity: 0.8; }
+        .eyelid { position: absolute; top: -100%; width: 100%; height: 100%; background: var(--skin); z-index: 15; transition: top 0.1s; }
+
+        .mouth-wrap { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); width: 75px; height: 4px; transition: height 0.1s; background: var(--mouth-inner); border-radius: 2px; z-index: 12; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+        .speaking .mouth-wrap { height: 30px; border-radius: 5px 5px 25px 25px; }
+        .teeth { width: 100%; height: 8px; background: #fdfdfd; border-bottom: 1px solid #ddd; opacity: 0; }
+        .speaking .teeth { opacity: 1; }
+
+           .neck { width:95px; height: 75px; background: var(--skin-dark); z-index: 5; margin-top: -35px; box-shadow: inset 0 20px 20px rgba(0,0,0,0.1); }
+        .torso { position: relative; width: 500px; height: 400px; background: #1a1a1a; border-radius: 120px 120px 0 0; z-index: 1; display: flex; justify-content: center; }
+        .shirt-opening { position: absolute; top: 0; width: 90px; height: 110px; background: var(--skin); clip-path: polygon(0 0, 100% 0, 50% 100%); z-index: 2; }
+        .collar-left, .collar-right { position: absolute; top: 5px; width: 70px; height: 140px; background: #222; z-index: 3; border: 2px solid #333; box-shadow: 2px 5px 10px rgba(0,0,0,0.4); }
+
+        .collar-left { left: 160px; transform: rotate(-28deg); border-radius: 5px 0 5px 20px; }
+        .collar-right { right: 160px; transform: rotate(28deg); border-radius: 0 5px 20px 5px; }
+
+        .pocket { position: absolute; top: 130px; right: 90px; width: 80px; height: 95px; background: #fff; border: 1px solid #ddd; border-radius: 5px 5px 30px 30px; z-index: 4; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .pocket img { width: 85%; height: 85%; object-fit: contain; }
+
+        .button-strip { position: absolute; top: 120px; display: flex; flex-direction: column; gap: 35px; z-index: 4; }
+        .realistic-button { width: 18px; height: 18px; background: #fff; border-radius: 50%; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 2px; }
+        .dot { background: #000; border-radius: 50%; width: 3px; height: 3px; }
+    </style>
 </head>
-
 <body>
 
-<div class="human">
-
-  <div class="hair"></div>
-
-  <div class="face">
-
-    <div class="ear left"></div>
-
-    <div class="ear right"></div>
-
-    <div class="eye left"><div class="pupil"></div></div>
-
-    <div class="eye right"><div class="pupil"></div></div>
-
-    <div class="nose"></div>
-
-    <div class="mouth" id="mouth">
-
-      <div class="teeth"></div>
-
-      <div class="tongue"></div>
-
+    <div class="human-container">
+        <div class="head-group" id="head">
+            <div class="hair-realistic"></div>
+            <div class="ear left"><div class="ear-fold"></div><div class="ear-inner-bump"></div></div>
+            <div class="ear right"><div class="ear-fold"></div><div class="ear-inner-bump"></div></div>
+            <div class="face">
+                <div class="chandan-btn" id="chandanBtn" onclick="toggleSystem()"></div>
+                <div class="brow-container">
+                    <div class="brow" id="browL"></div>
+                    <div class="brow" id="browR"></div>
+                </div>
+                <div class="eye left">
+                    <div class="eyelid" id="lidL"></div>
+                    <div class="pupil-outer saccade"><div style="width: 6px; height: 6px; background: #000; border-radius: 50%;"></div><div class="pupil-glint"></div></div>
+                </div>
+                <div class="eye right">
+                    <div class="eyelid" id="lidR"></div>
+                    <div class="pupil-outer saccade"><div style="width: 6px; height: 6px; background: #000; border-radius: 50%;"></div><div class="pupil-glint"></div></div>
+                </div>
+                <div class="nose" style="position: absolute; top: 175px; left: 50%; transform: translateX(-50%); width: 22px; height: 35px;"><div style="position: absolute; bottom: 0; width: 100%; height: 15px; background: var(--skin-dark); border-radius: 10px; opacity: 0.6;"></div></div>
+                <div class="mouth-wrap"><div class="teeth"></div></div>
+            </div>
+        </div>
+        <div class="neck"></div>
+        <div class="torso">
+            <div class="shirt-opening"></div>
+            <div class="collar-left"></div>
+            <div class="collar-right"></div>
+            <div class="pocket"><img src="static/logo.png" alt="" onerror="this.style.opacity='0'"></div>
+            <div class="button-strip">
+                <div class="realistic-button"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="realistic-button"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="realistic-button"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+            </div>
+        </div>
     </div>
 
-  </div>
-
-</div>
-
-<button id="neonBtn"></button>
-
-<script>
-
-let recognition, synth;
-
-let speaking=false, active=false;
-
-const mouth=document.getElementById("mouth");
-
-const btn=document.getElementById("neonBtn");
-
-btn.onclick=()=>{
-
-  active=!active;
-
-  btn.classList.toggle("on",active);
-
-  if(active) startAI();
-
-  else stopAI();
-
-};
-
-function cleanText(t){
-
-  return t.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,"");
-
-}
-
-function startAI(){
-
-  synth=window.speechSynthesis;
-
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-
-  recognition=new SR();
-
-  recognition.continuous=true;
-
-  recognition.lang="auto";
-
-  recognition.onresult=async(e)=>{
-
-    if(!active) return;
-
-    const text=e.results[e.results.length-1][0].transcript.trim();
-
-    if(!text) return;
-
-    if(speaking) synth.cancel();
-
-    try{
-
-      const res=await fetch("https://desh-ai.onrender.com/ask",{
-
-        method:"POST",
-
-        headers:{ "Content-Type":"application/json" },
-
-        body:JSON.stringify({ question:text })
-
-      });
-
-      const data=await res.json();
-
-      speak(cleanText(data.answer||"I did not understand"));
-
-    }catch{
-
-      speak("Network error");
-
-    }
-
-  };
-
-  recognition.onend=()=>{ if(active&&!speaking) recognition.start(); };
-
-  recognition.start();
-
-}
-
-function stopAI(){
-
-  if(recognition) recognition.stop();
-
-  if(synth) synth.cancel();
-
-  speaking=false;
-
-  mouth.classList.remove("open");
-
-}
-
-function speak(text){
-
-  const u=new SpeechSynthesisUtterance(text);
-
-  const voices=synth.getVoices();
-
-  u.voice=voices.find(v=>v.lang.startsWith("en")||v.lang.startsWith("hi"))||voices[0];
-
-  u.rate=1.25;
-  utter.pitch = 0.8;
-
-  u.onstart=()=>{
-
-    speaking=true;
-
-    lip();
-
-  };
-
-  u.onend=()=>{
-
-    speaking=false;
-
-    mouth.classList.remove("open");
-
-    if(active) recognition.start();
-
-  };
-
-  synth.speak(u);
-
-}
-
-function lip(){
-
-  if(!speaking) return;
-
-  mouth.classList.toggle("open");
-
-  setTimeout(lip,350);
-
-}
-
-</script>
-
+    <script>
+        const chandanBtn = document.getElementById('chandanBtn');
+        const head = document.getElementById('head');
+        const browL = document.getElementById('browL');
+        const browR = document.getElementById('browR');
+        const saccades = document.querySelectorAll('.saccade');
+        let recognition, isSpeaking = false, isActive = false, isThinking = false;
+        const synth = window.speechSynthesis;
+
+        function initRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.onresult = (e) => {
+                    if(!isActive || isSpeaking) return;
+                    processInput(e.results[e.results.length - 1][0].transcript);
+                };
+                recognition.onstart = () => { isThinking = false; updateEyePosition(); };
+            }
+        }
+
+        async function processInput(q) {
+            if(recognition) recognition.stop();
+            isThinking = true;
+            updateEyePosition();
+            try {
+                // Strict prompt for length and no emojis
+                const sysPrompt = "System: Respond in plain text only. No emojis. Max 4 lines. User: ";
+                const res = await fetch("https://desh-ai.onrender.com/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: sysPrompt + q })
+                });
+                const data = await res.json();
+                
+                // Regex to strip any remaining emojis
+                const cleanText = data.answer.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF])/g, '');
+                speak(cleanText);
+            } catch (e) { isThinking = false; speak("I'm sorry, I'm having trouble connecting."); }
+        }
+
+        function speak(text) {
+            if(!isActive) return;
+            isSpeaking = true;
+            isThinking = false;
+            updateEyePosition();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.pitch = 1;
+            utterance.rate = 1.10; 
+
+            utterance.onstart = () => { 
+                head.classList.add('speaking'); 
+                animateMouth(); 
+                animateBrows(); 
+            };
+            utterance.onend = () => {
+                isSpeaking = false;
+                head.classList.remove('speaking');
+                document.querySelector('.mouth-wrap').style.height = "4px";
+                browL.style.transform = "none";
+                browR.style.transform = "none";
+                updateEyePosition();
+                if (isActive) recognition.start();
+            };
+            synth.speak(utterance);
+        }
+
+        function updateEyePosition() {
+            if (isThinking) saccades.forEach(s => s.style.transform = `translate(7px, 0px)`);
+            else saccades.forEach(s => s.style.transform = `translate(0px, 0px)`);
+        }
+
+        function animateMouth() {
+            if (!isSpeaking) return;
+            document.querySelector('.mouth-wrap').style.height = (12 + Math.random() * 18) + 'px';
+            setTimeout(animateMouth, 100);
+        }
+
+        function animateBrows() {
+            if (!isSpeaking) return;
+            const y = (Math.random() * -5) - 2;
+            browL.style.transform = `translateY(${y}px)`;
+            browR.style.transform = `translateY(${y}px)`;
+            setTimeout(animateBrows, 350);
+        }
+
+        function toggleSystem() {
+            isActive = !isActive;
+            if (isActive) {
+                chandanBtn.classList.add('chandan-active');
+                initRecognition();
+                recognition.start();
+            } else {
+                chandanBtn.classList.remove('chandan-active');
+                if(recognition) recognition.stop();
+                synth.cancel();
+                isSpeaking = false;
+                isThinking = false;
+                head.classList.remove('speaking');
+                updateEyePosition();
+            }
+        }
+
+        function blink() {
+            const lids = [document.getElementById('lidL'), document.getElementById('lidR')];
+            lids.forEach(l => l.style.top = "0");
+            setTimeout(() => lids.forEach(l => l.style.top = "-100%"), 150);
+            setTimeout(blink, 5000 + Math.random() * 3000);
+        }
+
+        window.onload = () => { blink(); initRecognition(); };
+    </script>
 </body>
-
 </html>
+
+
+
+  
