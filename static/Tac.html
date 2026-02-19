@@ -126,10 +126,10 @@
         };
 
         const taunts = {
-            move: ["Ab tu gaya bete.", "Ruk abhi bataata hoon.", "Beta baap se panga nahi.", "Ye kya move hai? Rehne de.", "Dimaag ghar chhod ke aaya hai kya?"],
-            win: ["Hahaha! Bola tha na tu gaya bete.", "Beta, main tera baap hoon.", "Ab jaa ke doodh pee le."],
-            loss: ["Tukke se jeet gaya tu.", "System error tha, varna marta tu.", "Agli baar dekh lunga bete."],
-            draw: ["Bach gaya tu iss baar.", "Chalo draw hi sahi, dumm hai toh phir se khel."]
+            move: ["अरे जल्दी खेल कल सुबह पनवेल निकलना है", "ओह!.", "तुम बहुत धिरे खेलते हो यार", "Ye kya move hai? ", "इस बार तो मै ही जीतूँगा?"],
+            win: ["हाहा बोला था अब तु गया बेटे", "मज़ा न आया हो तो एकबार और आजाओ हारने के लिए", "भाई, अब जाने दो मुझे लगता है अब तुम रो दोगे"],
+            loss: ["Tukke se jeet gaya tu.", "सिस्टम एररर था, वरना इस बार तु तो गया था", "Agli baar dekh lunga bete."],
+            draw: ["Bach gaya tu iss baar.", "Chalo draw hi sahi, dumm hai toh phir se khelo."]
         };
 
         const cells = document.querySelectorAll('.cell');
@@ -166,7 +166,7 @@
         realStartBtn.onclick = () => {
             startScreen.classList.add('hidden');
             gameActive = true;
-            speak("Abhi bataata hoon tujhe, chal shuru kar.");
+            speak("Aa ek baar phir Abhi bataata hoon, jaldi kar bhai.");
         };
 
         function handleCellClick(e) {
@@ -306,4 +306,5 @@
         window.speechSynthesis.onvoiceschanged = () => {};
     </script>
 </body>
+
 </html>
