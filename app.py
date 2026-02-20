@@ -299,7 +299,8 @@ def serve_numpuzz():
 
 @app.get("/waves")
 def serve_numpuzz():
-    return FileResponse("static/wave.html")
+    return FileResponse("static/waves.html")
+
 
 
 
