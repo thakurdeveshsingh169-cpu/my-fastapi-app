@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝕯𝖊𝖘𝖍 𝐀𝖎 Brahma Waves</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Entry Modal */
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        #modal-content {
+            text-align: center;
+            color: white;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        button {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 20px;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: white;
+            color: black;
+        }
+
+        /* Timer UI */
+        #timer-container {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        #timer-display {
+            font-size: 42px;
+            font-weight: 200;
+            letter-spacing: 4px;
+        }
+
+        /* Speed Control Dot */
+        #speed-dot {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 4px;
+            height: 4px;
+            background-color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 0 0 10px #fff;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from { opacity: 0.2; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Footer Text */
+        #footer-text {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        #reset-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <h2 style="font-weight: 200;">Are you sure want to 𝙀𝙣𝙩𝙚𝙧 𝙱𝚛𝚊𝚖𝚑𝚊 𝕎𝔸𝕍𝔼𝕊 ?</h2>
+            <button onclick="startMode()">YES</button>
+        </div>
+    </div>
+
+    <div id="reset-overlay">
+        <h1 style="font-weight: 200;">Meditation Finished</h1>
+        <button onclick="restartSession()">Restart</button>
+    </div>
+
+    <div id="speed-dot" title="Click to change speed" onclick="changeSpeed()"></div>
+
+    <div id="timer-container" onclick="adjustTimer()">
+        <div id="timer-display">60:00</div>
+        <div style="font-size: 10px; opacity: 0.5; margin-top: 5px;">TAP TO ADJUST</div>
+    </div>
+
+    <div id="footer-text">..... 𝙿𝚛𝚎𝚏𝚎𝚛 𝗛𝗲𝗮𝗱𝗽𝗵𝗼𝗻𝗲𝘀 for Real 🧘‍♂️ 𝐅𝐞𝐞𝐞𝐥 .....</div>
+</div>
+
+    <canvas id="universeCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('universeCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let stars = [];
+        const STAR_COUNT = 150;
+        const BIG_STAR_COUNT = 15;
+        
+        // Timer & State
+        let timeRemaining = 3600;
+        let timerInterval;
+        let speedMultiplier = 1;
+        let bgOffset = 0;
+
+        // --- AUDIO HANDLERS ---
+        // YOU CAN REPLACE THESE PATHS WITH YOUR LOCAL FILES
+        const omAudio = new Audio('static/om.mp3');
+        omAudio.loop = true;
+        const bellAudio = new Audio('static/bell.mp3'); // or a.mp3
+
+        function startMode() {
+            document.getElementById('modal-overlay').style.display = 'none';
+            omAudio.play().catch(e => console.log("Audio play blocked until interaction"));
+            startTimer();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    onTimerEnd();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeRemaining / 60);
+            const s = timeRemaining % 60;
+            document.getElementById('timer-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function adjustTimer() {
+            const val = prompt("Enter minutes:", Math.floor(timeRemaining / 60));
+            if (val && !isNaN(val)) {
+                timeRemaining = parseInt(val) * 60;
+                updateTimerDisplay();
+            }
+        }
+
+        function onTimerEnd() {
+            omAudio.pause();
+            bellAudio.play();
+            document.getElementById('reset-overlay').style.display = 'flex';
+        }
+
+        function restartSession() {
+            document.getElementById('reset-overlay').style.display = 'none';
+            timeRemaining = 3600;
+            updateTimerDisplay();
+            omAudio.currentTime = 0;
+            omAudio.play();
+            startTimer();
+        }
+
+        function changeSpeed() {
+            const newSpeed = prompt("Enter speed multiplier (e.g. 0.5 for slow, 5 for fast):", speedMultiplier);
+            if (newSpeed && !isNaN(newSpeed)) {
+                speedMultiplier = parseFloat(newSpeed);
+            }
+        }
+
+        // --- ANIMATION LOGIC ---
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            initStars();
+        }
+
+        class Star {
+            constructor(isBig = false) {
+                this.isBig = isBig;
+                this.init();
+            }
+
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                if (this.isBig) {
+                    this.size = Math.random() * 2 + 1;
+                    this.glowRadius = Math.random() * 10 + 20; 
+                    this.opacity = Math.random() * 0.5 + 0.3;
+                } else {
+                    this.size = Math.random() * 1.5;
+                    this.glowRadius = 0;
+                    this.opacity = Math.random() * 0.8;
+                }
+                this.baseSpeedX = (Math.random() - 0.5) * 0.15;
+                this.baseSpeedY = (Math.random() - 0.5) * 0.15;
+                this.twinkleSpeed = Math.random() * 0.02;
+                this.twinklePhase = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                // Apply speed multiplier
+                this.x += this.baseSpeedX * speedMultiplier;
+                this.y += this.baseSpeedY * speedMultiplier;
+
+                if (this.x < -50) this.x = width + 50;
+                if (this.x > width + 50) this.x = -50;
+                if (this.y < -50) this.y = height + 50;
+                if (this.y > height + 50) this.y = -50;
+
+                this.twinklePhase += this.twinkleSpeed;
+            }
+
+            draw() {
+                const currentOpacity = this.opacity * (0.7 + Math.sin(this.twinklePhase) * 0.3);
+                if (this.isBig) {
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.glowRadius);
+                    gradient.addColorStop(0, `rgba(200, 230, 255, ${currentOpacity * 0.6})`);
+                    gradient.addColorStop(1, 'rgba(0, 0, 50, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.glowRadius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < STAR_COUNT; i++) stars.push(new Star(false));
+            for (let i = 0; i < BIG_STAR_COUNT; i++) stars.push(new Star(true));
+        }
+
+        function drawBackground() {
+            bgOffset += 0.002; // Movement speed of the color gradient
+            const wave = Math.sin(bgOffset) * 50; // Shift amount
+            
+            // Dynamic Linear Gradient moving up and down
+            const bgGrad = ctx.createLinearGradient(0, -wave, 0, height + wave);
+            bgGrad.addColorStop(0, '#000814'); // Blackish
+            bgGrad.addColorStop(0.4, '#001d3d'); // Bluish bliss
+            bgGrad.addColorStop(0.8, '#000814'); // Black
+            bgGrad.addColorStop(1, '#000000'); // Deep Black end
+            
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Subtle "bliss" overlay
+            ctx.globalCompositeOperation = 'screen';
+            ctx.fillStyle = 'rgba(10, 30, 70, 0.05)';
+            ctx.beginPath();
+            ctx.ellipse(width * 0.5, height * 0.5 + wave, width * 0.8, height * 0.4, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        function animate() {
+            drawBackground();
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        window.onload = function() {
+            resize();
+            animate();
+        };
+    </script>
+</body>
+</html>
+
