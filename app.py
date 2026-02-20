@@ -178,12 +178,7 @@ async def ask_question(data: Question, request: Request):
         "founder of", "who is your founder", "who made desh ai", "who created you", "Creates you", "created you" , "founded you" , "your founder" , "makes you" , "CEO of desh Ai" , "owner of Desh Ai" 
     ]
     if any(kw in prompt_lower for kw in founder_keywords):
-        reply = "Hello! 😊 I'm 𝕯𝖊𝖘𝖍 𝐀𝖎 (A Cloud Based Data trained Artificial Intelligence) .
-I'm proudly created by a 16-year-old innovator, 𝕯𝖊𝖛𝖊𝖘𝖍 𝕾𝖎𝖓𝖌𝖍 𝕽𝖆𝖏𝖕𝖚𝖙, from Jaunpur, Uttar Pradesh, India.
-We(Whole Team 𝕯𝖊𝖘𝖍 𝐀𝖎) warmly welcome you and truly appreciate your Interest to know about me. Our mission is to make technology smarter, more helpful, and accessible for everyone. We believe innovation has no age limit, and big dreams can start small.
-If you would like to visit our very first office in Noida, you are most welcome. We would be happy to connect with you. For any queries, collaborations, suggestions, or support, feel free to contact us through our Official email :- deshai.by.teamdsr@gmail.com .
-Thank you for being a part of our journey.
-We look forward to growing, learning, and innovating together with you."
+        reply = "🌟 Desh AI is founded by Devesh Singh Rajput, a 15-year-old from Jaunpur, U.P."
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
 
@@ -300,6 +295,7 @@ def serve_numpuzz():
 @app.get("/waves")
 def serve_numpuzz():
     return FileResponse("static/waves.html")
+
 
 
 
