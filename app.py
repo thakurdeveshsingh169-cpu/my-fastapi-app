@@ -303,6 +303,10 @@ def serve_numpuzz():
     return FileResponse("static/grid.html")
 
 
+@app.get("/pdf")
+def serve_numpuzz():
+    return FileResponse("static/pdf.html")
+
 
 
 
