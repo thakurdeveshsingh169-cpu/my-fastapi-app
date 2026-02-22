@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Text to PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        #textInput {
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center p-4 md:p-8">
+
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col border border-slate-200">
+        <!-- Header -->
+        <div class="bg-indigo-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold">Smart Text-to-PDF</h1>
+            <p class="text-indigo-100 text-sm mt-1">Preserves original formatting, spacing, and gaps</p>
+        </div>
+
+        <!-- Editor Area -->
+        <div class="p-6 flex-grow flex flex-col gap-4">
+            <label for="textInput" class="text-slate-700 font-semibold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Paste your text here:
+            </label>
+            
+            <textarea 
+                id="textInput" 
+                class="w-full h-96 p-4 font-mono text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none custom-scrollbar resize-none bg-slate-50"
+                placeholder="Paste your content here... (Standard text, code, or structured logs)"
+            ></textarea>
+
+            <!-- Settings -->
+            <div class="flex flex-wrap gap-4 items-center justify-between bg-slate-100 p-4 rounded-lg">
+                <div class="flex items-center gap-3">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Font Size:</label>
+                    <select id="fontSize" class="bg-white border border-slate-300 rounded px-2 py-1 text-sm">
+                        <option value="8">8pt</option>
+                        <option value="10" selected>10pt</option>
+                        <option value="12">12pt</option>
+                        <option value="14">14pt</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Filename:</label>
+                    <input id="fileName" type="text" value="converted_document" class="bg-white border border-slate-300 rounded px-2 py-1 text-sm outline-none focus:ring-1 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <button 
+                onclick="generatePDF()" 
+                id="downloadBtn"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition duration-200 flex items-center justify-center gap-3 shadow-lg active:scale-95"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download as PDF
+            </button>
+        </div>
+        
+        <!-- Status Message -->
+        <div id="status" class="hidden mx-6 mb-6 p-3 rounded-md text-center text-sm"></div>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        async function generatePDF() {
+            const text = document.getElementById('textInput').value;
+            const size = parseInt(document.getElementById('fontSize').value);
+            const fileName = document.getElementById('fileName').value || 'document';
+            const statusDiv = document.getElementById('status');
+            const btn = document.getElementById('downloadBtn');
+
+            if (!text.trim()) {
+                showMessage("Please paste some text first!", "error");
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = 'Generating...';
+                
+                // Initialize PDF (A4 size, units in points)
+                const doc = new jsPDF({
+                    orientation: 'p',
+                    unit: 'pt',
+                    format: 'a4'
+                });
+
+                // Use Courier (Monospaced) to ensure "same format same gap" logic
+                doc.setFont("courier", "normal");
+                doc.setFontSize(size);
+
+                const margin = 40;
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const maxLineWidth = pageWidth - (margin * 2);
+                
+                // Split text into lines, then split those lines by width to handle overflow
+                const lines = text.split('\n');
+                let cursorY = margin;
+
+                lines.forEach(line => {
+                    // Handle wrapping while keeping indentation
+                    const wrappedLines = doc.splitTextToSize(line, maxLineWidth);
+                    
+                    wrappedLines.forEach(wrappedLine => {
+                        // Check if we need a new page
+                        if (cursorY + size > pageHeight - margin) {
+                            doc.addPage();
+                            cursorY = margin;
+                        }
+                        doc.text(wrappedLine, margin, cursorY);
+                        cursorY += (size * 1.2); // Line spacing factor
+                    });
+                });
+
+                // Download the file
+                doc.save(`${fileName}.pdf`);
+                
+                showMessage("PDF Downloaded successfully!", "success");
+            } catch (error) {
+                console.error(error);
+                showMessage("Failed to generate PDF.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Download as PDF
+                `;
+            }
+        }
+
+        function showMessage(msg, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = msg;
+            statusDiv.className = `mx-6 mb-6 p-3 rounded-md text-center text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-700 block' : 'bg-red-100 text-red-700 block'
+            }`;
+            
+            setTimeout(() => {
+                statusDiv.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+
