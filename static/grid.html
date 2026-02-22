@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Link by 𝕯𝖊𝖘𝖍 𝐀𝖎</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: rgba(0, 150, 255, 0.05);
+            --card-border: rgba(0, 150, 255, 0.3);
+            --text-color: #ffffff;
+            --player-line: #ffffff;
+            --ai-line: #ff0000;
+            --line-idle: #1a1a1a;
+            --dot-color: #444;
+        }
+
+        [data-theme="white"] {
+            --bg-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.05);
+            --card-border: rgba(0, 0, 0, 0.2);
+            --text-color: #000000;
+            --player-line: #000000;
+            --ai-line: #ff0000;
+            --line-idle: #e5e5e5;
+            --dot-color: #888;
+        }
+
+        [data-theme="soft"] {
+            --bg-color: #fffcf5; /* Extremely light orange/cream */
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --card-border: rgba(255, 165, 0, 0.2);
+            --text-color: #332211;
+            --player-line: #000000;
+            --ai-line: #ff0000;
+            --line-idle: #f5eedc;
+            --dot-color: #c4b5a2;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: bold;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot { width: 8px; height: 8px; background-color: var(--dot-color); border-radius: 50%; z-index: 10; }
+
+        .line { position: absolute; background-color: var(--line-idle); cursor: pointer; z-index: 5; border-radius: 4px; }
+        .line.taken-A { background-color: var(--player-line) !important; box-shadow: 0 0 10px var(--player-line); }
+        .line.taken-B { background-color: var(--ai-line) !important; box-shadow: 0 0 10px var(--ai-line); }
+
+        .box { position: absolute; display: flex; align-items: center; justify-content: center; font-weight: 900; opacity: 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s; transform: scale(0.5); }
+        .box.taken { opacity: 1; transform: scale(1); }
+        .box-A { color: var(--player-line); }
+        .box-B { color: var(--ai-line); }
+
+        /* Menu Styling */
+        .settings-panel {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        .settings-panel.open { transform: translateX(0); }
+
+        .accordion-btn {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            transition: opacity 0.2s;
+        }
+        .accordion-btn:active { opacity: 0.8; }
+
+        .sub-menu { height: 0; overflow: hidden; transition: height 0.3s ease-out; }
+        .sub-menu.active { height: auto; margin-top: 10px; }
+        
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            text-align: center;
+        }
+
+        .firework { 
+            position: absolute; 
+            width: 4px; 
+            height: 4px; 
+            border-radius: 50%; 
+            pointer-events: none; 
+            animation: explode 1s ease-out forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(20); opacity: 0; }
+        }
+
+        #footer-tag {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 900;
+            font-style: italic;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 30;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+
+    <div id="overlay">
+        <div id="overlay-content" class="p-10 rounded-3xl bg-white text-black shadow-2xl">
+            <h1 id="overlay-msg" class="text-4xl font-black mb-4"></h1>
+            <div id="overlay-icon" class="text-8xl mb-4"></div>
+        </div>
+    </div>
+
+    <!-- Score Header -->
+    <div class="fixed top-6 flex gap-4 z-40">
+        <div id="ui-A" class="px-6 py-2 rounded-lg text-center border transition-all duration-300" style="background: var(--card-bg); border-color: var(--card-border);">
+            <div id="label-A" class="text-[10px] opacity-70 tracking-tighter">YOU</div>
+            <div id="score-A" class="text-3xl font-black">0</div>
+        </div>
+        <div id="ui-B" class="px-6 py-2 rounded-lg text-center border transition-all duration-300" style="background: var(--card-bg); border-color: var(--card-border);">
+            <div id="label-B" class="text-[10px] opacity-70 tracking-tighter">AI</div>
+            <div id="score-B" class="text-3xl font-black" style="color: var(--ai-line)">0</div>
+        </div>
+    </div>
+
+    <!-- Settings Trigger -->
+    <button id="settingsBtn" class="fixed top-6 right-6 p-2 z-40" style="color: var(--text-color)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+
+    <!-- Settings Overlay -->
+    <div id="settingsPanel" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white text-black z-50 settings-panel p-8 shadow-2xl border-l border-zinc-200">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-black italic">MENU</h2>
+            <button id="closeX" class="p-2 hover:bg-black/10 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        
+        <div class="space-y-4 pb-20">
+            <div>
+                <button onclick="accordion('modeMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black">GAME MODE <span>+</span></button>
+                <div id="modeMenu" class="sub-menu space-y-2">
+                    <button onclick="setMode('pvp')" class="w-full p-3 border-2 rounded-lg text-left" id="opt-pvp">Player VS Player</button>
+                    <button onclick="setMode('ai')" class="w-full p-3 border-2 border-black rounded-lg text-left" id="opt-ai">Player VS AI</button>
+                </div>
+            </div>
+
+            <div>
+                <button onclick="accordion('gridMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black">GRID SIZE <span>+</span></button>
+                <div id="gridMenu" class="sub-menu space-y-2">
+                    <button onclick="setGrid(4)" class="w-full p-3 border-2 rounded-lg text-left">4 x 4 Boxes</button>
+                    <button onclick="setGrid(6)" class="w-full p-3 border-2 border-black rounded-lg text-left">6 x 6 Boxes</button>
+                    <button onclick="setGrid(12)" class="w-full p-3 border-2 rounded-lg text-left">12 x 12 Boxes</button>
+                </div>
+            </div>
+
+            <div>
+                <button onclick="accordion('themeMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black">VISUAL THEME <span>+</span></button>
+                <div id="themeMenu" class="sub-menu space-y-2">
+                    <button onclick="setTheme('default')" class="w-full p-3 border-2 border-black rounded-lg text-left">Neon Dark</button>
+                    <button onclick="setTheme('white')" class="w-full p-3 border-2 rounded-lg text-left">White Panda</button>
+                    <button onclick="setTheme('soft')" class="w-full p-3 border-2 rounded-lg text-left">Light Orange</button>
+                </div>
+            </div>
+            
+            <button onclick="apply()" class="w-full py-5 bg-black text-white font-black rounded-xl sticky bottom-0">SAVE & RESTART</button>
+        </div>
+    </div>
+
+    <div id="board" class="relative"></div>
+    <div id="status" class="mt-12 font-black text-2xl uppercase italic tracking-wider">YOU TURN</div>
+
+    <!-- Signature -->
+    <div id="footer-tag">by 𝕯𝖊𝖘𝖍 𝐀𝖎</div>
+
+    <script>
+        let boxCount = 6; 
+        let gridSize = 7;
+        let spacing = 50;
+        let currentPlayer = 'A';
+        let scores = { A: 0, B: 0 };
+        let isVsAI = true;
+        let gameOver = false;
+
+        const sounds = {
+            line: new Audio('static/line.mp3'),
+            player: new Audio('static/player.mp3'),
+            ai: new Audio('static/ai.mp3'),
+            win: new Audio('static/win.mp3'),
+            loss: new Audio('static/loss.mp3')
+        };
+
+        const board = document.getElementById('board');
+        const settingsPanel = document.getElementById('settingsPanel');
+
+        document.getElementById('settingsBtn').onclick = () => settingsPanel.classList.add('open');
+        document.getElementById('closeX').onclick = () => settingsPanel.classList.remove('open');
+
+        function accordion(id) {
+            const menus = ['modeMenu', 'gridMenu', 'themeMenu'];
+            menus.forEach(m => {
+                const el = document.getElementById(m);
+                if (m === id) {
+                    el.classList.toggle('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        function setGrid(val) {
+            boxCount = val; gridSize = val + 1;
+            document.querySelectorAll('#gridMenu button').forEach(b => b.classList.remove('border-black'));
+            event.currentTarget.classList.add('border-black');
+        }
+
+        function setMode(m) {
+            isVsAI = (m === 'ai');
+            document.querySelectorAll('#modeMenu button').forEach(b => b.classList.remove('border-black'));
+            event.currentTarget.classList.add('border-black');
+        }
+
+        function setTheme(t) {
+            document.body.dataset.theme = t;
+            document.querySelectorAll('#themeMenu button').forEach(b => b.classList.remove('border-black'));
+            event.currentTarget.classList.add('border-black');
+        }
+
+        function apply() { settingsPanel.classList.remove('open'); initGame(); }
+
+        function initGame() {
+            board.innerHTML = ''; currentPlayer = 'A'; scores = { A: 0, B: 0 }; gameOver = false;
+            document.getElementById('overlay').style.display = 'none';
+            const labelA = document.getElementById('label-A');
+            const labelB = document.getElementById('label-B');
+            labelA.innerText = isVsAI ? "YOU" : "PLAYER A";
+            labelB.innerText = isVsAI ? "AI" : "PLAYER B";
+            const maxBoardSize = Math.min(window.innerWidth - 40, window.innerHeight - 320);
+            spacing = maxBoardSize / boxCount;
+            board.style.width = `${boxCount * spacing + 8}px`;
+            board.style.height = `${boxCount * spacing + 8}px`;
+            for (let r = 0; r < boxCount; r++) {
+                for (let c = 0; c < boxCount; c++) {
+                    const box = document.createElement('div');
+                    box.className = 'box'; box.id = `box-${r}-${c}`;
+                    box.style.width = `${spacing}px`; box.style.height = `${spacing}px`;
+                    box.style.top = `${r * spacing + 4}px`; box.style.left = `${c * spacing + 4}px`;
+                    box.style.fontSize = `${spacing * 0.4}px`;
+                    board.appendChild(box);
+                }
+            }
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    if (c < boxCount) createLine(r, c, 'horizontal');
+                    if (r < boxCount) createLine(r, c, 'vertical');
+                    const dot = document.createElement('div');
+                    dot.className = 'dot absolute';
+                    dot.style.top = `${r * spacing}px`; dot.style.left = `${c * spacing}px`;
+                    board.appendChild(dot);
+                }
+            }
+            updateUI();
+        }
+
+        function createLine(r, c, type) {
+            const line = document.createElement('div');
+            line.className = `line ${type}`;
+            line.dataset.row = r; line.dataset.col = c; line.dataset.type = type;
+            if (type === 'horizontal') {
+                line.style.width = `${spacing - 6}px`; line.style.height = `6px`;
+                line.style.top = `${r * spacing + 1}px`; line.style.left = `${c * spacing + 7}px`;
+            } else {
+                line.style.height = `${spacing - 6}px`; line.style.width = `6px`;
+                line.style.top = `${r * spacing + 7}px`; line.style.left = `${c * spacing + 1}px`;
+            }
+            line.onclick = () => { if (gameOver || line.classList.contains('taken')) return; if (isVsAI && currentPlayer === 'B') return; executeMove(line); };
+            board.appendChild(line);
+        }
+
+        function executeMove(line) {
+            sounds.line.currentTime = 0; sounds.line.play().catch(()=>{});
+            line.classList.add('taken', `taken-${currentPlayer}`);
+            const r = parseInt(line.dataset.row), c = parseInt(line.dataset.col), type = line.dataset.type;
+            let scored = false;
+            if (type === 'horizontal') { scored = checkSquare(r-1, c) || scored; scored = checkSquare(r, c) || scored; }
+            else { scored = checkSquare(r, c-1) || scored; scored = checkSquare(r, c) || scored; }
+            if (scored) {
+                if (isVsAI && currentPlayer === 'B') sounds.ai.play().catch(()=>{});
+                else sounds.player.play().catch(()=>{});
+                updateUI(); if (checkGameOver()) return;
+                if (isVsAI && currentPlayer === 'B') setTimeout(aiLogic, 400);
+            } else {
+                currentPlayer = currentPlayer === 'A' ? 'B' : 'A';
+                updateUI(); if (isVsAI && currentPlayer === 'B') setTimeout(aiLogic, 600);
+            }
+        }
+
+        function checkSquare(r, c) {
+            if (r < 0 || r >= boxCount || c < 0 || c >= boxCount) return false;
+            const box = document.getElementById(`box-${r}-${c}`);
+            if (box.classList.contains('taken')) return false;
+            if (isTaken(r,c,'horizontal') && isTaken(r+1,c,'horizontal') && isTaken(r,c,'vertical') && isTaken(r,c+1,'vertical')) {
+                box.classList.add('taken', `box-${currentPlayer}`);
+                box.innerText = isVsAI ? (currentPlayer === 'A' ? 'Y' : 'AI') : (currentPlayer === 'A' ? 'A' : 'B');
+                scores[currentPlayer]++; return true;
+            }
+            return false;
+        }
+
+        function isTaken(r, c, type) { const el = document.querySelector(`.line.${type}[data-row="${r}"][data-col="${c}"]`); return el && el.classList.contains('taken'); }
+
+        function aiLogic() {
+            if (gameOver || currentPlayer === 'A') return;
+            const lines = Array.from(document.querySelectorAll('.line:not(.taken)'));
+            if (!lines.length) return;
+            const best = lines.find(l => wouldFinish(l)) || lines.find(l => !givesOpponentPoint(l)) || lines[Math.floor(Math.random() * lines.length)];
+            executeMove(best);
+        }
+
+        function wouldFinish(l) {
+            const r = parseInt(l.dataset.row), c = parseInt(l.dataset.col), t = l.dataset.type;
+            const chk = (br, bc) => {
+                if (br < 0 || br >= boxCount || bc < 0 || bc >= boxCount) return false;
+                let cnt = (isTaken(br, bc, 'horizontal')?1:0) + (isTaken(br+1, bc, 'horizontal')?1:0) + (isTaken(br, bc, 'vertical')?1:0) + (isTaken(br, bc+1, 'vertical')?1:0);
+                return cnt === 3;
+            };
+            return t === 'horizontal' ? (chk(r-1, c) || chk(r, c)) : (chk(r, c-1) || chk(r, c));
+        }
+
+        function givesOpponentPoint(l) {
+            const r = parseInt(l.dataset.row), c = parseInt(l.dataset.col), t = l.dataset.type;
+            const chk = (br, bc) => {
+                if (br < 0 || br >= boxCount || bc < 0 || bc >= boxCount) return false;
+                let cnt = (isTaken(br, bc, 'horizontal')?1:0) + (isTaken(br+1, bc, 'horizontal')?1:0) + (isTaken(br, bc, 'vertical')?1:0) + (isTaken(br, bc+1, 'vertical')?1:0);
+                return cnt === 2;
+            };
+            return t === 'horizontal' ? (chk(r-1, c) || chk(r, c)) : (chk(r, c-1) || chk(r, c));
+        }
+
+        function updateUI() {
+            document.getElementById('score-A').innerText = scores.A;
+            document.getElementById('score-B').innerText = scores.B;
+            const s = document.getElementById('status');
+            const lblA = document.getElementById('label-A').innerText;
+            const lblB = document.getElementById('label-B').innerText;
+            if (currentPlayer === 'A') { s.innerText = `${lblA} TURN`; s.style.color = 'var(--text-color)'; }
+            else { s.innerText = isVsAI ? "AI THINKING..." : `${lblB} TURN`; s.style.color = 'var(--ai-line)'; }
+        }
+
+        function checkGameOver() {
+            if (scores.A + scores.B === boxCount * boxCount) {
+                gameOver = true;
+                const overlay = document.getElementById('overlay');
+                const msg = document.getElementById('overlay-msg');
+                const icon = document.getElementById('overlay-icon');
+                overlay.style.display = 'flex';
+
+                if (scores.A > scores.B) {
+                    msg.innerText = "YOU WIN!";
+                    icon.innerText = "🏆";
+                    sounds.win.play().catch(()=>{});
+                    startFireworks();
+                } else if (scores.B > scores.A) {
+                    msg.innerText = "Oh! TRY AGAIN";
+                    icon.innerText = "😔";
+                    sounds.loss.play().catch(()=>{});
+                } else {
+                    msg.innerText = "DRAW"; icon.innerText = "🤝";
+                }
+                setTimeout(() => initGame(), 3000);
+                return true;
+            }
+            return false;
+        }
+
+        function startFireworks() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const fw = document.createElement('div');
+                    fw.className = 'firework';
+                    fw.style.left = Math.random() * 100 + 'vw';
+                    fw.style.top = Math.random() * 100 + 'vh';
+                    fw.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                    document.body.appendChild(fw);
+                    setTimeout(() => fw.remove(), 1000);
+                }, i * 60);
+            }
+        }
+
+        window.onload = initGame;
+    </script>
+</body>
+</html>
+
