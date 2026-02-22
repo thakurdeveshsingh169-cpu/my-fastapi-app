@@ -298,6 +298,12 @@ def serve_numpuzz():
 
 
 
+@app.get("/dot")
+def serve_numpuzz():
+    return FileResponse("static/grid.html")
+
+
+
 
 
 
