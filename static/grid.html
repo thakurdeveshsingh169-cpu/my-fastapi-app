@@ -395,11 +395,11 @@
                 else sounds.player.play().catch(()=>{});
                 updateUI();
                 if (checkGameOver()) return;
-                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 400);
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 800);
             } else {
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                 updateUI();
-                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 600);
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 800);
             }
         }
 
@@ -500,7 +500,7 @@
                     sounds.win.play().catch(()=>{});
                     startFireworks();
                 }
-                setTimeout(() => initGame(), 7000);
+                setTimeout(() => initGame(), 3000);
                 return true;
             }
             return false;
