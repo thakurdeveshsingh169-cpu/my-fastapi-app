@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>𝕯𝖊𝖘𝖍 𝐀𝖎 Categorizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow: hidden; 
+            height: 100vh;
+            background-color: #f8fafc;
+        }
+
+        .app-wrapper {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            gap: 1.2rem;
+            position: relative;
+        }
+
+        /* Fixed container heights at ~2.5 inches */
+        .fixed-container {
+            width: 100%;
+            max-width: 500px;
+            height: 240px; 
+            background: white;
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Answer box hidden by default */
+        #resultContainer {
+            height: 0px;
+            opacity: 0;
+            border: none;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        #resultContainer.active {
+            height: 240px;
+            opacity: 1;
+            border: 1px solid rgba(0,0,0,0.1);
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .scroll-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 1rem;
+            font-size: 15px;
+        }
+
+        /* Logo Button - Positioned to the right */
+        .logo-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        .logo-btn {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s;
+            object-fit: cover;
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-btn:active {
+            transform: scale(0.92);
+        }
+
+        .logo-btn.loading {
+            opacity: 0.6;
+            pointer-events: none;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Blinking Dots */
+        .dots::after {
+            content: '.';
+            animation: dots 1.5s infinite;
+        }
+        @keyframes dots {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+
+        /* Bold Header Style */
+        .cat-title {
+            display: block;
+            font-weight: 800;
+            color: #1e1b4b;
+            margin-top: 12px;
+            font-size: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .copy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            resize: none;
+            outline: none;
+            border: none;
+            font-size: 16px;
+            color: #334155;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- Updated Header -->
+        <div class="text-center">
+            <h1 class="text-xl font-black text-indigo-700">DESH-AI</h1>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+                (Smart AI Product Categorizer)
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="fixed-container">
+            <div class="scroll-content">
+                <textarea id="userInput" placeholder="Paste your items here..."></textarea>
+            </div>
+        </div>
+
+        <!-- Logo Trigger (Right Aligned) -->
+        <div class="logo-container">
+            <div class="flex flex-col items-center">
+                <img src="logo.png" id="triggerBtn" class="logo-btn static" alt="Logo">
+                <p id="statusMsg" class="text-[9px] font-bold text-indigo-500 uppercase mt-1 hidden">Categorizing<span class="dots"></span></p>
+            </div>
+        </div>
+
+        <!-- Answer Section (Initially Hidden) -->
+        <div id="resultContainer" class="fixed-container">
+            <div id="copyHeader" class="copy-header hidden">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Categorized Output</span>
+                <button id="copyBtn" class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                    <i class="fa-regular fa-clone"></i>
+                </button>
+            </div>
+            <div class="scroll-content" id="scrollArea">
+                <div id="outText" class="text-slate-700 whitespace-pre-wrap leading-relaxed"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-full text-xs opacity-0 transition-opacity pointer-events-none z-50">
+        COPIED TO CLIPBOARD
+    </div>
+
+    <script>
+        const apiKey = ""; 
+        const trigger = document.getElementById('triggerBtn');
+        const input = document.getElementById('userInput');
+        const resCont = document.getElementById('resultContainer');
+        const outText = document.getElementById('outText');
+        const status = document.getElementById('statusMsg');
+        const copyHeader = document.getElementById('copyHeader');
+        const copyBtn = document.getElementById('copyBtn');
+
+        async function callAI(content) {
+            const prompt = `Categorize the following items into logical groups (e.g., Kirana Store, Dairy, Fruits & Vegetables). 
+            Format:
+            - Headings must be wrapped in double asterisks like **Heading Name**
+            - List items with bullets.
+            - Keep quantities exact.`;
+            
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    contents: [{parts: [{text: content}]}],
+                    systemInstruction: {parts: [{text: prompt}]}
+                })
+            });
+            const data = await res.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        trigger.addEventListener('click', async () => {
+            const text = input.value.trim();
+            if(!text) return;
+
+            // UI Reset & Start
+            trigger.classList.add('loading');
+            status.classList.remove('hidden');
+            resCont.classList.add('active'); // Shows the box
+            outText.innerHTML = "";
+            copyHeader.classList.add('hidden');
+
+            try {
+                const response = await callAI(text);
+                
+                // Bold formatting logic
+                const html = response.split('\n').map(line => {
+                    if(line.includes('**')) {
+                        const clean = line.replace(/\*\*/g, '').replace(':', '');
+                        return `<span class="cat-title">${clean}</span>`;
+                    }
+                    return line.trim() ? `<div>${line}</div>` : `<div class="h-1"></div>`;
+                }).join('');
+
+                outText.innerHTML = html;
+                copyHeader.classList.remove('hidden');
+            } catch (e) {
+                outText.innerText = "Connection error. Please try again.";
+            } finally {
+                trigger.classList.remove('loading');
+                status.classList.add('hidden');
+            }
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const el = document.createElement('textarea');
+            el.value = outText.innerText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const t = document.getElementById('toast');
+            t.style.opacity = "1";
+            setTimeout(() => t.style.opacity = "0", 1500);
+        });
+    </script>
+</body>
+</html>
+
