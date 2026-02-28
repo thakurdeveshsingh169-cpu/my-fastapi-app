@@ -307,20 +307,7 @@ def serve_numpuzz():
 def serve_numpuzz():
     return FileResponse("static/pdf.html")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@app.get("/smart")
+def serve_numpuzz():
+    return FileResponse("static/smart.html")
 
