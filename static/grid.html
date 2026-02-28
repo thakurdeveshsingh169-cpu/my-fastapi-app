@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+< <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -414,7 +414,7 @@
             const r = parseInt(line.dataset.row), c = parseInt(line.dataset.col), type = line.dataset.type;
             const now = Date.now();
             
-            if (now - lastBoxTime > 400) boxesCompletedThisTurn = 0;
+            if (now - lastBoxTime > 700) boxesCompletedThisTurn = 0;
 
             let newlyScored = 0;
             if (type === 'horizontal') { 
@@ -442,12 +442,12 @@
                 
                 updateUI();
                 if (checkGameOver()) return;
-                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 350);
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 500);
             } else {
                 boxesCompletedThisTurn = 0;
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                 updateUI();
-                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 350);
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 600);
             }
         }
 
@@ -587,7 +587,7 @@
                         await navigator.share({
                             files: [file],
                             title: 'Dot Connecting Scoreboard',
-                            text: 'Hey Bro! Can You Beat my score on 𝕯𝖊𝖘𝖍 𝐀𝖎's Dot Connecting!'
+                            text: 'Hey Bro! Can You Beat my score on Dot Connecting!'
                         });
                     } else {
                         const link = document.createElement('a');
@@ -613,7 +613,7 @@
                     fw.style.top = Math.random() * 100 + 'vh';
                     fw.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
                     document.body.appendChild(fw);
-                    setTimeout(() => fw.remove(), 2000);
+                    setTimeout(() => fw.remove(), 1000);
                 }, i * 80);
             }
         }
