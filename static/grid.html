@@ -1,18 +1,25 @@
-<!DOCTYPE html>
+< <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grid Link by 𝕯𝖊𝖘𝖍 𝐀𝖎</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dot Linking by 𝕯𝖊𝖘𝖍 𝐀𝖎</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
+            --bg-color: #fffcf5;
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --card-border: rgba(255, 165, 0, 0.2);
+            --text-color: #332211;
+            --line-idle: #f5eedc;
+            --dot-color: #c4b5a2;
+        }
+
+        [data-theme="dark"] {
             --bg-color: #000000;
             --card-bg: rgba(0, 150, 255, 0.05);
             --card-border: rgba(0, 150, 255, 0.3);
             --text-color: #ffffff;
-            --player-line: #ffffff;
-            --ai-line: #ff0000;
             --line-idle: #1a1a1a;
             --dot-color: #444;
         }
@@ -22,21 +29,8 @@
             --card-bg: rgba(0, 0, 0, 0.05);
             --card-border: rgba(0, 0, 0, 0.2);
             --text-color: #000000;
-            --player-line: #000000;
-            --ai-line: #ff0000;
             --line-idle: #e5e5e5;
             --dot-color: #888;
-        }
-
-        [data-theme="soft"] {
-            --bg-color: #fffcf5; /* Extremely light orange/cream */
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --card-border: rgba(255, 165, 0, 0.2);
-            --text-color: #332211;
-            --player-line: #000000;
-            --ai-line: #ff0000;
-            --line-idle: #f5eedc;
-            --dot-color: #c4b5a2;
         }
 
         body {
@@ -46,20 +40,18 @@
             font-weight: bold;
             overflow: hidden;
             transition: background-color 0.3s ease;
+            touch-action: manipulation;
         }
 
-        .dot { width: 8px; height: 8px; background-color: var(--dot-color); border-radius: 50%; z-index: 10; }
+        .dot { width: 8px; height: 8px; background-color: var(--dot-color); border-radius: 50%; z-index: 10; transform: translate(-50%, -50%); }
 
-        .line { position: absolute; background-color: var(--line-idle); cursor: pointer; z-index: 5; border-radius: 4px; }
-        .line.taken-A { background-color: var(--player-line) !important; box-shadow: 0 0 10px var(--player-line); }
-        .line.taken-B { background-color: var(--ai-line) !important; box-shadow: 0 0 10px var(--ai-line); }
+        .line { position: absolute; background-color: var(--line-idle); cursor: pointer; z-index: 5; border-radius: 4px; transition: background-color 0.2s; }
+        .line.taken { box-shadow: 0 0 12px currentColor; }
 
-        .box { position: absolute; display: flex; align-items: center; justify-content: center; font-weight: 900; opacity: 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s; transform: scale(0.5); }
+        .box { position: absolute; display: flex; align-items: center; justify-content: center; font-weight: 900; opacity: 0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s; transform: scale(0.5); pointer-events: none; }
         .box.taken { opacity: 1; transform: scale(1); }
-        .box-A { color: var(--player-line); }
-        .box-B { color: var(--ai-line); }
 
-        /* Menu Styling */
+        /* Settings UI */
         .settings-panel {
             transform: translateX(100%);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -68,20 +60,53 @@
         }
         .settings-panel.open { transform: translateX(0); }
 
+        #closeX {
+            background-color: #ff0000 !important;
+            color: #ffffff !important;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+
         .accordion-btn {
             background-color: #000000 !important;
             color: #ffffff !important;
             transition: opacity 0.2s;
+            cursor: pointer;
         }
-        .accordion-btn:active { opacity: 0.8; }
 
-        .sub-menu { height: 0; overflow: hidden; transition: height 0.3s ease-out; }
-        .sub-menu.active { height: auto; margin-top: 10px; }
+        /* Curtain Animation Logic */
+        .sub-menu, .curtain-content { 
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin 0.4s;
+            overflow: hidden;
+            margin-top: 0;
+        }
+        .sub-menu > div, .curtain-content > div { min-height: 0; }
         
+        /* Active States */
+        .sub-menu.active { 
+            grid-template-rows: 1fr; 
+            margin-top: 10px; 
+        }
+        .curtain-content.active {
+            grid-template-rows: 1fr;
+            margin-top: 8px;
+        }
+
+        .mode-section { background-color: #f3f4f6; padding: 12px; border-radius: 12px; }
+        .nested-section { background-color: #e5e7eb; padding: 12px; border-radius: 8px; }
+
         #overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: none;
             flex-direction: column;
             align-items: center;
@@ -92,111 +117,125 @@
 
         .firework { 
             position: absolute; 
-            width: 4px; 
-            height: 4px; 
+            width: 4px; height: 4px; 
             border-radius: 50%; 
             pointer-events: none; 
             animation: explode 1s ease-out forwards;
         }
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(20); opacity: 0; }
-        }
+        @keyframes explode { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(25); opacity: 0; } }
 
         #footer-tag {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 900;
-            font-style: italic;
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: 30;
+            position: fixed; bottom: 10px; width: 100%;
+            text-align: center; font-size: 14px; font-weight: 900;
+            font-style: italic; opacity: 0.6; pointer-events: none; z-index: 30;
         }
+
+        .player-score-card { cursor: pointer; border-width: 2px; min-width: 60px; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen">
 
     <div id="overlay">
-        <div id="overlay-content" class="p-10 rounded-3xl bg-white text-black shadow-2xl">
-            <h1 id="overlay-msg" class="text-4xl font-black mb-4"></h1>
-            <div id="overlay-icon" class="text-8xl mb-4"></div>
+        <div id="overlay-content" class="p-8 rounded-3xl bg-white text-black shadow-2xl max-w-[90vw]">
+            <h1 id="overlay-msg" class="text-3xl font-black mb-4"></h1>
+            <div id="overlay-icon" class="text-6xl mb-4"></div>
+            <div id="leaderboard" class="space-y-2 text-left font-bold mb-4"></div>
         </div>
     </div>
 
-    <!-- Score Header -->
-    <div class="fixed top-6 flex gap-4 z-40">
-        <div id="ui-A" class="px-6 py-2 rounded-lg text-center border transition-all duration-300" style="background: var(--card-bg); border-color: var(--card-border);">
-            <div id="label-A" class="text-[10px] opacity-70 tracking-tighter">YOU</div>
-            <div id="score-A" class="text-3xl font-black">0</div>
-        </div>
-        <div id="ui-B" class="px-6 py-2 rounded-lg text-center border transition-all duration-300" style="background: var(--card-bg); border-color: var(--card-border);">
-            <div id="label-B" class="text-[10px] opacity-70 tracking-tighter">AI</div>
-            <div id="score-B" class="text-3xl font-black" style="color: var(--ai-line)">0</div>
-        </div>
-    </div>
+    <div id="score-container" class="fixed top-4 flex flex-wrap justify-center gap-2 px-4 z-40 max-w-full"></div>
 
-    <!-- Settings Trigger -->
-    <button id="settingsBtn" class="fixed top-6 right-6 p-2 z-40" style="color: var(--text-color)">
+    <button id="settingsBtn" class="fixed top-4 right-4 p-2 z-40" style="color: var(--text-color); background: transparent; border: none; cursor: pointer;">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
 
-    <!-- Settings Overlay -->
     <div id="settingsPanel" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white text-black z-50 settings-panel p-8 shadow-2xl border-l border-zinc-200">
         <div class="flex justify-between items-center mb-10">
             <h2 class="text-3xl font-black italic">MENU</h2>
-            <button id="closeX" class="p-2 hover:bg-black/10 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button id="closeX">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
         
-        <div class="space-y-4 pb-20">
+        <div class="space-y-4 pb-24">
+            <!-- GAME MODE ACCORDION -->
             <div>
-                <button onclick="accordion('modeMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black">GAME MODE <span>+</span></button>
-                <div id="modeMenu" class="sub-menu space-y-2">
-                    <button onclick="setMode('pvp')" class="w-full p-3 border-2 rounded-lg text-left" id="opt-pvp">Player VS Player</button>
-                    <button onclick="setMode('ai')" class="w-full p-3 border-2 border-black rounded-lg text-left" id="opt-ai">Player VS AI</button>
+                <button onclick="accordion('modeMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black uppercase">GAME MODE <span>+</span></button>
+                <div id="modeMenu" class="sub-menu">
+                    <div>
+                        <div class="mode-section space-y-4">
+                            <button id="opt-ai" onclick="setMode('ai')" class="mode-opt w-full p-3 border-2 border-black rounded-lg text-left font-black uppercase">VS AI (Single Player)</button>
+                            <button id="opt-pvp" onclick="setMode('pvp')" class="mode-opt w-full p-3 border-2 rounded-lg text-left font-black uppercase">Multiplayer (PVP)</button>
+                            
+                            <!-- NESTED PLAYER COUNT CURTAIN -->
+                            <div id="player-count-select" class="curtain-content">
+                                <div>
+                                    <div class="nested-section">
+                                        <div class="text-xs opacity-50 font-black mb-2 text-zinc-800 uppercase">Select Players</div>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <button onclick="setPlayerCount(2)" class="pc-opt p-3 border-2 rounded-lg text-center font-black">2 P</button>
+                                            <button onclick="setPlayerCount(3)" class="pc-opt p-3 border-2 rounded-lg text-center font-black">3 P</button>
+                                            <button onclick="setPlayerCount(4)" class="pc-opt p-3 border-2 rounded-lg text-center font-black">4 P</button>
+                                            <button onclick="setPlayerCount(5)" class="pc-opt p-3 border-2 rounded-lg text-center font-black">5 P</button>
+                                            <button onclick="setPlayerCount(6)" class="pc-opt p-3 border-2 rounded-lg text-center font-black">6 P</button>
+                                            <button onclick="setPlayerCount(7)" class="pc-opt p-3 border-2 rounded-lg text-center font-black">7 P</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- GRID SIZE ACCORDION -->
             <div>
-                <button onclick="accordion('gridMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black">GRID SIZE <span>+</span></button>
-                <div id="gridMenu" class="sub-menu space-y-2">
-                    <button onclick="setGrid(4)" class="w-full p-3 border-2 rounded-lg text-left">4 x 4 Boxes</button>
-                    <button onclick="setGrid(6)" class="w-full p-3 border-2 border-black rounded-lg text-left">6 x 6 Boxes</button>
-                    <button onclick="setGrid(12)" class="w-full p-3 border-2 rounded-lg text-left">12 x 12 Boxes</button>
+                <button onclick="accordion('gridMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black uppercase">Grid Size <span>+</span></button>
+                <div id="gridMenu" class="sub-menu">
+                    <div>
+                        <div class="mode-section space-y-2">
+                            <button onclick="setGrid(4)" class="grid-opt w-full p-3 border-2 rounded-lg text-left font-black">Small (4x4)</button>
+                            <button onclick="setGrid(6)" class="grid-opt w-full p-3 border-2 border-black rounded-lg text-left font-black">Medium (6x6)</button>
+                            <button onclick="setGrid(8)" class="grid-opt w-full p-3 border-2 rounded-lg text-left font-black">Large (8x8)</button>
+                            <button onclick="setGrid(10)" class="grid-opt w-full p-3 border-2 rounded-lg text-left font-black">Pro (10x10)</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- THEME ACCORDION -->
             <div>
-                <button onclick="accordion('themeMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black">VISUAL THEME <span>+</span></button>
-                <div id="themeMenu" class="sub-menu space-y-2">
-                    <button onclick="setTheme('default')" class="w-full p-3 border-2 border-black rounded-lg text-left">Neon Dark</button>
-                    <button onclick="setTheme('white')" class="w-full p-3 border-2 rounded-lg text-left">White Panda</button>
-                    <button onclick="setTheme('soft')" class="w-full p-3 border-2 rounded-lg text-left">Light Orange</button>
+                <button onclick="accordion('themeMenu')" class="accordion-btn w-full p-4 rounded-lg flex justify-between font-black uppercase">Visual Theme <span>+</span></button>
+                <div id="themeMenu" class="sub-menu">
+                    <div>
+                        <div class="mode-section space-y-2">
+                            <button onclick="setTheme('default')" class="theme-opt w-full p-3 border-2 border-black rounded-lg text-left font-black">Light Orange</button>
+                            <button onclick="setTheme('dark')" class="theme-opt w-full p-3 border-2 rounded-lg text-left font-black">Neon Dark</button>
+                            <button onclick="setTheme('white')" class="theme-opt w-full p-3 border-2 rounded-lg text-left font-black">White Panda</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <button onclick="apply()" class="w-full py-5 bg-black text-white font-black rounded-xl sticky bottom-0">SAVE & RESTART</button>
+            <button onclick="apply()" class="w-full py-5 bg-[#ff0000] text-white font-black rounded-xl sticky bottom-0 border-4 border-white shadow-lg cursor-pointer uppercase">Save & Restart</button>
         </div>
     </div>
 
-    <div id="board" class="relative"></div>
-    <div id="status" class="mt-12 font-black text-2xl uppercase italic tracking-wider">YOU TURN</div>
+    <div id="board" class="relative mt-8"></div>
+    <div id="status" class="mt-8 font-black text-2xl uppercase italic tracking-wider">YOUR TURN</div>
 
-    <!-- Signature -->
     <div id="footer-tag">by 𝕯𝖊𝖘𝖍 𝐀𝖎</div>
 
     <script>
-        let boxCount = 6; 
-        let gridSize = 7;
+        let boxCount = 6;
         let spacing = 50;
-        let currentPlayer = 'A';
-        let scores = { A: 0, B: 0 };
+        let currentPlayerIndex = 0;
         let isVsAI = true;
+        let numPlayers = 2;
+        let players = [];
         let gameOver = false;
+
+        const colors = ['#00d2ff', '#ff0055', '#00ff66', '#ffaa00', '#9d00ff', '#facc15', '#ff7f50'];
 
         const sounds = {
             line: new Audio('static/line.mp3'),
@@ -206,15 +245,8 @@
             loss: new Audio('static/loss.mp3')
         };
 
-        const board = document.getElementById('board');
-        const settingsPanel = document.getElementById('settingsPanel');
-
-        document.getElementById('settingsBtn').onclick = () => settingsPanel.classList.add('open');
-        document.getElementById('closeX').onclick = () => settingsPanel.classList.remove('open');
-
         function accordion(id) {
-            const menus = ['modeMenu', 'gridMenu', 'themeMenu'];
-            menus.forEach(m => {
+            ['modeMenu', 'gridMenu', 'themeMenu'].forEach(m => {
                 const el = document.getElementById(m);
                 if (m === id) {
                     el.classList.toggle('active');
@@ -225,54 +257,97 @@
         }
 
         function setGrid(val) {
-            boxCount = val; gridSize = val + 1;
-            document.querySelectorAll('#gridMenu button').forEach(b => b.classList.remove('border-black'));
+            boxCount = val;
+            document.querySelectorAll('.grid-opt').forEach(b => b.classList.remove('border-black'));
             event.currentTarget.classList.add('border-black');
         }
 
         function setMode(m) {
-            isVsAI = (m === 'ai');
-            document.querySelectorAll('#modeMenu button').forEach(b => b.classList.remove('border-black'));
-            event.currentTarget.classList.add('border-black');
+            const pcCurtain = document.getElementById('player-count-select');
+            
+            // Logic for toggling PvP curtain
+            if (m === 'pvp') {
+                if (isVsAI === false) {
+                    // If already in PvP mode, toggle the curtain closed/open
+                    pcCurtain.classList.toggle('active');
+                } else {
+                    // Switching from AI to PvP, ensure curtain opens
+                    isVsAI = false;
+                    pcCurtain.classList.add('active');
+                }
+            } else {
+                // Switching to AI mode
+                isVsAI = true;
+                pcCurtain.classList.remove('active');
+            }
+
+            // UI feedback for mode buttons
+            document.querySelectorAll('.mode-opt').forEach(b => b.classList.remove('border-black'));
+            document.getElementById(isVsAI ? 'opt-ai' : 'opt-pvp').classList.add('border-black');
+            
+            if (isVsAI) numPlayers = 2;
+        }
+
+        function setPlayerCount(count) {
+            numPlayers = count;
+            document.querySelectorAll('.pc-opt').forEach(b => b.classList.remove('border-black', 'bg-white'));
+            event.currentTarget.classList.add('border-black', 'bg-white');
         }
 
         function setTheme(t) {
             document.body.dataset.theme = t;
-            document.querySelectorAll('#themeMenu button').forEach(b => b.classList.remove('border-black'));
+            document.querySelectorAll('.theme-opt').forEach(b => b.classList.remove('border-black'));
             event.currentTarget.classList.add('border-black');
         }
 
-        function apply() { settingsPanel.classList.remove('open'); initGame(); }
+        function apply() { 
+            document.getElementById('settingsPanel').classList.remove('open'); 
+            initGame(); 
+        }
 
         function initGame() {
-            board.innerHTML = ''; currentPlayer = 'A'; scores = { A: 0, B: 0 }; gameOver = false;
+            gameOver = false;
+            currentPlayerIndex = 0;
             document.getElementById('overlay').style.display = 'none';
-            const labelA = document.getElementById('label-A');
-            const labelB = document.getElementById('label-B');
-            labelA.innerText = isVsAI ? "YOU" : "PLAYER A";
-            labelB.innerText = isVsAI ? "AI" : "PLAYER B";
-            const maxBoardSize = Math.min(window.innerWidth - 40, window.innerHeight - 320);
-            spacing = maxBoardSize / boxCount;
-            board.style.width = `${boxCount * spacing + 8}px`;
-            board.style.height = `${boxCount * spacing + 8}px`;
-            for (let r = 0; r < boxCount; r++) {
-                for (let c = 0; c < boxCount; c++) {
+            document.getElementById('board').innerHTML = '';
+            
+            players = [];
+            const count = isVsAI ? 2 : numPlayers;
+            for(let i=0; i<count; i++) {
+                let name = isVsAI ? (i === 0 ? "YOU" : "AI") : `P${i+1}`;
+                players.push({ id: i, name, score: 0, color: colors[i] });
+            }
+
+            const availableW = window.innerWidth - 40;
+            const availableH = window.innerHeight - 220; 
+            const boardSize = Math.min(availableW, availableH);
+            
+            spacing = Math.floor(boardSize / boxCount);
+            const actualBoardDim = spacing * boxCount;
+
+            const b = document.getElementById('board');
+            b.style.width = `${actualBoardDim + 6}px`;
+            b.style.height = `${actualBoardDim + 6}px`;
+
+            for(let r=0; r<boxCount; r++) {
+                for(let c=0; c<boxCount; c++) {
                     const box = document.createElement('div');
                     box.className = 'box'; box.id = `box-${r}-${c}`;
                     box.style.width = `${spacing}px`; box.style.height = `${spacing}px`;
-                    box.style.top = `${r * spacing + 4}px`; box.style.left = `${c * spacing + 4}px`;
+                    box.style.top = `${r * spacing + 3}px`; box.style.left = `${c * spacing + 3}px`;
                     box.style.fontSize = `${spacing * 0.4}px`;
-                    board.appendChild(box);
+                    b.appendChild(box);
                 }
             }
-            for (let r = 0; r < gridSize; r++) {
-                for (let c = 0; c < gridSize; c++) {
+
+            for(let r=0; r<=boxCount; r++) {
+                for(let c=0; c<=boxCount; c++) {
                     if (c < boxCount) createLine(r, c, 'horizontal');
                     if (r < boxCount) createLine(r, c, 'vertical');
                     const dot = document.createElement('div');
                     dot.className = 'dot absolute';
-                    dot.style.top = `${r * spacing}px`; dot.style.left = `${c * spacing}px`;
-                    board.appendChild(dot);
+                    dot.style.top = `${r * spacing + 3}px`; dot.style.left = `${c * spacing + 3}px`;
+                    b.appendChild(dot);
                 }
             }
             updateUI();
@@ -282,51 +357,97 @@
             const line = document.createElement('div');
             line.className = `line ${type}`;
             line.dataset.row = r; line.dataset.col = c; line.dataset.type = type;
+            const thickness = Math.max(6, spacing * 0.12);
+            const offset = 3;
+
             if (type === 'horizontal') {
-                line.style.width = `${spacing - 6}px`; line.style.height = `6px`;
-                line.style.top = `${r * spacing + 1}px`; line.style.left = `${c * spacing + 7}px`;
+                line.style.width = `${spacing}px`; line.style.height = `${thickness}px`;
+                line.style.top = `${r * spacing + offset - thickness/2}px`; 
+                line.style.left = `${c * spacing + offset}px`;
             } else {
-                line.style.height = `${spacing - 6}px`; line.style.width = `6px`;
-                line.style.top = `${r * spacing + 7}px`; line.style.left = `${c * spacing + 1}px`;
+                line.style.height = `${spacing}px`; line.style.width = `${thickness}px`;
+                line.style.top = `${r * spacing + offset}px`; 
+                line.style.left = `${c * spacing + offset - thickness/2}px`;
             }
-            line.onclick = () => { if (gameOver || line.classList.contains('taken')) return; if (isVsAI && currentPlayer === 'B') return; executeMove(line); };
-            board.appendChild(line);
+            
+            line.onclick = () => {
+                if (gameOver || line.classList.contains('taken')) return;
+                if (isVsAI && currentPlayerIndex === 1) return;
+                executeMove(line);
+            };
+            document.getElementById('board').appendChild(line);
         }
 
         function executeMove(line) {
             sounds.line.currentTime = 0; sounds.line.play().catch(()=>{});
-            line.classList.add('taken', `taken-${currentPlayer}`);
+            const p = players[currentPlayerIndex];
+            line.classList.add('taken');
+            line.style.color = p.color;
+            line.style.backgroundColor = p.color;
+
             const r = parseInt(line.dataset.row), c = parseInt(line.dataset.col), type = line.dataset.type;
             let scored = false;
             if (type === 'horizontal') { scored = checkSquare(r-1, c) || scored; scored = checkSquare(r, c) || scored; }
             else { scored = checkSquare(r, c-1) || scored; scored = checkSquare(r, c) || scored; }
+
             if (scored) {
-                if (isVsAI && currentPlayer === 'B') sounds.ai.play().catch(()=>{});
+                if (isVsAI && currentPlayerIndex === 1) sounds.ai.play().catch(()=>{});
                 else sounds.player.play().catch(()=>{});
-                updateUI(); if (checkGameOver()) return;
-                if (isVsAI && currentPlayer === 'B') setTimeout(aiLogic, 400);
+                updateUI();
+                if (checkGameOver()) return;
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 400);
             } else {
-                currentPlayer = currentPlayer === 'A' ? 'B' : 'A';
-                updateUI(); if (isVsAI && currentPlayer === 'B') setTimeout(aiLogic, 600);
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                updateUI();
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 600);
             }
         }
 
         function checkSquare(r, c) {
             if (r < 0 || r >= boxCount || c < 0 || c >= boxCount) return false;
             const box = document.getElementById(`box-${r}-${c}`);
-            if (box.classList.contains('taken')) return false;
+            if (!box || box.classList.contains('taken')) return false;
             if (isTaken(r,c,'horizontal') && isTaken(r+1,c,'horizontal') && isTaken(r,c,'vertical') && isTaken(r,c+1,'vertical')) {
-                box.classList.add('taken', `box-${currentPlayer}`);
-                box.innerText = isVsAI ? (currentPlayer === 'A' ? 'Y' : 'AI') : (currentPlayer === 'A' ? 'A' : 'B');
-                scores[currentPlayer]++; return true;
+                const p = players[currentPlayerIndex];
+                box.classList.add('taken');
+                box.style.color = p.color;
+                box.innerText = p.name;
+                p.score++;
+                return true;
             }
             return false;
         }
 
-        function isTaken(r, c, type) { const el = document.querySelector(`.line.${type}[data-row="${r}"][data-col="${c}"]`); return el && el.classList.contains('taken'); }
+        function isTaken(r, c, type) { 
+            const el = document.querySelector(`.line.${type}[data-row="${r}"][data-col="${c}"]`); 
+            return el && el.classList.contains('taken'); 
+        }
+
+        function updateUI() {
+            const container = document.getElementById('score-container');
+            container.innerHTML = '';
+            players.forEach((p, i) => {
+                const card = document.createElement('div');
+                card.className = `player-score-card px-3 py-1 rounded-lg text-center transition-all duration-300 ${i === currentPlayerIndex ? 'scale-110 shadow-md' : 'opacity-60'}`;
+                card.style.borderColor = p.color;
+                card.style.background = i === currentPlayerIndex ? p.color + '33' : 'transparent';
+                card.innerHTML = `<div class="text-[10px] font-black">${p.name}</div><div class="text-xl font-black" style="color:${p.color}">${p.score}</div>`;
+                card.onclick = () => editName(i);
+                container.appendChild(card);
+            });
+            const s = document.getElementById('status');
+            const cp = players[currentPlayerIndex];
+            s.innerText = (isVsAI && currentPlayerIndex === 1) ? "AI THINKING..." : `${cp.name} TURN`;
+            s.style.color = cp.color;
+        }
+
+        function editName(idx) {
+            const newName = prompt("Edit Player Name:", players[idx].name);
+            if(newName) { players[idx].name = newName.substring(0, 5).toUpperCase(); updateUI(); }
+        }
 
         function aiLogic() {
-            if (gameOver || currentPlayer === 'A') return;
+            if (gameOver) return;
             const lines = Array.from(document.querySelectorAll('.line:not(.taken)'));
             if (!lines.length) return;
             const best = lines.find(l => wouldFinish(l)) || lines.find(l => !givesOpponentPoint(l)) || lines[Math.floor(Math.random() * lines.length)];
@@ -353,37 +474,33 @@
             return t === 'horizontal' ? (chk(r-1, c) || chk(r, c)) : (chk(r, c-1) || chk(r, c));
         }
 
-        function updateUI() {
-            document.getElementById('score-A').innerText = scores.A;
-            document.getElementById('score-B').innerText = scores.B;
-            const s = document.getElementById('status');
-            const lblA = document.getElementById('label-A').innerText;
-            const lblB = document.getElementById('label-B').innerText;
-            if (currentPlayer === 'A') { s.innerText = `${lblA} TURN`; s.style.color = 'var(--text-color)'; }
-            else { s.innerText = isVsAI ? "AI THINKING..." : `${lblB} TURN`; s.style.color = 'var(--ai-line)'; }
-        }
-
         function checkGameOver() {
-            if (scores.A + scores.B === boxCount * boxCount) {
+            const total = players.reduce((a, b) => a + b.score, 0);
+            if (total === boxCount * boxCount) {
                 gameOver = true;
                 const overlay = document.getElementById('overlay');
-                const msg = document.getElementById('overlay-msg');
-                const icon = document.getElementById('overlay-icon');
-                overlay.style.display = 'flex';
+                const lb = document.getElementById('leaderboard');
+                lb.innerHTML = '';
+                
+                const sorted = [...players].sort((a, b) => b.score - a.score);
+                sorted.forEach((p, i) => {
+                    lb.innerHTML += `<div class="flex justify-between p-3 rounded-xl mb-1 border-2" style="border-color:${p.color}; background:${p.color}22; color:${p.color}">
+                        <span>${i+1}. ${p.name}</span> <span>${p.score} pts</span>
+                    </div>`;
+                });
 
-                if (scores.A > scores.B) {
-                    msg.innerText = "YOU WIN!";
-                    icon.innerText = "🏆";
-                    sounds.win.play().catch(()=>{});
-                    startFireworks();
-                } else if (scores.B > scores.A) {
-                    msg.innerText = "Oh! TRY AGAIN";
-                    icon.innerText = "😔";
+                overlay.style.display = 'flex';
+                if (isVsAI && sorted[0].id === 1) {
+                    document.getElementById('overlay-msg').innerText = "AI DOMINATION";
+                    document.getElementById('overlay-icon').innerText = "🤖";
                     sounds.loss.play().catch(()=>{});
                 } else {
-                    msg.innerText = "DRAW"; icon.innerText = "🤝";
+                    document.getElementById('overlay-msg').innerText = "VICTORY!";
+                    document.getElementById('overlay-icon').innerText = "🏆";
+                    sounds.win.play().catch(()=>{});
+                    startFireworks();
                 }
-                setTimeout(() => initGame(), 3000);
+                setTimeout(() => initGame(), 7000);
                 return true;
             }
             return false;
@@ -403,6 +520,9 @@
             }
         }
 
+        document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsPanel').classList.add('open');
+        document.getElementById('closeX').onclick = () => document.getElementById('settingsPanel').classList.remove('open');
+        window.onresize = () => { if(!gameOver) initGame(); };
         window.onload = initGame;
     </script>
 </body>
