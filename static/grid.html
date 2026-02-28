@@ -122,7 +122,7 @@
             font-style: italic; opacity: 0.6; pointer-events: none; z-index: 30;
         }
 
-        .player-score-card { cursor: pointer; border-width: 2px; min-width: 60px; }
+        .player-score-card { cursor: pointer; border-width: 2px; min-width: 80px; }
 
         .certified-badge {
             display: inline-flex;
@@ -200,7 +200,7 @@
                 <div id="modeMenu" class="sub-menu">
                     <div>
                         <div class="mode-section space-y-4">
-                            <button id="opt-ai" onclick="setMode('ai')" class="mode-opt w-full p-3 border-2 border-black rounded-lg text-left font-black uppercase">VS AI (Single Player)</button>
+                            <button id="opt-ai" onclick="setMode('ai')" class="mode-opt w-full p-3 border-2 border-black rounded-lg text-left font-black uppercase">VS AI </button>
                             <button id="opt-pvp" onclick="setMode('pvp')" class="mode-opt w-full p-3 border-2 rounded-lg text-left font-black uppercase">Multiplayer (PVP)</button>
                             <div id="player-count-select" class="curtain-content">
                                 <div>
@@ -268,10 +268,8 @@
         let lastBoxTime = 0;
         let boxesCompletedThisTurn = 0;
 
-        // Updated Colors: AI is now Neon Red (#FF0033)
         const colors = ['#00d2ff', '#FF0033', '#00ff66', '#ffaa00', '#9d00ff', '#facc15', '#ff7f50'];
 
-        // Updated Sound Logic Assets
         const sounds = {
             line: new Audio('static/line.mp3'),
             player: new Audio('static/player.mp3'),
@@ -340,9 +338,11 @@
                 players = [];
                 for(let i=0; i<count; i++) {
                     let name = isVsAI ? (i === 0 ? "YOU" : "AI") : `P${i+1}`;
-                    if (oldPlayers[i] && !isVsAI) name = oldPlayers[i].name;
-                    players.push({ id: i, name, score: 0, color: colors[i] });
+                    if (oldPlayers[i] && !isVsAI && oldPlayers.length === count) name = oldPlayers[i].name;
+                    players.push({ id: i, name, score: 0, color: colors[i % colors.length] });
                 }
+            } else {
+                players.forEach(p => p.score = 0);
             }
 
             const availableW = window.innerWidth - 40;
@@ -362,7 +362,7 @@
                     box.className = 'box'; box.id = `box-${r}-${c}`;
                     box.style.width = `${spacing}px`; box.style.height = `${spacing}px`;
                     box.style.top = `${r * spacing + 3}px`; box.style.left = `${c * spacing + 3}px`;
-                    box.style.fontSize = `${spacing * 0.4}px`;
+                    box.style.fontSize = `${spacing * 0.35}px`;
                     b.appendChild(box);
                 }
             }
@@ -409,14 +409,12 @@
             sounds.line.currentTime = 0; sounds.line.play().catch(()=>{});
             const p = players[currentPlayerIndex];
             line.classList.add('taken');
-            line.style.color = p.color;
             line.style.backgroundColor = p.color;
 
             const r = parseInt(line.dataset.row), c = parseInt(line.dataset.col), type = line.dataset.type;
             const now = Date.now();
             
-            // Time limit for multi-box sound is 0.7s
-            if (now - lastBoxTime > 450) boxesCompletedThisTurn = 0;
+            if (now - lastBoxTime > 400) boxesCompletedThisTurn = 0;
 
             let newlyScored = 0;
             if (type === 'horizontal') { 
@@ -432,17 +430,10 @@
                 boxesCompletedThisTurn += newlyScored;
                 
                 let soundToPlay;
-                // Multi-box sound rule for everyone
                 if (boxesCompletedThisTurn > 1) {
                     soundToPlay = sounds.multi;
                 } else {
-                    // Single box sound depends on WHO made it
-                    if (isVsAI) {
-                        soundToPlay = (currentPlayerIndex === 1) ? sounds.ai : sounds.player;
-                    } else {
-                        // In Multiplayer, every user made box gets player.mp3
-                        soundToPlay = sounds.player;
-                    }
+                    soundToPlay = (isVsAI && currentPlayerIndex === 1) ? sounds.ai : sounds.player;
                 }
 
                 soundToPlay.pause();
@@ -456,7 +447,7 @@
                 boxesCompletedThisTurn = 0;
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                 updateUI();
-                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, ,350);
+                if (isVsAI && currentPlayerIndex === 1) setTimeout(aiLogic, 350);
             }
         }
 
@@ -485,9 +476,10 @@
             container.innerHTML = '';
             players.forEach((p, i) => {
                 const card = document.createElement('div');
-                card.className = `player-score-card px-3 py-1 rounded-lg text-center transition-all duration-300 ${i === currentPlayerIndex ? 'scale-110 shadow-md border-black' : 'opacity-60 border-transparent'}`;
+                card.className = `player-score-card px-3 py-1 rounded-lg text-center transition-all duration-300 ${i === currentPlayerIndex ? 'scale-110 shadow-md' : 'opacity-60 border-transparent'}`;
                 card.style.borderColor = p.color;
-                card.style.background = i === currentPlayerIndex ? p.color + '33' : 'transparent';
+                card.style.borderWidth = '2px';
+                card.style.background = i === currentPlayerIndex ? p.color + '22' : 'transparent';
                 card.innerHTML = `<div class="text-[10px] font-black">${p.name}</div><div class="text-xl font-black" style="color:${p.color}">${p.score}</div>`;
                 card.onclick = () => editName(i);
                 container.appendChild(card);
@@ -504,7 +496,7 @@
         }
 
         function aiLogic() {
-            if (gameOver) return;
+            if (gameOver || currentPlayerIndex !== 1) return;
             const lines = Array.from(document.querySelectorAll('.line:not(.taken)'));
             if (!lines.length) return;
             const best = lines.find(l => wouldFinish(l)) || lines.find(l => !givesOpponentPoint(l)) || lines[Math.floor(Math.random() * lines.length)];
@@ -565,12 +557,11 @@
         }
 
         function handleRestart() {
-            players = players.map(p => ({...p, score: 0}));
             initGame(false); 
         }
 
         function handleResume() {
-            initGame(true);
+            document.getElementById('overlay').style.display = 'none';
         }
 
         async function shareAsImage() {
@@ -587,10 +578,7 @@
                     backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-color'),
                     scale: 3,
                     useCORS: true,
-                    logging: false,
-                    onclone: (clonedDoc) => {
-                        clonedDoc.getElementById('certified-tag').style.display = 'inline-flex';
-                    }
+                    logging: false
                 });
 
                 canvas.toBlob(async (blob) => {
@@ -625,7 +613,7 @@
                     fw.style.top = Math.random() * 100 + 'vh';
                     fw.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
                     document.body.appendChild(fw);
-                    setTimeout(() => fw.remove(), 1000);
+                    setTimeout(() => fw.remove(), 2000);
                 }, i * 80);
             }
         }
