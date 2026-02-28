@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Desh-AI Categorizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow: hidden; 
+            height: 100vh;
+            background-color: #f8fafc;
+        }
+
+        .app-wrapper {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            gap: 1.2rem;
+            position: relative;
+        }
+
+        .fixed-container {
+            width: 100%;
+            max-width: 500px;
+            height: 240px; 
+            background: white;
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        #resultContainer {
+            height: 0px;
+            opacity: 0;
+            border: none;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        #resultContainer.active {
+            height: 240px;
+            opacity: 1;
+            border: 1px solid rgba(0,0,0,0.1);
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .scroll-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 1rem;
+            font-size: 15px;
+        }
+
+        .logo-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        .logo-btn {
+            width: 64px;
+            height: 64px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            object-fit: cover;
+            border-radius: 14px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+        @keyframes dots {
+            0% { content: ''; }
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
+        }
+
+        /* Bold Shop Names with Large Circular Pointer */
+        .cat-title {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            color: #000;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-size: 17px;
+        }
+        .cat-title::before {
+            content: "●";
+            color: #000;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        /* Product items with thin small pointer */
+        .item-point {
+            padding-left: 26px;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        .item-point::before {
+            content: "○";
+            font-size: 10px;
+            margin-right: 10px;
+            font-weight: 100;
+        }
+
+        .copy-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            resize: none;
+            outline: none;
+            border: none;
+            font-size: 16px;
+            color: #334155;
+            background: transparent;
+            padding-right: 40px;
+        }
+
+        /* Red Cross Button */
+        #clearBtn {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            background: #ef4444;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+            z-index: 50;
+        }
+
+        #thinkingArea {
+            text-align: center;
+            padding: 20px;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <div class="text-center">
+            <h1 class="text-xl font-black text-indigo-700">DESH-AI</h1>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+                (Smart AI Product Categorizer)
+            </p>
+        </div>
+
+        <!-- Input Container -->
+        <div class="fixed-container">
+            <div class="scroll-content">
+                <textarea id="userInput" placeholder="Paste your grocery list here..."></textarea>
+            </div>
+            <div id="clearBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+        </div>
+
+        <div class="logo-container">
+            <div class="flex flex-col items-center">
+                <img src="/static/logo.png" id="triggerBtn" class="logo-btn" alt="DESH-AI">
+            </div>
+        </div>
+
+        <!-- Answer Container -->
+        <div id="resultContainer" class="fixed-container">
+            <div id="copyHeader" class="copy-header hidden">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Categorized Output</span>
+                <button id="copyBtn" class="text-indigo-600">
+                    <i class="fa-regular fa-clone"></i>
+                </button>
+            </div>
+            <div class="scroll-content" id="scrollArea">
+                <div id="thinkingArea" class="hidden">DESH-AI is thinking<span class="dots"></span></div>
+                <div id="outText" class="text-slate-700 whitespace-pre-wrap leading-relaxed"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy Toast -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-full text-xs opacity-0 transition-opacity pointer-events-none z-50">
+        COPIED TO CLIPBOARD
+    </div>
+
+    <script>
+        const trigger = document.getElementById('triggerBtn');
+        const input = document.getElementById('userInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const resCont = document.getElementById('resultContainer');
+        const outText = document.getElementById('outText');
+        const thinkingArea = document.getElementById('thinkingArea');
+        const copyHeader = document.getElementById('copyHeader');
+        const copyBtn = document.getElementById('copyBtn');
+
+        // Red cross button visibility logic
+        input.addEventListener('input', () => {
+            clearBtn.style.display = input.value.length > 0 ? "flex" : "none";
+        });
+
+        clearBtn.onclick = () => {
+            input.value = "";
+            clearBtn.style.display = "none";
+            input.focus();
+        };
+
+        // Format Markdown Response to Custom UI
+        function formatOutput(text) {
+            return text.split('\n').map(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return '<div class="h-2"></div>';
+
+                // Shop headings (Bold + Black + Big Circle)
+                if (trimmed.includes('**')) {
+                    const clean = trimmed.replace(/\*\*/g, '').replace(':', '');
+                    return `<span class="cat-title">${clean}</span>`;
+                }
+
+                // Item points (Thin + Small Hollow Circle)
+                if (trimmed.startsWith('*') || trimmed.startsWith('-') || trimmed.startsWith('•')) {
+                    const content = trimmed.replace(/^[*•-]\s*/, '');
+                    return `<div class="item-point">${content}</div>`;
+                }
+
+                return `<div>${trimmed}</div>`;
+            }).join('');
+        }
+
+        trigger.onclick = async () => {
+            const val = input.value.trim();
+            if(!val) return;
+
+            // Activate result view
+            resCont.classList.add('active');
+            thinkingArea.classList.remove('hidden');
+            outText.innerHTML = "";
+            copyHeader.classList.add('hidden');
+
+            // Custom Prompt to ensure grouping and formatting
+            const customPrompt = `
+You are a Product Categorizer.
+Task: Group all items into categories based on where they are bought.
+Rule: ALL items of the same category (like Grocery/Kirana) MUST be grouped together under ONE heading, regardless of their order in the input.
+Format:
+- Shop name headings must be in **Bold** like **Kirana Store**
+- Items must be listed in points starting with a bullet.
+
+Input Items:
+${val}
+`;
+
+            try {
+                // Fetch using the exact logic from your BMI example
+                const res = await fetch("https://desh-ai.onrender.com/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: customPrompt })
+                });
+
+                const data = await res.json();
+                thinkingArea.classList.add('hidden');
+                
+                const answer = data.answer || "No response received";
+                outText.innerHTML = formatOutput(answer);
+                copyHeader.classList.remove('hidden');
+
+            } catch (err) {
+                thinkingArea.classList.add('hidden');
+                outText.innerHTML = `<div class="text-red-500 font-bold p-2 text-center text-sm">⚠️ Server waking up, please try again in a few seconds...</div>`;
+            }
+        };
+
+        copyBtn.onclick = () => {
+            const temp = document.createElement('textarea');
+            temp.value = outText.innerText;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            
+            const t = document.getElementById('toast');
+            t.style.opacity = "1";
+            setTimeout(() => t.style.opacity = "0", 1500);
+        };
+    </script>
+</body>
+</html>
+
