@@ -311,3 +311,7 @@ def serve_numpuzz():
 def serve_numpuzz():
     return FileResponse("static/smart.html")
 
+@app.get("/study")
+def serve_numpuzz():
+    return FileResponse("static/study.html")
+
