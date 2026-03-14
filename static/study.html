@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Desh AI - Study Expert</title>
+    <title>𝕯𝖊𝖘𝖍 𝐀𝖎’s - Study Specific</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -42,14 +42,14 @@
         .curtain-wrapper {
             width: 100%;
             display: flex;
-            justify-content: flex-start; /* Aligned to left of chat */
+            justify-content: flex-start; 
             margin: 10px 0;
         }
 
         .curtain-stage {
             position: relative;
             width: 320px; 
-            height: 60px; /* Base height for the bold lines */
+            height: 60px; /* Exact height for the bold lines */
             overflow: hidden; 
             display: flex;
             align-items: center;
@@ -79,17 +79,18 @@
         }
 
         .thinking-video {
-            height: 100%; /* Matches line height exactly */
+            height: 100%; /* Height matches the bold lines exactly */
             width: auto;
             object-fit: contain;
             z-index: 1;
+            position: absolute;
+            left: 0;
         }
 
         @keyframes shimmer {
             to { background-position: 200% center; }
         }
 
-        /* Wardrobe Doors */
         .curtain-panel {
             position: absolute;
             top: 0;
@@ -102,46 +103,38 @@
         .panel-left { left: 0; border-right: 3px solid #000; }
         .panel-right { right: 0; border-left: 3px solid #000; }
 
-        /* Animation Cycle: 
-           0-30%: Open to show Text
-           30-40%: Close
-           40-70%: Open to show Video
-           70-80%: Close
-           80-100%: Open to show Text
-        */
-        .animate-curtain .panel-left { animation: cycleLeft 8s infinite ease-in-out; }
-        .animate-curtain .panel-right { animation: cycleRight 8s infinite ease-in-out; }
-        
-        /* Swapping visibility of Text vs Video */
-        .animate-curtain .curtain-text { animation: showText 8s infinite; }
-        .animate-curtain .thinking-video { animation: showVideo 8s infinite; }
+        /* Animation Cycle (Total 9s) */
+        .animate-curtain .panel-left { animation: cycleLeft 9s infinite ease-in-out; }
+        .animate-curtain .panel-right { animation: cycleRight 9s infinite ease-in-out; }
+        .animate-curtain .curtain-text { animation: toggleText 9s infinite; }
+        .animate-curtain .thinking-video { animation: toggleVideo 9s infinite; }
 
         @keyframes cycleLeft {
-            0%, 25% { transform: translateX(-100%); }
-            35%, 45% { transform: translateX(0); }
-            55%, 75% { transform: translateX(-100%); }
-            85%, 95% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            0%, 25% { transform: translateX(-100%); } /* Open for Text */
+            30%, 35% { transform: translateX(0); }    /* Closed */
+            40%, 65% { transform: translateX(-100%); } /* Open for Video */
+            70%, 75% { transform: translateX(0); }    /* Closed */
+            80%, 100% { transform: translateX(-100%); } /* Open for Text */
         }
 
         @keyframes cycleRight {
             0%, 25% { transform: translateX(100%); }
-            35%, 45% { transform: translateX(0); }
-            55%, 75% { transform: translateX(100%); }
-            85%, 95% { transform: translateX(0); }
-            100% { transform: translateX(100%); }
+            30%, 35% { transform: translateX(0); }
+            40%, 65% { transform: translateX(100%); }
+            70%, 75% { transform: translateX(0); }
+            80%, 100% { transform: translateX(100%); }
         }
 
-        @keyframes showText {
-            0%, 35% { opacity: 1; display: block; }
-            36%, 75% { opacity: 0; display: none; }
-            76%, 100% { opacity: 1; display: block; }
+        @keyframes toggleText {
+            0%, 35% { opacity: 1; visibility: visible; }
+            36%, 79% { opacity: 0; visibility: hidden; }
+            80%, 100% { opacity: 1; visibility: visible; }
         }
 
-        @keyframes showVideo {
-            0%, 45% { opacity: 0; display: none; }
-            55%, 75% { opacity: 1; display: block; }
-            76%, 100% { opacity: 0; display: none; }
+        @keyframes toggleVideo {
+            0%, 39% { opacity: 0; visibility: hidden; }
+            40%, 69% { opacity: 1; visibility: visible; }
+            70%, 100% { opacity: 0; visibility: hidden; }
         }
 
         .error-text {
@@ -182,12 +175,12 @@
 <body>
 
     <div class="header">
-        <h1>DESH AI</h1>
+        <h1>𝕯𝖊𝖘𝖍 𝐀𝖎</h1>
     </div>
 
     <div id="chat-window">
         <div class="message ai-msg">
-            👋 Welcome to <b>Desh AI Study Pro</b>. <br>I'm ready to analyze your questions.
+            👋 Welcome Dear<b>𝕯𝖊𝖘𝖍 𝐀𝖎’s Study Master</b>. <br>I'm ready to analyze your questions 😎.
         </div>
     </div>
 
@@ -252,7 +245,6 @@
             const query = userInput.value.trim();
             if (!query) return;
 
-            // User Message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-msg';
             userMsg.textContent = query;
@@ -262,15 +254,14 @@
             userInput.style.height = 'auto';
             sendBtn.disabled = true;
 
-            // Curtain Animation Container
             const loaderWrapper = document.createElement('div');
             loaderWrapper.className = 'curtain-wrapper animate-curtain';
             loaderWrapper.innerHTML = `
                 <div class="curtain-stage">
                     <div class="curtain-content-box">
-                        <div class="curtain-text">𝕯𝖊𝖘𝖖 𝐀𝖎 is 𝐓𝐡𝐢𝐧𝐤𝐢𝐧𝐠</div>
+                        <div class="curtain-text">𝕯𝖊𝖘𝖍 𝐀𝖎 is 𝐓𝐡𝐢𝐧𝐤𝐢𝐧𝐠</div>
                         <video class="thinking-video" autoplay loop muted playsinline>
-                            <source src="video.mp4" type="video/mp4">
+                            <source src="static/video.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="curtain-panel panel-left"></div>
@@ -283,7 +274,7 @@
             let requestSettled = false;
 
             const timeout = new Promise((_, reject) => {
-                setTimeout(() => { if (!requestSettled) reject('timeout'); }, 10000);
+                setTimeout(() => { if (!requestSettled) reject('timeout'); }, 20000);
             });
 
             const fetchReq = (async () => {
@@ -306,8 +297,7 @@
                 aiMsg.className = 'message ai-msg';
                 chatWindow.appendChild(aiMsg);
 
-                // User shared preference: "Don't give full answers, only give the correct option."
-                // This logic would ideally be on your backend, but showing the answer here.
+                // Note: Response will prioritize correct options as per instructions
                 await typeText(aiMsg, data.answer || "No response received.");
                 
                 const footer = document.createElement('div');
