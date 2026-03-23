@@ -193,7 +193,7 @@ async def ask_question(data: Question, request: Request):
     system_prompt = {
         "role": "system",
         "content": (
-            f"You are Desh AI. Reply in {detected_lang} language, using emojis naturally."
+            f"You are 𝕯𝖊𝖘𝖍 𝐀𝖎. Reply in {detected_lang} language, using emojis naturally."
         )
     }
 
@@ -317,5 +317,4 @@ def serve_numpuzz():
 @app.get("/vsics")
 def serve_numpuzz():
     return FileResponse("static/vsics.html")
-
 
