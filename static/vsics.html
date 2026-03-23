@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Desh AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-color: #ef4444;
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --box-bg: #ffffff;
+            --secondary-text: #4b5563;
+            --border-style: 0.5px solid var(--accent-color);
+            --setting-item-bg: #f9fafb;
+        }
+
+        .dark-theme {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --box-bg: #111111;
+            --secondary-text: #9ca3af;
+            --setting-item-bg: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .blur-bg { filter: blur(4px); pointer-events: none; }
+
+        .portfolio-section {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 40px auto;
+            padding: 10px;
+            position: relative;
+        }
+
+        .square-img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 8px;
+            background-color: #f3f4f6;
+            cursor: pointer;
+        }
+
+        .info-trigger {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.9);
+            border: var(--border-style);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: serif;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 10;
+            color: #000;
+        }
+
+        .img-desc-box {
+            display: none;
+            border: var(--border-style);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: 10px;
+            color: var(--secondary-text);
+            background: var(--box-bg);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .red-border-box {
+            background-color: var(--box-bg);
+            color: var(--text-color);
+            border: var(--border-style);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        #menuBtn, #moreBtn, #scrollToTopBtn {
+            position: fixed;
+            z-index: 100;
+            cursor: pointer;
+            padding: 10px;
+            background: var(--box-bg);
+            opacity: 0.9;
+            backdrop-filter: blur(8px);
+            border: 0.5px solid rgba(128, 128, 128, 0.2);
+            border-radius: 50%;
+            height: 44px;
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #menuBtn { top: 20px; left: 20px; }
+        #moreBtn { top: 20px; right: 20px; flex-direction: column; gap: 3px; }
+        #scrollToTopBtn { 
+            bottom: 20px; 
+            right: 20px; 
+            visibility: hidden; 
+            opacity: 0; 
+        }
+        #scrollToTopBtn.visible {
+            visibility: visible;
+            opacity: 0.9;
+        }
+        
+        .dot { width: 4px; height: 4px; background: var(--text-color); border-radius: 50%; }
+
+        #moreMenu {
+            position: fixed;
+            top: 75px;
+            right: 20px;
+            width: 180px;
+            background: var(--box-bg);
+            border: var(--border-style);
+            border-radius: 12px;
+            display: none;
+            z-index: 1100;
+            padding: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .more-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 8px;
+            color: var(--text-color);
+        }
+
+        #sideMenu {
+            position: fixed;
+            top: 0;
+            left: -70%;
+            width: 70%;
+            height: 100%;
+            background: var(--box-bg);
+            z-index: 1001;
+            transition: left 0.4s ease;
+            border-right: 0.5px solid rgba(128,128,128,0.2);
+            padding: 60px 25px;
+        }
+        #sideMenu.active { left: 0; }
+
+        .back-btn-container {
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            padding: 15px 20px;
+            z-index: 2001;
+            border-bottom: 1px solid rgba(128,128,128,0.1);
+        }
+
+        .back-text-btn {
+            display: inline-block;
+            padding: 5px 15px;
+            border: var(--border-style);
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            color: var(--text-color);
+        }
+
+        .view-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            display: none;
+            overflow-y: auto;
+        }
+
+        /* Settings Specific */
+        .setting-section {
+            background: var(--setting-item-bg);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            border-bottom: 2px solid var(--bg-color);
+        }
+        .setting-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .setting-content {
+            display: none;
+            padding: 0 16px 16px 16px;
+        }
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .help-btn {
+            background: var(--box-bg);
+            border: 3px solid var(--text-color);
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 20px;
+            color: var(--text-color);
+        }
+
+        /* --- CURTAIN ANIMATION --- */
+        .curtain-stage {
+            position: relative;
+            width: 200px;
+            height: 40px;
+            margin: 10px auto;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .curtain-text {
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            z-index: 1;
+        }
+        .curtain-panel {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            background: var(--bg-color);
+            z-index: 10;
+        }
+        .panel-left { left: 0; border-right: 2px solid var(--text-color); animation: cycleLeft 4s infinite ease-in-out; }
+        .panel-right { right: 0; border-left: 2px solid var(--text-color); animation: cycleRight 4s infinite ease-in-out; }
+
+        @keyframes cycleLeft {
+            0%, 20% { transform: translateX(0); }
+            40%, 60% { transform: translateX(-100%); }
+            80%, 100% { transform: translateX(0); }
+        }
+        @keyframes cycleRight {
+            0%, 20% { transform: translateX(0); }
+            40%, 60% { transform: translateX(100%); }
+            80%, 100% { transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body onclick="closeAllPopups(event)">
+
+    <div id="menuBtn" onclick="toggleMenu(event)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </div>
+
+    <div id="moreBtn" onclick="toggleMoreMenu(event)">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <div id="scrollToTopBtn" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+    </div>
+
+    <div id="moreMenu">
+        <div class="more-item" onclick="handleShare()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span data-lang="share">Share</span>
+        </div>
+        <div class="more-item" onclick="handleFeedback()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span data-lang="feedback">Feedback</span>
+        </div>
+        <div class="more-item" onclick="openView('settings')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span data-lang="settings">Settings</span>
+        </div>
+    </div>
+
+    <div id="contentWrapper">
+        <div class="mt-24">
+            <div class="portfolio-section">
+                <img src="static/selfie.png" alt="Selfie" class="square-img" onerror="this.src='https://via.placeholder.com/500?text=Selfie'">
+                <div class="info-trigger" onclick="toggleInfo(this, event)">i</div>
+                <div class="img-desc-box dynamic-font" data-lang="desc1">Profile: A professional capture of the developer.</div>
+            </div>
+            <div class="portfolio-section">
+                <img src="static/college.png" alt="College" class="square-img" onerror="this.src='https://via.placeholder.com/500?text=College'">
+                <div class="info-trigger" onclick="toggleInfo(this, event)">i</div>
+                <div class="img-desc-box dynamic-font" data-lang="desc2">Education: Snapshot of my academic environment and school life.</div>
+            </div>
+            <div class="portfolio-section">
+                <img src="static/logo.png" alt="Logo" class="square-img" onclick="window.location.href='https://desh-ai.onrender.com'" onerror="this.src='https://via.placeholder.com/500?text=Logo'">
+                <div class="info-trigger" onclick="toggleInfo(this, event)">i</div>
+                <div class="img-desc-box dynamic-font" data-lang="desc3">Identity: The official Desh AI project branding.</div>
+                <!-- Curtain Text Section -->
+                <div class="curtain-stage">
+                    <div class="curtain-text">AI</div>
+                    <div class="curtain-panel panel-left"></div>
+                    <div class="curtain-panel panel-right"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="red-border-box mx-auto" style="width: 90%;">
+            <h2 class="font-extrabold text-2xl mb-4" style="color: var(--accent-color);">Desh AI</h2>
+            <div class="text-sm space-y-3 dynamic-font">
+                <p data-lang="mastery">I have mastered AI implementation personally on <strong>Render.com</strong>.</p>
+                <ul class="list-disc ml-5 space-y-2">
+                    <li data-lang="engine">Core Engine: Google Groq AI Cloud API.</li>
+                    <li data-lang="voice">Pro Features: Voice Talking Mode & TTS.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/10 z-[1000] hidden" onclick="toggleMenu()">𝗠𝗲𝗻𝘂</div>
+    <div id="sideMenu">
+        <div class="flex justify-between items-center mb-10">
+            <span class="text-xs font-bold uppercase tracking-widest text-gray-400" data-lang="nav"></span>
+            <button onclick="toggleMenu()" class="text-2xl">&times;</button>
+        </div>
+        <div class="red-border-box cursor-pointer" onclick="openView('services')">
+            <span class="text-lg font-bold" data-lang="serv_title">Our Services</span>
+        </div>
+        <div class="red-border-box cursor-pointer" onclick="openView('contact')">
+            <span class="text-lg font-bold" data-lang="contact_title">Contact</span>
+        </div>
+    </div>
+
+    <!-- View Screens -->
+    <div id="servicesView" class="view-screen">
+        <div class="back-btn-container"><div class="back-text-btn" onclick="closeView('services')" data-lang="back">back</div></div>
+        <div class="p-6"><div class="red-border-box"><h1 class="text-2xl font-black mb-4" data-lang="cloud_serv">Cloud Services</h1><p data-lang="cloud_desc">High-performance cloud solutions.</p></div></div>
+    </div>
+
+    <div id="contactView" class="view-screen">
+        <div class="back-btn-container"><div class="back-text-btn" onclick="closeView('contact')" data-lang="back">back</div></div>
+        <div class="p-6 flex flex-col items-center justify-center min-h-[80vh]">
+            <div class="red-border-box text-center"><h2 class="text-xl font-bold mb-2" data-lang="support">Support</h2><a href="javascript:handleFeedback()" class="font-bold" style="color: var(--accent-color);">support.deshai@gmail.com</a></div>
+            <button class="help-btn" onclick="handleFeedback()" data-lang="help">Help</button>
+        </div>
+    </div>
+
+    <!-- Settings View -->
+    <div id="settingsView" class="view-screen">
+        <div class="back-btn-container"><div class="back-text-btn" onclick="closeView('settings')" data-lang="back">back</div></div>
+        <div class="p-6">
+            <!-- Accent Color -->
+            <div class="setting-section">
+                <div class="setting-header" onclick="toggleAccordion('accentOptions')">
+                    <div class="flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                        <span class="font-bold" data-lang="accent">Accent Color</span>
+                    </div>
+                    <span>^</span>
+                </div>
+                <div id="accentOptions" class="setting-content">
+                    <div class="grid grid-cols-1 gap-2">
+                        <div onclick="setAccent('#ef4444', 'Red')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #ef4444;"></div> <span data-lang="red">Red</span>
+                        </div>
+                        <div onclick="setAccent('#3b82f6', 'Blue')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #3b82f6;"></div> <span data-lang="blue">Blue</span>
+                        </div>
+                        <div onclick="setAccent('#10b981', 'Green')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #10b981;"></div> <span data-lang="green">Green</span>
+                        </div>
+                        <div onclick="setAccent('#f59e0b', 'Yellow')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #f59e0b;"></div> <span data-lang="yellow">Yellow</span>
+                        </div>
+                        <div onclick="setAccent('#8b5cf6', 'Purple')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #8b5cf6;"></div> <span data-lang="purple">Purple</span>
+                        </div>
+                        <div onclick="setAccent('#ec4899', 'Pink')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #ec4899;"></div> <span data-lang="pink">Pink</span>
+                        </div>
+                        <div onclick="setAccent('#000000', 'Black')" class="flex items-center gap-3 p-2 hover:bg-black/5 rounded cursor-pointer">
+                            <div class="color-dot" style="background: #000000;"></div> <span data-lang="black">Black</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme -->
+            <div class="setting-section">
+                <div class="setting-header" onclick="toggleAccordion('themeOptions')">
+                    <div class="flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <span class="font-bold" data-lang="theme">Theme</span>
+                    </div>
+                    <span>^</span>
+                </div>
+                <div id="themeOptions" class="setting-content">
+                    <div class="flex gap-4">
+                        <button onclick="setTheme('light')" class="flex-1 p-3 border rounded border-gray-300 dark:border-gray-700" data-lang="white">White</button>
+                        <button onclick="setTheme('dark')" class="flex-1 p-3 border rounded border-gray-300 dark:border-gray-700" data-lang="dark">Dark</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Font Size -->
+            <div class="setting-section">
+                <div class="setting-header" onclick="toggleAccordion('fontOptions')">
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold">A<small>A</small></span>
+                        <span class="font-bold" data-lang="font">Font Size</span>
+                    </div>
+                    <span>^</span>
+                </div>
+                <div id="fontOptions" class="setting-content">
+                    <input type="range" min="12" max="24" value="14" class="w-full mb-4" oninput="setFontSize(this.value)">
+                    <p id="fontPreview" class="text-center italic">Preview Text / पूर्वावलोकन</p>
+                </div>
+            </div>
+
+            <!-- Language -->
+            <div class="setting-section">
+                <div class="setting-header" onclick="toggleAccordion('langOptions')">
+                    <div class="flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        <span class="font-bold" data-lang="language">Language</span>
+                    </div>
+                    <span>^</span>
+                </div>
+                <div id="langOptions" class="setting-content flex gap-4">
+                    <button onclick="setLang('en')" class="flex-1 p-3 border rounded border-gray-300">English</button>
+                    <button onclick="setLang('hi')" class="flex-1 p-3 border rounded border-gray-300">हिंदी</button>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="setting-section">
+                <div class="setting-header" onclick="toggleAccordion('aboutOptions')">
+                    <div class="flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <span class="font-bold" data-lang="about">About</span>
+                    </div>
+                    <span>^</span>
+                </div>
+                <div id="aboutOptions" class="setting-content">
+                    <div class="red-border-box p-4 text-sm leading-relaxed" style="border-width: 1px;">
+                        <p class="mb-4" data-lang="about_p1">This is a Portfolio website of Shreya Singh, a student of Dr. Virendra Swarup Institute of Computer Application.</p>
+                        <ul class="list-disc ml-5 space-y-2">
+                            <li data-lang="about_pt1">Certified in Microsoft Azure.</li>
+                            <li data-lang="about_pt2">Adobe Certified Professional.</li>
+                            <li data-lang="about_pt3">Expert in AI implementation and use.</li>
+                            <li data-lang="about_pt4">Quick adopter of new technologies.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                back: "back", share: "Share", feedback: "Feedback", settings: "Settings",
+                accent: "Accent Color", theme: "Theme", font: "Font Size", language: "Language",
+                about: "About", red: "Red", blue: "Blue", green: "Green", yellow: "Yellow",
+                purple: "Purple", pink: "Pink", black: "Black", white: "White", dark: "Dark",
+                nav: "Navigation", serv_title: "Our Services", contact_title: "Contact",
+                cloud_serv: "Cloud Services", cloud_desc: "High-performance cloud solutions.",
+                support: "Support", help: "Help",
+                desc1: "Profile: A professional capture of the developer.",
+                desc2: "Education: Snapshot of my academic environment and school life.",
+                desc3: "Identity: The official Desh AI project branding.",
+                mastery: "I have mastered AI implementation personally on Render.com.",
+                engine: "Core Engine: Google Groq AI Cloud API.",
+                voice: "Pro Features: Voice Talking Mode & TTS.",
+                about_p1: "This is a Portfolio website of Shreya Singh, a student of Dr. Virendra Swarup Institute of Computer Application.",
+                about_pt1: "Certified in Microsoft Azure.",
+                about_pt2: "Adobe Certified Professional.",
+                about_pt3: "Expert in AI implementation and use.",
+                about_pt4: "Quick adopter of new technologies."
+            },
+            hi: {
+                back: "पीछे", share: "साझा करें", feedback: "प्रतिक्रिया", settings: "सेटिंग्स",
+                accent: "एक्सेंट रंग", theme: "थीम", font: "फ़ॉन्ट आकार", language: "भाषा",
+                about: "हमारे बारे में", red: "लाल", blue: "नीला", green: "हरा", yellow: "पीला",
+                purple: "बैंगनी", pink: "गुलाबी", black: "काला", white: "सफेद", dark: "डार्क",
+                nav: "नेविगेशन", serv_title: "हमारी सेवाएँ", contact_title: "संपर्क",
+                cloud_serv: "क्लाउड सेवाएँ", cloud_desc: "उच्च प्रदर्शन क्लाउड समाधान।",
+                support: "सहायता", help: "मदद",
+                desc1: "प्रोफ़ाइल: डेवलपर की एक पेशेवर तस्वीर।",
+                desc2: "शिक्षा: मेरे शैक्षणिक वातावरण और स्कूली जीवन की झलक।",
+                desc3: "पहचान: आधिकारिक देश एआई (Desh AI) प्रोजेक्ट ब्रांडिंग।",
+                mastery: "मैंने व्यक्तिगत रूप से Render.com पर AI कार्यान्वयन में महारत हासिल की है।",
+                engine: "कोर इंजन: Google Groq AI क्लाउड API।",
+                voice: "प्रो फीचर्स: वॉयस टॉकिंग मोड और TTS।",
+                about_p1: "यह डॉ. वीरेंद्र स्वरूप इंस्टीट्यूट ऑफ कंप्यूटर एप्लिकेशन की छात्रा श्रेया सिंह की पोर्टफोलियो वेबसाइट है।",
+                about_pt1: "माइक्रोसॉफ्ट एज़्योर (Microsoft Azure) में प्रमाणित।",
+                about_pt2: "एडोब (Adobe) प्रमाणित पेशेवर।",
+                about_pt3: "एआई कार्यान्वयन और उपयोग में विशेषज्ञ।",
+                about_pt4: "नई तकनीकों को तेजी से अपनाने वाली।"
+            }
+        };
+
+        window.onscroll = function() {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setLang(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+        }
+
+        function setAccent(color, name) {
+            document.documentElement.style.setProperty('--accent-color', color);
+            toggleAccordion('accentOptions');
+        }
+
+        function setTheme(mode) {
+            if (mode === 'dark') document.body.classList.add('dark-theme');
+            else document.body.classList.remove('dark-theme');
+        }
+
+        function setFontSize(val) {
+            const px = val + 'px';
+            document.querySelectorAll('.dynamic-font').forEach(el => el.style.fontSize = px);
+            document.getElementById('fontPreview').style.fontSize = px;
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const isVisible = content.style.display === 'block';
+            document.querySelectorAll('.setting-content').forEach(c => c.style.display = 'none');
+            content.style.display = isVisible ? 'none' : 'block';
+        }
+
+        function handleFeedback() {
+            const email = "support.deshai@gmail.com";
+            const subject = encodeURIComponent("Feedback / Report for Desh AI");
+            const body = encodeURIComponent("Hey team Desh Ai!,\n\nI am here to give my feedback or sharing problem or report of my feeling by after using your product.");
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        }
+
+        function handleShare() {
+            const appLink = window.location.href; 
+            const shareText = encodeURIComponent(`Hey I have used this AI and literally I am telling that it's it was my one of the best experience for using such an AI with unread realistic and futuristic feature! Check it out here: ${appLink}`);
+            window.open(`https://api.whatsapp.com/send?text=${shareText}`, '_blank');
+        }
+
+        function toggleMenu(e) {
+            if(e) e.stopPropagation();
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            const isActive = menu.classList.contains('active');
+            overlay.style.display = isActive ? 'none' : 'block';
+            menu.classList.toggle('active');
+        }
+
+        function toggleMoreMenu(e) {
+            e.stopPropagation();
+            const m = document.getElementById('moreMenu');
+            const wrapper = document.getElementById('contentWrapper');
+            const isVisible = m.style.display === 'block';
+            m.style.display = isVisible ? 'none' : 'block';
+            wrapper.classList.toggle('blur-bg', !isVisible);
+        }
+
+        function openView(id) {
+            const moreMenu = document.getElementById('moreMenu');
+            const wrapper = document.getElementById('contentWrapper');
+            moreMenu.style.display = 'none';
+            wrapper.classList.remove('blur-bg');
+            
+            const sideMenu = document.getElementById('sideMenu');
+            if(sideMenu.classList.contains('active')) toggleMenu();
+
+            document.getElementById(id + 'View').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeView(id) {
+            document.getElementById(id + 'View').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleInfo(btn, e) {
+            e.stopPropagation();
+            const desc = btn.nextElementSibling;
+            const isVisible = desc.style.display === 'block';
+            document.querySelectorAll('.img-desc-box').forEach(box => box.style.display = 'none');
+            if (!isVisible) desc.style.display = 'block';
+        }
+
+        function closeAllPopups(e) {
+            document.getElementById('moreMenu').style.display = 'none';
+            document.getElementById('contentWrapper').classList.remove('blur-bg');
+            document.querySelectorAll('.img-desc-box').forEach(box => box.style.display = 'none');
+        }
+    </script>
+</body>
+</html>
+
