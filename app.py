@@ -314,4 +314,8 @@ def serve_numpuzz():
 @app.get("/study")
 def serve_numpuzz():
     return FileResponse("static/study.html")
+@app.get("/vsics")
+def serve_numpuzz():
+    return FileResponse("static/vsics.html")
+
 
