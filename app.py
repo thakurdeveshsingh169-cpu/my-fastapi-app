@@ -317,4 +317,3 @@ def serve_numpuzz():
 @app.get("/vsics")
 def serve_numpuzz():
     return FileResponse("static/vsics.html")
-
