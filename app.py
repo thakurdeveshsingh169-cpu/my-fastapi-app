@@ -178,7 +178,15 @@ async def ask_question(data: Question, request: Request):
         "founder of", "who is your founder", "who made desh ai", "who created you", "Creates you", "created you" , "founded you" , "your founder" , "makes you" , "CEO of desh Ai" , "owner of Desh Ai" 
     ]
     if any(kw in prompt_lower for kw in founder_keywords):
-        reply = "🌟 Desh AI is founded by Devesh Singh Rajput, a 15-year-old from Jaunpur, U.P."
+        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led  by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙼𝚊𝚗𝚊𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝚎𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
+​Leadership and Board:
+The strategic direction is spearheaded by a dynamic duo. Shreya Singh serves as the CEO and primary architect of the vision and scaling strategies. Devesh Singh is the Managing Director and the technical force driving the core architecture and integration.
+​Core Capabilities and Innovations:
+The platform distinguishes itself through a suite of integrated tools designed for utility and entertainment. It features high-performance conversational engines with voice synthesis and real-time response capabilities. The multi-functional utility suite includes dynamic PDF solutions for generators and editors, and creative tools like FaceTalk in 𝕯𝖊𝖘𝖍 𝐀𝖎 Pro which isn't currently in top Ai of today's market But You'll get in Our Aí.
+​Interactive Entertainment and API:
+Unique projects like the Hand Cricket game utilize pattern-recognition for a personalized experience. The platform leverages top-tier models ensuring sophisticated language processing for all users.
+​The 2025 Milestone:
+Founded during a pivotal year for artificial intelligence, the platform focuses on clean UI and functional web-based tools to bridge the gap between complex coding and daily needs. And we are rapidly developing & integrating new features for our Users"""
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
 
