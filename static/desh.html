@@ -54,7 +54,7 @@
 }
 
 .logo-char-img {
-  height: 44px;          /* matches text height */
+  height: 40px;          /* matches text height */
   width: auto;
   object-fit: contain;
   margin-right: -11px;    /* tight D + esh spacing */
@@ -582,7 +582,8 @@ micBtn.addEventListener('click', () => {
 
       const img = wrapper.querySelector('.gen-img');
 
-      img.src = `https://image.pollinations.ai/prompt/${encodeURIComponent(q)}?seed=${Math.floor(Math.random()*99999)}&width=1024&height=1024&nologo=true`;
+
+      img.src = `https://gen.pollinations.ai/image/${encodeURIComponent(q)}?seed=${Math.floor(Math.random()*99999)}&width=1024&height=1024&nologo=true`;
 
       img.onload = () => {
 
