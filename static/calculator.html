@@ -1,171 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Normal Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Xiaomi Style Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --btn-dark: #1c1c1e;
+            --text-orange: #d97706;
+            --accent-orange: #f97316;
+        }
 
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #f5f5f5;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: Arial, sans-serif;
-    }
+        body {
+            background-color: #000;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: white;
+        }
 
-    .calculator {
-        width: 330px;
-        padding: 20px;
-        background: white;
-        border-radius: 18px;
-        box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
-    }
+        #carousel {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
 
-    .display {
-        width: 100%;
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 20px;
-        box-sizing: border-box;
-        margin-bottom: 15px;
-        overflow: hidden;
-    }
+        .theme-page {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
-    .main-input {
-        width: 100%;
-        font-size: 32px;
-        border: none;
-        outline: none;
-        text-align: right;
-        background: none;
-    }
+        /* Miniature Device Look matching the "Lock screen" screenshot */
+        .miniature .device-frame {
+            transform: scale(0.72);
+            border-radius: 3rem;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2), 0 30px 60px rgba(0,0,0,0.8);
+            filter: brightness(0.6);
+            cursor: pointer;
+        }
 
-    .small-output {
-        text-align: right;
-        font-size: 18px;
-        color: #888;
-        height: 22px;
-    }
+        .active-mini .device-frame {
+            filter: brightness(1) !important;
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.4), 0 30px 60px rgba(0,0,0,0.8);
+        }
 
-    .buttons {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-    }
+        .device-frame {
+            width: 100%;
+            height: 100%;
+            transition: all 0.5s cubic-bezier(0.2, 0, 0, 1);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
 
-    button {
-        padding: 20px;
-        font-size: 22px;
-        border: none;
-        border-radius: 14px;
-        background: #ffffff;
-        box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
-        cursor: pointer;
-        transition: 0.2s;
-    }
+        /* Calculator Buttons matching your second screenshot */
+        .calc-grid {
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            background: inherit;
+        }
 
-    button:active {
-        transform: scale(0.95);
-    }
+        .calc-btn {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            border-radius: 1.2rem; /* Squircle style */
+            transition: background 0.2s, transform 0.1s;
+            user-select: none;
+        }
 
-    .btn-orange {
-        background: #ffae00;
-        color: white;
-        font-weight: bold;
-    }
+        .calc-btn:active {
+            transform: scale(0.92);
+            filter: brightness(1.3);
+        }
 
-    .btn-green {
-        background: #32c759;
-        color: white;
-        font-weight: bold;
-    }
-</style>
+        .btn-zero { grid-column: span 1; }
+
+        /* Navigation elements for Theme Mode */
+        #theme-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .miniature-mode #theme-ui {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nav-header {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .nav-header button {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 24px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            font-size: 14px;
+        }
+
+        .apply-btn {
+            background: #3b82f6 !important;
+        }
+
+        #theme-title {
+            position: absolute;
+            top: 100px;
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+        #theme-footer {
+            position: absolute;
+            bottom: 60px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dot-box {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            width: 20px;
+            background: #fff;
+            border-radius: 4px;
+        }
+    </style>
 </head>
+<body class="select-none">
 
-<body>
-
-<div class="calculator">
-
-    <div class="display">
-        <div class="small-output" id="small"></div>
-        <input class="main-input" id="main" readonly>
+    <!-- Theme Selection Overlays (Visible only in miniature mode) -->
+    <div id="theme-ui">
+        <div class="nav-header">
+            <button onclick="exitTheme()">Exit</button>
+            <button class="apply-btn" onclick="exitTheme()">Apply</button>
+        </div>
+        <div id="theme-title">Theme selection</div>
+        <div id="theme-footer">
+            <div class="text-[10px] uppercase tracking-[0.3em] opacity-40">Slide to change</div>
+            <div id="dots" class="dot-box"></div>
+        </div>
     </div>
 
-    <div class="buttons">
-        <button class="btn-orange" onclick="clearAll()">C</button>
-        <button onclick="backspace()">⌫</button>
-        <button onclick="press('%')">%</button>
-        <button onclick="press('/')">÷</button>
-
-        <button onclick="press('7')">7</button>
-        <button onclick="press('8')">8</button>
-        <button onclick="press('9')">9</button>
-        <button onclick="press('*')">×</button>
-
-        <button onclick="press('4')">4</button>
-        <button onclick="press('5')">5</button>
-        <button onclick="press('6')">6</button>
-        <button onclick="press('-')">−</button>
-
-        <button onclick="press('1')">1</button>
-        <button onclick="press('2')">2</button>
-        <button onclick="press('3')">3</button>
-        <button onclick="press('+')">+</button>
-
-        <button onclick="press('0')">0</button>
-        <button onclick="press('.')">.</button>
-        <button class="btn-green" style="grid-column: span 2;" onclick="calculate()">=</button>
+    <div id="carousel">
+        <!-- Themes will be injected here -->
     </div>
 
-</div>
+    <script>
+        const themes = [
+            { id: 'dark', bg: '#000000', text: '#ffffff', btn: '#1c1c1e', opText: '#d97706', accent: '#f97316' },
+            { id: 'white', bg: '#f2f2f7', text: '#000000', btn: '#ffffff', opText: '#007aff', accent: '#007aff' },
+            { id: 'orange', bg: '#f97316', text: '#ffffff', btn: '#fb923c', opText: '#ffffff', accent: '#ffffff', accentText: '#f97316' },
+            { id: 'deep-blue', bg: '#0f172a', text: '#f8fafc', btn: '#1e293b', opText: '#38bdf8', accent: '#38bdf8' }
+        ];
 
-<script>
-    const main = document.getElementById("main");
-    const small = document.getElementById("small");
+        let currentIndex = 0;
+        let isMini = false;
+        let pressTimer;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let displayValue = "0";
+        let historyValue = "";
 
-    function press(val) {
-        main.value += val;
-        liveResult();
-    }
+        const carousel = document.getElementById('carousel');
+        const dotsContainer = document.getElementById('dots');
 
-    function clearAll() {
-        main.value = "";
-        small.textContent = "";
-    }
+        function init() {
+            themes.forEach((theme, i) => {
+                const page = document.createElement('div');
+                page.className = 'theme-page';
+                
+                page.innerHTML = `
+                    <div class="device-frame" style="background: ${theme.bg}; color: ${theme.text}" onclick="handleDeviceClick(${i})">
+                        <!-- Empty area for long press -->
+                        <div class="flex-1 flex flex-col p-8 empty-space" onmousedown="startLongPress(event)" ontouchstart="startLongPress(event)">
+                            <div class="flex justify-between items-center opacity-60 text-sm">
+                                <span>Calculator</span>
+                                <span>Converter</span>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-end items-end pb-4">
+                                <div class="text-sm opacity-40 history-text mb-2">${historyValue}</div>
+                                <div class="text-7xl font-light tracking-tight display-text">0</div>
+                            </div>
+                        </div>
 
-    function backspace() {
-        main.value = main.value.slice(0, -1);
-        liveResult();
-    }
+                        <!-- Button Grid (Does NOT trigger long press) -->
+                        <div class="calc-grid">
+                            <button class="calc-btn font-medium" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('AC')">AC</button>
+                            <button class="calc-btn font-medium" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('DEL')">⌫</button>
+                            <button class="calc-btn font-medium" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('%')">%</button>
+                            <button class="calc-btn font-medium" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('÷')">÷</button>
+                            
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('7')">7</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('8')">8</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('9')">9</button>
+                            <button class="calc-btn" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('*')">×</button>
+                            
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('4')">4</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('5')">5</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('6')">6</button>
+                            <button class="calc-btn" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('-')">-</button>
+                            
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('1')">1</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('2')">2</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('3')">3</button>
+                            <button class="calc-btn" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('+')">+</button>
+                            
+                            <button class="calc-btn" style="background: ${theme.btn}; color: ${theme.opText}" onclick="calc('swap')">⇅</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('0')">0</button>
+                            <button class="calc-btn" style="background: ${theme.btn}" onclick="calc('.')">.</button>
+                            <button class="calc-btn" style="background: ${theme.accent}; color: ${theme.accentText || '#fff'}" onclick="calc('=')">=</button>
+                        </div>
+                    </div>
+                `;
+                carousel.appendChild(page);
 
-    function liveResult() {
-        try {
-            if (main.value !== "") {
-                let ans = eval(main.value.replace("×", "*"));
-                if (!isNaN(ans)) small.textContent = ans;
-            } else {
-                small.textContent = "";
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === 0 ? 'active' : ''}`;
+                dotsContainer.appendChild(dot);
+            });
+            updatePosition();
+        }
+
+        // Logic
+        window.calc = (btn) => {
+            if (isMini) return;
+            event.stopPropagation();
+            
+            if (btn === 'AC') {
+                displayValue = "0";
+                historyValue = "";
+            } else if (btn === 'DEL') {
+                displayValue = displayValue.length > 1 ? displayValue.slice(0, -1) : "0";
+            } else if (btn === '=') {
+                try {
+                    historyValue = displayValue + " =";
+                    displayValue = String(eval(displayValue.replace('×', '*').replace('÷', '/')));
+                } catch { displayValue = "Error"; }
+            } else if (['+', '-', '*', '/', '%', '÷'].includes(btn)) {
+                displayValue += btn;
+            } else if (btn !== 'swap') {
+                displayValue = displayValue === "0" ? btn : displayValue + btn;
             }
-        } catch {
-            small.textContent = "";
-        }
-    }
+            
+            updateDisplays();
+        };
 
-    function calculate() {
-        try {
-            let ans = eval(main.value);
-            main.value = ans;
-            small.textContent = "";
-        } catch {
-            main.value = "Error";
-            small.textContent = "";
+        function updateDisplays() {
+            document.querySelectorAll('.display-text').forEach(el => el.innerText = displayValue);
+            document.querySelectorAll('.history-text').forEach(el => el.innerText = historyValue);
         }
-    }
-</script>
 
+        // Gesture System
+        window.addEventListener('mousemove', drag);
+        window.addEventListener('touchmove', drag);
+        window.addEventListener('mouseup', endPress);
+        window.addEventListener('touchend', endPress);
+
+        window.startLongPress = (e) => {
+            if (isMini) return;
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            pressTimer = setTimeout(() => {
+                enterMiniature();
+            }, 1500);
+        };
+
+        function enterMiniature() {
+            isMini = true;
+            document.body.classList.add('miniature-mode');
+            document.querySelectorAll('.theme-page').forEach(p => p.classList.add('miniature'));
+            updateActiveDevice();
+        }
+
+        window.exitTheme = () => {
+            isMini = false;
+            document.body.classList.remove('miniature-mode');
+            document.querySelectorAll('.theme-page').forEach(p => p.classList.remove('miniature'));
+        };
+
+        function drag(e) {
+            if (!isMini) return;
+            const x = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const walk = (x - startX) * 1.2; // Frequency/Sensitivity multiplier
+            currentTranslate = prevTranslate + walk;
+            carousel.style.transition = 'none';
+            carousel.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        function endPress() {
+            clearTimeout(pressTimer);
+            if (!isMini) return;
+
+            const movedBy = currentTranslate - prevTranslate;
+            if (movedBy < -80 && currentIndex < themes.length - 1) currentIndex++;
+            if (movedBy > 80 && currentIndex > 0) currentIndex--;
+
+            updatePosition();
+            updateActiveDevice();
+        }
+
+        function updatePosition() {
+            carousel.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            prevTranslate = currentIndex * -window.innerWidth;
+            currentTranslate = prevTranslate;
+            carousel.style.transform = `translateX(${prevTranslate}px)`;
+            
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        function updateActiveDevice() {
+            document.querySelectorAll('.theme-page').forEach((p, i) => {
+                p.classList.toggle('active-mini', i === currentIndex);
+            });
+        }
+
+        window.handleDeviceClick = (index) => {
+            if (isMini && index === currentIndex) {
+                exitTheme();
+            }
+        };
+
+        init();
+    </script>
 </body>
 </html>
+
