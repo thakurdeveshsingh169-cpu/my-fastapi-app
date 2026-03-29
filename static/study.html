@@ -1,330 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>𝕯𝖊𝖘𝖍 𝐀𝖎’s - Study Specific</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- MathJax Configuration -->
-    <script>
-        window.MathJax = {
-            tex: { 
-                inlineMath: [['$', '$'], ['\\(', '\\)']], 
-                displayMath: [['$$', '$$']],
-                processEscapes: true
-            },
-            options: { enableMenu: false },
-            svg: { fontCache: 'global' }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>𝕯𝖊𝕾𝖍 𝗔𝗶 - Neural Supreme</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        
-        body { font-family: 'Outfit', sans-serif; background-color: #ffffff; height: 100vh; display: flex; flex-direction: column; margin: 0; overflow: hidden; }
-        
-        .header { text-align: center; padding: 18px 0; border-bottom: 1px solid #f0f0f0; background: #fff; flex-shrink: 0; }
-        .header h1 { font-size: 26px; font-weight: 800; letter-spacing: 5px; color: #000; margin: 0; }
+  <style>
+    /* ... (All your existing CSS remains exactly the same) ... */
 
-        #chat-window { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 20px; background: #fafafa; }
+    /* NEW AD STYLES */
+    .top-ad-banner {
+      width: 100%;
+      max-width: 800px;
+      margin: 10px auto 0;
+      height: 90px;
+      background: #f9f9f9;
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 8px;
+    }
 
-        .message { max-width: 92%; padding: 16px; border-radius: 20px; line-height: 1.7; font-size: 15px; position: relative; }
-        .user-msg { align-self: flex-end; background-color: #000; color: #fff; border-bottom-right-radius: 4px; }
-        .ai-msg { 
-            align-self: flex-start; background-color: #fff; border: 1px solid #e5e7eb; 
-            color: #1f2937; border-bottom-left-radius: 4px; width: 100%; max-width: 550px;
-        }
+    /* Full-screen Ad Overlay */
+    #adOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
 
-        /* --- WARDROBE MULTI-PHASE ANIMATION --- */
-        .curtain-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start; 
-            margin: 10px 0;
-        }
+    .ad-timer {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #f5b342;
+    }
 
-        .curtain-stage {
-            position: relative;
-            width: 320px; 
-            height: 60px; /* Exact height for the bold lines */
-            overflow: hidden; 
-            display: flex;
-            align-items: center;
-            background: transparent;
-        }
-
-        .curtain-content-box {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-        }
-
-        .curtain-text {
-            font-size: 22px;
-            font-weight: 600;
-            white-space: nowrap;
-            color: #000;
-            z-index: 1;
-            background: linear-gradient(90deg, #000 0%, #777 50%, #000 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 1.2s linear infinite;
-        }
-
-        .thinking-video {
-            height: 100%; /* Height matches the bold lines exactly */
-            width: auto;
-            object-fit: contain;
-            z-index: 1;
-            position: absolute;
-            left: 0;
-        }
-
-        @keyframes shimmer {
-            to { background-position: 200% center; }
-        }
-
-        .curtain-panel {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 50%;
-            background: #fafafa;
-            z-index: 10;
-        }
-
-        .panel-left { left: 0; border-right: 3px solid #000; }
-        .panel-right { right: 0; border-left: 3px solid #000; }
-
-        /* Animation Cycle (Total 9s) */
-        .animate-curtain .panel-left { animation: cycleLeft 9s infinite ease-in-out; }
-        .animate-curtain .panel-right { animation: cycleRight 9s infinite ease-in-out; }
-        .animate-curtain .curtain-text { animation: toggleText 9s infinite; }
-        .animate-curtain .thinking-video { animation: toggleVideo 9s infinite; }
-
-        @keyframes cycleLeft {
-            0%, 25% { transform: translateX(-100%); } /* Open for Text */
-            30%, 35% { transform: translateX(0); }    /* Closed */
-            40%, 65% { transform: translateX(-100%); } /* Open for Video */
-            70%, 75% { transform: translateX(0); }    /* Closed */
-            80%, 100% { transform: translateX(-100%); } /* Open for Text */
-        }
-
-        @keyframes cycleRight {
-            0%, 25% { transform: translateX(100%); }
-            30%, 35% { transform: translateX(0); }
-            40%, 65% { transform: translateX(100%); }
-            70%, 75% { transform: translateX(0); }
-            80%, 100% { transform: translateX(100%); }
-        }
-
-        @keyframes toggleText {
-            0%, 35% { opacity: 1; visibility: visible; }
-            36%, 79% { opacity: 0; visibility: hidden; }
-            80%, 100% { opacity: 1; visibility: visible; }
-        }
-
-        @keyframes toggleVideo {
-            0%, 39% { opacity: 0; visibility: hidden; }
-            40%, 69% { opacity: 1; visibility: visible; }
-            70%, 100% { opacity: 0; visibility: hidden; }
-        }
-
-        .error-text {
-            color: #ef4444;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 10px;
-        }
-
-        /* --- UI Elements --- */
-        .input-area { padding: 12px 15px; background: #fff; border-top: 1px solid #eee; flex-shrink: 0; }
-        .input-bar { background: #f3f4f6; border-radius: 35px; display: flex; align-items: center; padding: 6px 12px; gap: 8px; }
-        
-        .input-bar textarea {
-            flex: 1; background: transparent; border: none; outline: none; resize: none;
-            max-height: 120px; font-size: 16px; padding: 10px 0; font-family: inherit;
-        }
-
-        .control-btns { display: flex; gap: 8px; align-items: center; }
-        .btn-circle {
-            width: 38px; height: 38px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; cursor: pointer; border: none; transition: 0.3s;
-        }
-        .thunder-btn { background: #22c55e; color: white; }
-        .thunder-btn.active { background: #ef4444; }
-        .plus-btn { background: #e5e7eb; color: #4b5563; }
-
-        .send-btn { color: #000; font-size: 22px; background: transparent; border: none; cursor: pointer; padding: 0 8px; }
-        .send-btn:disabled { color: #d1d5db; }
-
-        .typing-cursor::after { content: "▋"; animation: blink 1s infinite; color: #000; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .footer-tools { display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px; border-top: 1px solid #f3f4f6; padding-top: 8px; }
-        .tool-icon { color: #9ca3af; font-size: 14px; cursor: pointer; transition: 0.2s; }
-    </style>
+    .ad-content-placeholder {
+        width: 300px;
+        height: 250px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
-    <div class="header">
-        <h1>𝕯𝖊𝖘𝖍 𝐀𝖎</h1>
+  <div class="top-ad-banner">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-0000"
+         data-ad-slot="0000"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <p style="color:#999; font-size:12px;">Advertisement</p>
+  </div>
+
+  <header class="header">
+    <div class="logo-brand">
+      <img src="static/logo.png" alt="Desh AI Logo" class="logo-char-img">
+      <span class="brand-text-rest">𝖊𝕾𝖍 𝐀𝖎</span>
     </div>
+  </header>
 
-    <div id="chat-window">
-        <div class="message ai-msg">
-            👋 Welcome Dear<b>𝕯𝖊𝖘𝖍 𝐀𝖎’s Study Master</b>. <br>I'm ready to analyze your questions 😎.
-        </div>
+  <main id="chatContainer"></main>
+
+  <div id="adOverlay">
+    <div class="ad-content-placeholder">
+        <span>Video Ad Playing...</span>
     </div>
+    <div class="ad-timer">Wait <span id="seconds">5</span> seconds to continue...</div>
+  </div>
 
-    <div class="input-area">
-        <div class="input-bar">
-            <div class="control-btns">
-                <button id="thunderBtn" class="btn-circle thunder-btn" title="Typing Toggle">
-                    <i class="fa-solid fa-bolt"></i>
-                </button>
-                <button class="btn-circle plus-btn">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
+  <div id="scrollTopBtn"><svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg></div>
 
-            <textarea id="userInput" placeholder="Ask DeSh Ai..." rows="1"></textarea>
-
-            <button id="sendBtn" class="send-btn" disabled>
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
-        </div>
+  <div class="bottom-bar">
+    <div class="input-box" id="inputBox">
+      <button class="icon-btn mic-btn" id="micBtn">
+        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </button>
+      <textarea id="question" placeholder="Ask 𝕯𝖊𝕾𝖍 𝐀𝖎..." rows="1"></textarea>
+      <button id="sendBtn" class="icon-btn wave-mode">
+        <svg id="waveIcon" viewBox="0 0 24 24"><rect x="3" y="10" width="2" height="4" rx="1"/><rect x="7" y="8" width="2" height="8" rx="1"/><rect x="11" y="5" width="2" height="14" rx="1"/><rect x="15" y="8" width="2" height="8" rx="1"/><rect x="19" y="10" width="2" height="4" rx="1"/></svg>
+        <svg id="sendIcon" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
     </div>
+  </div>
 
-    <script>
-        const chatWindow = document.getElementById('chat-window');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const thunderBtn = document.getElementById('thunderBtn');
-        
-        let typingEnabled = false;
+  <script>
+    /* ... (Keep all your existing JS code until the Send Button Logic) ... */
 
-        thunderBtn.onclick = () => {
-            typingEnabled = !typingEnabled;
-            thunderBtn.classList.toggle('active', typingEnabled);
-        };
+    const adOverlay = document.getElementById('adOverlay');
+    const secondsSpan = document.getElementById('seconds');
 
-        userInput.oninput = () => {
-            userInput.style.height = 'auto';
-            userInput.style.height = userInput.scrollHeight + 'px';
-            sendBtn.disabled = !userInput.value.trim();
-        };
+    // MODIFIED SEND LOGIC
+    sendBtn.onclick = () => {
+      const q = input.value.trim();
+      
+      if (q.length === 0) {
+        window.location.href = "/neon";
+        return;
+      }
 
-        async function typeText(container, text) {
-            const content = document.createElement('div');
-            container.appendChild(content);
+      // 5-SECOND AD LOGIC
+      showAdAndThen(() => {
+        handleRequest();
+      });
+    };
 
-            if (!typingEnabled) {
-                content.innerHTML = text.replace(/\n/g, '<br>');
-            } else {
-                content.classList.add('typing-cursor');
-                const words = text.split(' ');
-                for (let word of words) {
-                    content.innerHTML += word + ' ';
-                    await new Promise(r => setTimeout(r, 40));
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }
-                content.classList.remove('typing-cursor');
-            }
-            if (window.MathJax) MathJax.typesetPromise([content]);
+    function showAdAndThen(callback) {
+      adOverlay.style.display = 'flex';
+      let count = 5;
+      secondsSpan.innerText = count;
+
+      const timer = setInterval(() => {
+        count--;
+        secondsSpan.innerText = count;
+        if (count <= 0) {
+          clearInterval(timer);
+          adOverlay.style.display = 'none';
+          callback(); // Runs the actual handleRequest after 5s
         }
+      }, 1000);
+    }
 
-        async function handleSend() {
-            const query = userInput.value.trim();
-            if (!query) return;
-
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user-msg';
-            userMsg.textContent = query;
-            chatWindow.appendChild(userMsg);
-
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            sendBtn.disabled = true;
-
-            const loaderWrapper = document.createElement('div');
-            loaderWrapper.className = 'curtain-wrapper animate-curtain';
-            loaderWrapper.innerHTML = `
-                <div class="curtain-stage">
-                    <div class="curtain-content-box">
-                        <div class="curtain-text">𝕯𝖊𝖘𝖍 𝐀𝖎 is 𝐓𝐡𝐢𝐧𝐤𝐢𝐧𝐠</div>
-                        <video class="thinking-video" autoplay loop muted playsinline>
-                            <source src="static/video.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="curtain-panel panel-left"></div>
-                    <div class="curtain-panel panel-right"></div>
-                </div>
-            `;
-            chatWindow.appendChild(loaderWrapper);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-
-            let requestSettled = false;
-
-            const timeout = new Promise((_, reject) => {
-                setTimeout(() => { if (!requestSettled) reject('timeout'); }, 20000);
-            });
-
-            const fetchReq = (async () => {
-                try {
-                    const response = await fetch("https://desh-ai.onrender.com/ask", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ question: query })
-                    });
-                    return await response.json();
-                } catch (e) { throw e; }
-            })();
-
-            try {
-                const data = await Promise.race([fetchReq, timeout]);
-                requestSettled = true;
-                loaderWrapper.remove();
-
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message ai-msg';
-                chatWindow.appendChild(aiMsg);
-
-                // Note: Response will prioritize correct options as per instructions
-                await typeText(aiMsg, data.answer || "No response received.");
-                
-                const footer = document.createElement('div');
-                footer.className = 'footer-tools';
-                footer.innerHTML = `<i class="fa-regular fa-copy tool-icon" onclick="copyResult(this)"></i>`;
-                aiMsg.appendChild(footer);
-
-            } catch (err) {
-                requestSettled = true;
-                loaderWrapper.innerHTML = `
-                    <div class="error-text">⚠️ Server busy. Try again soon.</div>
-                `;
-                sendBtn.disabled = false;
-            }
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        function copyResult(icon) {
-            const text = icon.closest('.ai-msg').innerText;
-            navigator.clipboard.writeText(text);
-            icon.className = "fa-solid fa-check tool-icon text-green-500";
-            setTimeout(() => icon.className = "fa-regular fa-copy tool-icon", 2000);
-        }
-
-        sendBtn.onclick = handleSend;
-        userInput.onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
-    </script>
+    /* ... (Keep the rest of your original functions: handleRequest, handleText, etc.) ... */
+  </script>
 </body>
 </html>
-
