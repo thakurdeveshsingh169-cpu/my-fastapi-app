@@ -178,9 +178,9 @@ async def ask_question(data: Question, request: Request):
         "founder of", "who is your founder", "who made desh ai", "who created you", "Creates you", "created you" , "founded you" , "your founder" , "makes you" , "CEO of desh Ai" , "owner of Desh Ai" 
     ]
     if any(kw in prompt_lower for kw in founder_keywords):
-        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led  by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙼𝚊𝚗𝚊𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝚎𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
+        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led  by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾), 𝗔𝗵𝗮𝗮𝗻 𝗦𝗶𝗻𝗴𝗵 (𝙲𝚘-𝙵𝚘𝚞𝚗𝚍𝚎𝚛) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙵𝚘𝚞𝚗𝚍𝚎𝚛 & 𝙼𝚊𝚗𝚊𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝚎𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
 ​Leadership and Board:
-The strategic direction is spearheaded by a dynamic duo. Shreya Singh serves as the CEO and primary architect of the vision and scaling strategies. Devesh Singh is the Managing Director and the technical force driving the core architecture and integration.
+The strategic direction is spearheaded by a dynamic duo. Shreya Singh serves as the CEO and primary architect of the vision and scaling strategies. Devesh Singh is the 𝙵𝚘𝚞𝚍𝚎𝚛 & Managing Director and the technical force driving the core architecture and integration. Whereas Ahaan Singh(Co-Founder) gives his best Contribution with Devesh & whole Team DSR in making DBMS & Ai's data Training. 
 ​Core Capabilities and Innovations:
 The platform distinguishes itself through a suite of integrated tools designed for utility and entertainment. It features high-performance conversational engines with voice synthesis and real-time response capabilities. The multi-functional utility suite includes dynamic PDF solutions for generators and editors, and creative tools like FaceTalk in 𝕯𝖊𝖘𝖍 𝐀𝖎 Pro which isn't currently in top Ai of today's market But You'll get in Our Aí.
 ​Interactive Entertainment and API:
