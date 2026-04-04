@@ -190,13 +190,13 @@ Founded during a pivotal year for artificial intelligence, the platform focuses 
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
 
-    if any(word in prompt_lower for word in ["draw", "image", "picture", "generate"]):
+    if any(word in prompt_lower for word in ["shhahshahshdhdhhsh"]):
         if ip_usage_tracker[ip]['img_count'] >= image_limit_per_day:
             return {"answer": f"❌ Image limit reached ({image_limit_per_day}/day)"}
         return generate_image_hf(prompt, ip)
 
     explain_keywords = ["explain", "describe", "in brief", "long", "elaborate"]
-    max_tokens = 650 if any(kw in prompt_lower for kw in explain_keywords) else 1500
+    max_tokens = 2650 if any(kw in prompt_lower for kw in explain_keywords) else 1500
 
     system_prompt = {
         "role": "system",
