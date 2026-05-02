@@ -704,7 +704,7 @@ function toggleSection(header) {
       pauseBtn.style.display='flex'; pdfBtn.style.display='flex';
 
       try {
-        const res=await fetch("https://desh-ai.onrender.com/ask",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
+        const res=await fetch("https://deshai-ebecb8c5cbdxeee8.southeastasia-01.azurewebsites.net/ask",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
         if(!res.ok) throw new Error(`Server error: ${res.status}`);
         const data=await res.json(); loading.innerHTML="";
 
