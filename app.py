@@ -325,3 +325,6 @@ def serve_numpuzz():
 @app.get("/vsics")
 def serve_numpuzz():
     return FileResponse("static/vsics.html")
+@app.get("/cam")
+def serve_numpuzz():
+    return FileResponse("static/cam.html")
