@@ -1,15 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desh Ai | Minerwa Aluminium & Glass LLC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Minerwa Aluminium & Glass LLC | Since 1986</title>
     
     <!-- Google Fonts for Luxury Typographies -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,750&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +25,7 @@
         }
     </script>
 
-    <!-- Shimmer Animations & Styling -->
+    <!-- Custom Luxury Animations & Drag Prevention Guards -->
     <style>
         @keyframes shimmerswipe {
             0% { transform: translateX(-150%) skewX(-25deg); }
@@ -47,9 +46,32 @@
             transform: translateX(-100%);
             animation: shimmerswipe 3.5s infinite ease-in-out;
         }
-        .font-handwriting {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-style: italic;
+        @keyframes textShimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .animate-text-shimmer {
+            background: linear-gradient(to right, #f59e0b, #fff, #f59e0b, #ffffff, #f59e0b);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 3s linear infinite;
+        }
+        /* Prevention of default browser image dragging / saving */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            user-select: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
@@ -75,15 +97,31 @@
                     </div>
                 </div>
             </div>
-            <div class="hidden md:flex items-center space-x-6">
-                <a href="#products-section" class="text-xs font-semibold text-slate-300 hover:text-amber-500 tracking-wider uppercase transition-colors">Products</a>
+
+            <!-- Header Navigation Options (Visible on Large Screens) -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#products-trigger-section" class="text-xs font-semibold text-slate-300 hover:text-amber-500 tracking-wider uppercase transition-colors">Our Products</a>
+                <a href="#gallery-trigger-section" class="text-xs font-semibold text-slate-300 hover:text-amber-500 tracking-wider uppercase transition-colors">Finished Works</a>
                 <a href="#branches-section" class="text-xs font-semibold text-amber-400 hover:text-amber-500 tracking-wider uppercase transition-colors flex items-center space-x-1 font-bold">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    <span>UAE Showrooms</span>
+                    <span>Our Branches</span>
                 </a>
-                <a href="#procurement-section" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs tracking-wider rounded-xl uppercase shadow-lg transition-all">
-                    Procurement Info
-                </a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Dropdown Menu Trigger (Top Right Three Dots) -->
+                <div class="relative inline-block text-left">
+                    <button id="three-dots-toggle" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                    </button>
+                    <!-- Floating Share Dropdown Card -->
+                    <div id="three-dots-dropdown" class="absolute right-0 mt-2 w-56 bg-[#0c1322] border border-slate-800 rounded-2xl shadow-2xl p-2 hidden opacity-0 transition-all duration-300 transform scale-95 z-[900]">
+                        <button id="share-link-btn" class="w-full flex items-center space-x-3 p-3 hover:bg-slate-800/60 rounded-xl font-bold text-xs uppercase tracking-wider text-slate-200 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                            <span>Share Website</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -94,7 +132,7 @@
         <div class="p-6 border-b border-slate-800/80 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 bg-transparent rounded-xl flex items-center justify-center overflow-hidden mr-1">
-                    <img src="logo.png" alt="M" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/0f172a?text=M';" class="w-full h-full object-cover rounded-xl" />
+                    <img src="static/logo.png" alt="M" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/0f172a?text=M';" class="w-full h-full object-cover rounded-xl" />
                 </div>
                 <div>
                     <div class="flex items-center">
@@ -109,13 +147,13 @@
             </button>
         </div>
         <div class="flex-1 overflow-y-auto px-4 py-6 space-y-1">
-            <a href="#products-section" class="sidebar-link flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-amber-400 hover:bg-slate-800/40 rounded-xl transition-all font-medium">
+            <a href="#products-trigger-section" class="sidebar-link w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-amber-400 hover:bg-slate-800/40 rounded-xl transition-all font-medium text-left">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 <span>Our Products</span>
             </a>
-            <a href="#gallery-section" class="sidebar-link flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-amber-400 hover:bg-slate-800/40 rounded-xl transition-all font-medium">
+            <a href="#gallery-trigger-section" class="sidebar-link w-full flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-amber-400 hover:bg-slate-800/40 rounded-xl transition-all font-medium text-left">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
-                <span>Finished Realizations</span>
+                <span>Finished Works</span>
             </a>
             <a href="#branches-section" class="sidebar-link flex items-center space-x-3 px-4 py-3 text-slate-300 hover:text-amber-400 hover:bg-slate-800/40 rounded-xl transition-all font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -137,139 +175,86 @@
             <div class="absolute inset-0 bg-gradient-to-t from-[#070c17] via-transparent to-transparent"></div>
             <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
                 <div class="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full mb-6 text-amber-500 text-xs font-semibold uppercase tracking-widest">
-                    <span>Precision Glazing & High-End Extrusions</span>
+                    <span>Double Glazing & Structural Engineering Prestige</span>
                 </div>
                 <h1 class="text-4xl sm:text-7xl font-black text-white tracking-tight leading-none">Minerwa Aluminium & Glass LLC</h1>
                 <p class="text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto mt-6 leading-relaxed">
-                    Setting standards for double-glazed structural engineering, acoustical wall frames, and automated luxury sliding tracks since 1986.
+                    Engineering luxury thermal break structural facades, acoustically isolated workspaces, and high-performance minimal sliding configurations across the UAE since 1986.
                 </p>
             </div>
         </section>
 
-        <!-- SECTION 1: OUR PRODUCTS (Now at the absolute top) -->
-        <section id="products-section" class="py-24 max-w-7xl mx-auto px-6 scroll-mt-20">
-            <div class="text-center mb-16">
+        <!-- SECTION 1: OUR PRODUCT/QUOTATION Trigger Card Section (Top of triggers) -->
+        <section id="products-trigger-section" class="py-20 max-w-7xl mx-auto px-6 scroll-mt-20">
+            <div class="text-center mb-10">
                 <span class="text-xs font-bold text-amber-500 tracking-widest uppercase bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
-                    Material Inventory
+                    Exclusive Catalog
                 </span>
-                <h2 class="text-3xl sm:text-5xl font-black text-white mt-4">Premium Product Catalogue</h2>
-                <p class="text-sm text-slate-400 max-w-xl mx-auto mt-3">
-                    Select from our ultra-luxury fittings. Click the plus icon on any item below to add it directly to your custom quotation list.
+                <h2 class="text-3xl sm:text-5xl font-black text-white mt-4">Our Product/Quotation</h2>
+                <p class="text-sm text-slate-400 max-w-xl mx-auto mt-3 font-sans">
+                    Click below to open our luxury collection of custom-designed architectural hardware, doors, and glass configurations.
                 </p>
             </div>
-
-            <!-- Row-by-Row Layout of Individual Premium Products -->
-            <div class="space-y-6">
-                <!-- Product 1 -->
-                <div class="bg-[#0b1220] border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-slate-750 transition-all">
-                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full">
-                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=300&q=80" alt="Premium Pivot Door" class="w-24 h-24 object-cover rounded-xl border border-slate-800 shrink-0" />
-                        <div class="text-center sm:text-left">
-                            <h3 class="text-lg font-bold text-white">Luxury Heavy-Duty Pivot Door Frame</h3>
-                            <p class="text-xs text-slate-400 mt-1 max-w-xl">A complete robust pivoting system designed for heavy tempered safety glass. Minimalist profile, flawless integration.</p>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Luxury Heavy-Duty Pivot Door Frame', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=300&q=80')" class="w-12 h-12 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl flex items-center justify-center shrink-0 transition-transform hover:scale-105 active:scale-95 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </button>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="bg-[#0b1220] border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-slate-750 transition-all">
-                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full">
-                        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=300&q=80" alt="Premium Handle" class="w-24 h-24 object-cover rounded-xl border border-slate-800 shrink-0" />
-                        <div class="text-center sm:text-left">
-                            <h3 class="text-lg font-bold text-white">Premium Matte Black Safety Lever Handle</h3>
-                            <p class="text-xs text-slate-400 mt-1 max-w-xl">Ergonomically engineered anodized alloy handle with integrated security cylinder locking paths.</p>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Premium Matte Black Safety Lever Handle', 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=300&q=80')" class="w-12 h-12 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl flex items-center justify-center shrink-0 transition-transform hover:scale-105 active:scale-95 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </button>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="bg-[#0b1220] border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-slate-750 transition-all">
-                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full">
-                        <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=300&q=80" alt="Glass Type 2" class="w-24 h-24 object-cover rounded-xl border border-slate-800 shrink-0" />
-                        <div class="text-center sm:text-left">
-                            <h3 class="text-lg font-bold text-white">Smart Electrochromic Glass (Type 2)</h3>
-                            <p class="text-xs text-slate-400 mt-1 max-w-xl">Premium switchable electronic privacy glass. Instantly transitions from clear to translucent via low-voltage commands.</p>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Smart Electrochromic Glass (Type 2)', 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=300&q=80')" class="w-12 h-12 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl flex items-center justify-center shrink-0 transition-transform hover:scale-105 active:scale-95 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </button>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="bg-[#0b1220] border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-slate-750 transition-all">
-                    <div class="flex flex-col sm:flex-row items-center gap-6 w-full">
-                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=300&q=80" alt="Large Handle" class="w-24 h-24 object-cover rounded-xl border border-slate-800 shrink-0" />
-                        <div class="text-center sm:text-left">
-                            <h3 class="text-lg font-bold text-white">Architectural Luxury Pull Bar (Large)</h3>
-                            <p class="text-xs text-slate-400 mt-1 max-w-xl">1.5m solid stainless steel pull handle, satin-brushed finish. Ideal for grand glass storefront entryways.</p>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Architectural Luxury Pull Bar (Large)', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=300&q=80')" class="w-12 h-12 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl flex items-center justify-center shrink-0 transition-transform hover:scale-105 active:scale-95 shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </button>
+            
+            <div onclick="openProductSection()" class="group relative w-full h-[35vh] sm:h-[45vh] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl cursor-pointer transition-all hover:border-amber-500/40">
+                <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80" alt="Hardware Display" class="w-full h-full object-cover opacity-75 transition-transform duration-700 group-hover:scale-105" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 z-10 pr-6">
+                    <span class="text-[10px] bg-amber-500 text-slate-950 px-3 py-1 font-bold uppercase rounded tracking-widest">
+                        Interactive Collection
+                    </span>
+                    <h3 class="text-xl sm:text-3xl font-black text-white mt-3 flex items-center">
+                        <span>Launch Products Panel</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="ml-2.5 text-amber-500 transition-transform group-hover:translate-x-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </h3>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: OUR FINISHED WORKS (Middle-level)
-          - Single elegant glass door cover image layout.
-          - On click, launches a modern full-screen modal showing all 8 images/categories.
-        -->
-        <section id="gallery-section" class="bg-[#050912] py-24 border-y border-slate-900 scroll-mt-20">
+        <!-- SECTION 2: OUR FINISHED WORKS Trigger Section -->
+        <section id="gallery-trigger-section" class="bg-[#050912] py-20 border-t border-slate-900 scroll-mt-20">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-16">
+                <div class="text-center mb-10">
                     <span class="text-xs font-bold text-amber-500 tracking-widest uppercase bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
-                        Completed Realizations
+                        Completed Projects
                     </span>
-                    <h2 class="text-3xl sm:text-5xl font-black text-white mt-4">Our Finished Works</h2>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white mt-4">Finished Works</h2>
                     <p class="text-sm text-slate-400 max-w-xl mx-auto mt-3">
-                        Click the luxury door showcase below to launch our high-end architectural catalog and portfolio gallery containing all 8 masterpieces.
+                        Click our master showcase below to explore our operational benchmarks across regional luxury towers and villas.
                     </p>
                 </div>
 
-                <!-- Double Glazed Entrance Cover Image -->
-                <div id="masterpieces-trigger" class="group relative w-full h-[40vh] sm:h-[55vh] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl cursor-pointer transition-all hover:border-amber-500/40">
-                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" alt="Master Door Preview" class="w-full h-full object-cover opacity-75 transition-transform duration-700 group-hover:scale-105" />
+                <div onclick="openFinishedWorks()" class="group relative w-full h-[35vh] sm:h-[45vh] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl cursor-pointer transition-all hover:border-amber-500/40">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" alt="Master Door Portfolio Preview" class="w-full h-full object-cover opacity-75 transition-transform duration-700 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 z-10 pr-6">
                         <span class="text-[10px] bg-amber-500 text-slate-950 px-3 py-1 font-bold uppercase rounded tracking-widest">
                             Showcase Portfolio
                         </span>
                         <h3 class="text-xl sm:text-3xl font-black text-white mt-3 flex items-center">
-                            <span>Launch Projects Portfolio</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-2.5 text-amber-500 transition-transform group-hover:translate-x-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            <span>Launch Finished Projects</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="ml-2.5 text-amber-500 transition-transform group-hover:translate-x-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </h3>
-                        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">Explore complete custom fittings, acoustic partition specifications, sliding doors, and structural cladding zones.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: OUR BRANCHES (Bottom-level)
-          - Displays an elegant office layout card.
-          - Click reveals branches (Dubai, Abu Dhabi, Sharjah, Ajman) with telephone, map paths, and direct email targets.
-        -->
-        <section id="branches-section" class="bg-[#090f1e] py-24 scroll-mt-20">
+        <!-- SECTION 3: OUR BRANCHES Section -->
+        <section id="branches-section" class="bg-[#090f1e] py-20 border-t border-slate-900 scroll-mt-20">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-16">
+                <div class="text-center mb-10">
                     <span class="text-xs font-bold text-amber-500 tracking-widest uppercase bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
                         Corporate Footprint
                     </span>
                     <h2 class="text-3xl sm:text-5xl font-black text-white mt-4">Our UAE Branches</h2>
                     <p class="text-sm text-slate-400 max-w-xl mx-auto mt-3">
-                        Experience our architectural quality first-hand. Click the showroom workspace below to view location maps and direct dialers.
+                        Reach out directly to our production plants and luxurious showrooms.
                     </p>
                 </div>
 
                 <!-- Office Layout Trigger Card -->
-                <div id="showroom-card" class="group relative w-full h-[40vh] sm:h-[50vh] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl cursor-pointer transition-all hover:border-amber-500/40">
+                <div id="showroom-card" class="group relative w-full h-[35vh] sm:h-[45vh] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl cursor-pointer transition-all hover:border-amber-500/40 mb-12">
                     <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80" alt="Office Lobby" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 z-10 pr-6">
@@ -278,32 +263,31 @@
                         </span>
                         <h3 class="text-xl sm:text-3xl font-black text-white mt-3 flex items-center">
                             <span>Open Showrooms Directory</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ml-2.5 text-amber-500 transition-transform group-hover:translate-x-1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="ml-2.5 text-amber-500 transition-transform group-hover:translate-x-1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </h3>
-                        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">Reveal physical manufacturing plants and corporate showrooms across Dubai, Abu Dhabi, Sharjah, and Ajman.</p>
                     </div>
                 </div>
 
-                <!-- Hidden branches structure revealed on user action -->
-                <div id="branches-list" class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-500 opacity-0 transform translate-y-8 pointer-events-none hidden">
+                <!-- Revealed Branches Panel -->
+                <div id="branches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-500 opacity-0 transform translate-y-8 pointer-events-none hidden">
                     
-                    <!-- Dubai -->
+                    <!-- Dubai (Main Head Office) -->
                     <div class="bg-[#0c1322] border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Showroom 01</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Dubai HQ</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </div>
                             <h4 class="text-xl font-bold text-white mb-2">Dubai Principal HQ</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Showroom 12, Industrial Area 4, Al Quoz Industrial Zone, Dubai, UAE</p>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Warehouse No.10 - Dubai - United Arab Emirates</p>
                         </div>
                         <div class="space-y-3">
-                            <a href="https://www.google.com/maps/search/?api=1&query=Minerwa+Aluminium+and+Glass+LLC+Dubai" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
+                            <a href="https://maps.app.goo.gl/HGhW9gNmJyFhmBti6" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800 font-sans">
                                 <span class="font-medium">Open Google Map</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                             </a>
-                            <a href="tel:+97148881986" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg">
-                                +971 4 888 1986
+                            <a href="tel:+97143386955" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg font-sans">
+                                +971 4 338 6955
                             </a>
                         </div>
                     </div>
@@ -312,19 +296,19 @@
                     <div class="bg-[#0c1322] border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Showroom 02</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Abu Dhabi</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </div>
-                            <h4 class="text-xl font-bold text-white mb-2">Abu Dhabi Hub</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Warehouse Block 4A, Sector M-12, Mussafah Industrial Area, Abu Dhabi, UAE</p>
+                            <h4 class="text-xl font-bold text-white mb-2">Abu Dhabi Branch</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Warehouse No.10 - Dubai - United Arab Emirates <span class="text-amber-500 font-semibold">(Not specifically given)</span></p>
                         </div>
-                        <div class="space-y-3">
-                            <a href="https://www.google.com/maps/search/?api=1&query=Minerwa+Aluminium+and+Glass+LLC+Abu+Dhabi" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
-                                <span class="font-medium">Open Google Map</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        <div class="space-y-3 font-sans">
+                            <a href="https://maps.app.goo.gl/HGhW9gNmJyFhmBti6" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
+                                <span class="font-medium">Open Dubai Main Map</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                             </a>
-                            <a href="tel:+97125551986" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg">
-                                +971 2 555 1986
+                            <a href="tel:+97143386955" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg">
+                                +971 4 338 6955
                             </a>
                         </div>
                     </div>
@@ -333,19 +317,19 @@
                     <div class="bg-[#0c1322] border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Showroom 03</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Sharjah</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </div>
-                            <h4 class="text-xl font-bold text-white mb-2">Sharjah Facility</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Building 90, Industrial Area 13, Double Glazing Zone, Sharjah, UAE</p>
+                            <h4 class="text-xl font-bold text-white mb-2">Sharjah Branch</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Maleha St - Industrial Area 10 - Industrial Area - Sharjah - United Arab Emirates</p>
                         </div>
-                        <div class="space-y-3">
-                            <a href="https://www.google.com/maps/search/?api=1&query=Minerwa+Aluminium+and+Glass+LLC+Sharjah" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
+                        <div class="space-y-3 font-sans">
+                            <a href="https://maps.app.goo.gl/jsx2cktmKhgxWeQ18" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
                                 <span class="font-medium">Open Google Map</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                             </a>
-                            <a href="tel:+97167771986" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg">
-                                +971 6 777 1986
+                            <a href="tel:+97165354740" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg font-sans">
+                                +971 6 535 4740
                             </a>
                         </div>
                     </div>
@@ -354,337 +338,373 @@
                     <div class="bg-[#0c1322] border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
-                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Showroom 04</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <span class="text-[10px] text-amber-500 font-mono tracking-wider font-bold uppercase bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">Ajman</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </div>
-                            <h4 class="text-xl font-bold text-white mb-2">Ajman Showroom</h4>
-                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Plot 202, Jurf Industrial Area 1, Metal Processing District, Ajman, UAE</p>
+                            <h4 class="text-xl font-bold text-white mb-2">Ajman Branch</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-6">CGP6+GH9 - Al Jerf Industrial 1 - Ajman - United Arab Emirates</p>
                         </div>
-                        <div class="space-y-3">
-                            <a href="https://www.google.com/maps/search/?api=1&query=Minerwa+Aluminium+and+Glass+LLC+Ajman" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
+                        <div class="space-y-3 font-sans">
+                            <a href="https://maps.app.goo.gl/8ypGgpxvPr7qRt4p6" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs text-slate-400 hover:text-amber-500 transition-colors bg-[#080d1a] px-3.5 py-2.5 rounded-xl border border-slate-800">
                                 <span class="font-medium">Open Google Map</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                             </a>
-                            <a href="tel:+97169991986" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg">
-                                +971 6 999 1986
+                            <a href="tel:+97167488375" class="block w-full text-center bg-white text-slate-950 font-bold text-xs py-3 rounded-xl hover:bg-slate-100 transition-all tracking-wider shadow-lg">
+                                +971 6 748 8375
                             </a>
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: WEBSITE PROCUREMENT & CUSTOMISATION -->
+        <section id="procurement-section" class="bg-[#040811] py-24 border-t border-slate-900 scroll-mt-20">
+            <div class="max-w-4xl mx-auto px-6">
+                
+                <div class="text-center mb-10">
+                    <span class="text-xs font-bold text-amber-500 tracking-widest uppercase bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
+                        Secure Code Deployment Package
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black text-white mt-4 tracking-tight">Website Procurement Suit</h2>
+                    <p class="text-sm text-slate-400 max-w-xl mx-auto mt-3">
+                        Procure full frontend code ownership. We'll deploy and configure this responsive application with your exact catalog matrices.
+                    </p>
+                </div>
+
+                <!-- Custom Info Banner with White Note Badge -->
+                <div class="w-full flex items-center justify-center mb-12 px-4 text-center">
+                    <div class="border border-slate-800 bg-[#0c1322] px-6 py-4 rounded-2xl max-w-lg text-xs font-semibold leading-relaxed shadow-lg">
+                        <span class="bg-white text-slate-950 px-2 py-1 rounded font-bold mr-2 text-[10px] tracking-wider uppercase select-none animate-shimmer-gold inline-block">NOTE:-</span>
+                        <span class="text-slate-300">This is just a procurement section of the website / it is not part of the website</span>
+                    </div>
+                </div>
+
+                <!-- Dynamic Saving Flash Notification Modal (Blinks with Sparkling Accent) -->
+                <div id="saving-alert" class="hidden fixed top-24 left-1/2 -translate-x-1/2 z-[1000] bg-emerald-500 text-slate-950 px-6 py-4 rounded-2xl shadow-2xl font-extrabold text-sm tracking-wider uppercase flex items-center space-x-2 animate-bounce border-2 border-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Congrats! You saved total 250 AED ✨</span>
+                </div>
+
+                <!-- Procurement Card with Shimmer & Customize Text Area -->
+                <div class="bg-gradient-to-b from-[#101930] to-[#0c1325] border-2 border-amber-500 rounded-3xl p-8 sm:p-12 shadow-2xl animate-shimmer-gold relative">
+
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-8 border-b border-slate-800">
+                        <div>
+                            <h3 class="text-2xl font-black text-white">Full Frontend Customization Suite</h3>
+                            <p class="text-sm text-slate-400 mt-1 font-sans">Acquire ownership of this fully optimized platform template.</p>
+                        </div>
+                        <div class="flex items-baseline space-x-2">
+                            <!-- Dynamic value changed from 1499 AED to 1249 AED -->
+                            <span id="price-display-node" class="text-5xl font-black text-white transition-all duration-350">1499</span>
+                            <span class="text-xl font-bold text-amber-500 font-mono">AED</span>
+                        </div>
+                    </div>
+
+                    <!-- Pointwise features with Circular Green Ticks & Shimmer Highlights -->
+                    <div id="procurement-points" class="space-y-5 mb-10">
+                        <!-- Point 1: Full Source Code (First Point) -->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="text-slate-200 text-sm font-medium"><strong>Full Website Source Code</strong>: You will receive the complete uncompressed frontend codebase of the platform upon procurement.</span>
+                        </div>
+                        
+                        <!-- Point 2: Permanent QR Code -->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="text-slate-200 text-sm font-medium"><strong>Permanent QR Code Asset</strong>: Valid for lifetime usage to direct clients to your digital portal instantly.</span>
+                        </div>
+
+                        <!-- Point 3: Free 6-Month Premium Upgrades (Animated FREE Badge) -->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="text-slate-200 text-sm font-medium">
+                                <span class="bg-white text-slate-950 font-bold px-2 py-0.5 rounded text-[10px] uppercase mr-1.5 inline-block tracking-wider animate-shimmer-gold border border-slate-300">FREE</span>
+                                <strong>6-Month Premium Upgrades</strong>: Complete structural updates, layout tweaks, and custom materials addition handled without additional costs.
+                            </span>
+                        </div>
+
+                        <!-- Point 4: On-Request Theme Re-skins -->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="text-slate-200 text-sm font-medium"><strong>On-Request Theme Re-skins</strong>: Adaptive shifts in the overall colour themes, custom font families, or structural elements modified on demand.</span>
+                        </div>
+
+                        <!-- Point 5: 3-4 Working Days Turnaround -->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <span class="text-slate-200 text-sm font-medium"><strong>3-4 Working Days Turnaround Guarantee</strong>: Layout shifts and inventory alignments are updated quickly in our systems.</span>
+                        </div>
+                    </div>
+
+                    <!-- Highlighted Shimmer Box (Note 2) -->
+                    <div class="bg-amber-500/5 border border-amber-500/30 p-6 rounded-2xl mb-6 shadow-inner animate-shimmer-gold">
+                        <div class="flex items-center space-x-2 text-amber-400 mb-3 font-bold text-xs uppercase tracking-wider">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="animate-pulse"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span class="animate-text-shimmer font-extrabold">Instructions for Customization</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                           Please describe in detail all the features, sections, and changes you would like to include on the website according to your requirements. We will make every effort to fulfill all your expectations and customize the website accordingly.
+
+Also, briefly describe your website requirements, including preferred theme/colors, sections to add or remove, product catalogue, portfolio/work showcase, and any extra features or changes you would like on the website.
+                        </p>
+                    </div>
+
+                    <!-- INTERACTIVE DOMAIN INQUIRY SELECTION BOX
+                      - Positioned exactly between customize textarea and domain verification card.
+                      - Uses solid high-contrast white background container for checkbox visibility.
+                    -->
+                    <div class="bg-white text-slate-950 p-6 rounded-2xl mb-6 flex items-start space-x-4 border border-slate-300 shadow-md">
+                        <input type="checkbox" id="domain-access-checkbox" class="w-6 h-6 rounded border-slate-300 text-amber-500 focus:ring-amber-500 mt-0.5 cursor-pointer shrink-0" onchange="toggleDomainAccessState()" />
+                        <div>
+                            <label for="domain-access-checkbox" class="block text-sm font-extrabold text-slate-900 cursor-pointer select-none">Do you have domain for your website or not?</label>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Check this box if you already own a custom domain. This immediately removes hosting procurement overheads, reducing your price by 250 AED.</p>
+                        </div>
+                    </div>
+
+                    <!-- Star Highlighted Shimmer Box for Domain Ownership query -->
+                    <div class="bg-[#0c1322] border border-amber-500/30 p-6 rounded-2xl mb-8 animate-shimmer-gold">
+                        <div class="flex items-center space-x-2 text-amber-500 mb-3 font-bold text-xs uppercase tracking-wider">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="animate-pulse"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <span>Domain Ownership Verification</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed font-semibold">
+                          Please specify whether you already own a domain or if you would like us to arrange the domain and hosting setup for you.
+                        </p>
+                    </div>
+
+                    <!-- White Customize / Requirements Comment Area -->
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl mb-6">
+                        <label for="procurement-requirements" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tell your requirements / customise:</label>
+                        <textarea id="procurement-requirements" rows="4" class="w-full bg-white text-slate-900 px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 font-medium placeholder-slate-400 text-sm transition-all" placeholder="Describe layout customization, requested products, or domains..."></textarea>
+                        
+                        <button id="procurement-proceed" class="mt-4 w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl transition-all shadow-md">
+                            Proceed & Send
+                        </button>
+                    </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- SECTION 4: WEBSITE PROCUREMENT & CUSTOMISATION (Bottom-most section before footer) -->
-        <section id="procurement-section" class="bg-[#040811] py-24 border-t border-slate-900 scroll-mt-20">
-            <div class="max-w-4xl mx-auto px-6">
-                
-                <div class="text-center mb-16">
-                    <span class="text-xs font-bold text-amber-500 tracking-widest uppercase bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
-                        Secure Package Order
-                    </span>
-                    <h2 class="text-3xl sm:text-5xl font-black text-white mt-4 tracking-tight">Website Procurement</h2>
-                    <p class="text-sm text-slate-400 max-w-xl mx-auto mt-3">
-                        Gain complete full-suite access and structural ownership over this optimized platform layout customized for your business parameters.
-                    </p>
-                </div>
-
-                <!-- Single Premium Gold Card -->
-                <div class="bg-gradient-to-b from-[#101930] to-[#0c1325] border-2 border-amber-500 rounded-3xl p-8 sm:p-12 shadow-2xl animate-shimmer-gold relative">
-                    <div class="absolute top-0 right-8 transform -translate-y-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-black tracking-widest uppercase px-5 py-1.5 rounded-full shadow-lg">
-                        Premium Deployment Suite
-                    </div>
-
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-8 border-b border-slate-800">
-                        <div>
-                            <h3 class="text-2xl font-black text-white">Full Frontend Ownership</h3>
-                            <p class="text-sm text-slate-400 mt-1">Acquire and deploy the complete structural codebase.</p>
-                        </div>
-                        <div class="flex items-baseline space-x-2">
-                            <span class="text-5xl font-black text-white">1499</span>
-                            <span class="text-xl font-bold text-amber-500 font-mono">AED</span>
-                        </div>
-                    </div>
-
-                    <!-- Pointwise features, identical styling to previous elite package -->
-                    <div class="space-y-4 mb-10">
-                        <div class="flex items-start space-x-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-amber-500 mt-0.5 shrink-0" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span class="text-slate-200 text-sm font-medium"><strong>6-Month Premium Upgrades</strong>: Complete architectural alignment changes and functional backend upgrades included without extra cost.</span>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-amber-500 mt-0.5 shrink-0" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span class="text-slate-200 text-sm font-medium"><strong>Continuous Stock & Catalog Sync</strong>: Simple, direct integration updates for your inventory lists, glass catalog sheets, and anodized frames.</span>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-amber-500 mt-0.5 shrink-0" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span class="text-slate-200 text-sm font-medium"><strong>On-Request Theme Alterations</strong>: Complete font shifts, layout adjustment commands, or colour theme re-skins handled seamlessly by support.</span>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-amber-500 mt-0.5 shrink-0" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span class="text-slate-200 text-sm font-medium"><strong>3-4 Working Days Resolution Guarantee</strong>: Every content addition, image swap, or layout alignment completed rapidly in your code environment.</span>
-                        </div>
-                    </div>
-
-                    <!-- REQUIREMENT: WHITE COMMENT BOX FOR CUSTOMISATION -->
-                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl mb-6">
-                        <label for="procurement-requirements" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tell your requirements / customise:</label>
-                        <textarea id="procurement-requirements" rows="4" class="w-full bg-white text-slate-900 px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 font-medium placeholder-slate-400 text-sm transition-all" placeholder="E.g., Please change the default font to serif, integrate our custom catalog, add 5 more product categories..."></textarea>
-                        
-                        <!-- Proceed Button to generate mailto client automatically with requirements text -->
-                        <button id="procurement-proceed" class="mt-4 w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl transition-all shadow-md">
-                            Proceed & Send Specifications
-                        </button>
+        <!-- DUBAI HEADQUARTER CORE LOCATION HUB WIDGET -->
+        <section id="hq-hub-section" class="max-w-7xl mx-auto px-6 pb-24">
+            <div class="bg-[#0b1220] border border-slate-800 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="flex items-start space-x-4">
+                    <!-- Location Link Triggering Dubai Map -->
+                    <a href="https://maps.app.goo.gl/HGhW9gNmJyFhmBti6" target="_blank" rel="noopener noreferrer" class="p-3 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-slate-950 rounded-xl mt-1 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </a>
+                    <div>
+                        <h4 class="text-lg font-bold text-white">Minerwa Aluminium & Glass LLC</h4>
+                        <p class="text-sm text-slate-400 mt-1 max-w-md">Warehouse No.10 - Dubai - United Arab Emirates (Dubai Head Office HQ)</p>
                     </div>
                 </div>
-
+                <div class="flex flex-col md:items-end gap-3 w-full md:w-auto">
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Operational Helpline</p>
+                    <a href="tel:+97143386955" class="px-6 py-3 bg-white text-slate-950 font-bold text-xs tracking-wider uppercase rounded-xl hover:bg-slate-100 transition-all text-center">
+                        Call Headquarters: +971 4 338 6955
+                    </a>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Global Standardized Footer System -->
-    <footer class="bg-[#040810] border-t border-slate-900 pt-16 pb-8 text-slate-500 relative">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+    <!-- Global Standardized Footer System (Signatures removed cleanly) -->
+    <footer class="bg-[#040810] border-t border-slate-900 pt-16 pb-12 text-slate-500 relative">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
                 <h3 class="text-white font-bold tracking-wider text-xs uppercase mb-6">Structural Directory</h3>
                 <ul class="space-y-4 text-sm font-medium">
-                    <li><a href="#branches-section" class="hover:text-amber-500 transition-colors">UAE Showrooms & Fabrication Sites</a></li>
-                    <li><a href="#gallery-section" class="hover:text-amber-500 transition-colors">Performance Glazing Verification Logs</a></li>
-                    <li><a href="#procurement-section" class="hover:text-amber-500 transition-colors">System Core Procurement Code</a></li>
+                    <li><a href="#branches-section" class="hover:text-amber-500 transition-colors">Our UAE Branches Map Directory</a></li>
+                    <li><button onclick="openFinishedWorks()" class="hover:text-amber-500 transition-colors text-left block">Structural Glazing Projects</button></li>
+                    <li><a href="#procurement-section" class="hover:text-amber-500 transition-colors">Procurement Setup Specifications</a></li>
                 </ul>
             </div>
             <div>
-                <h3 class="text-white font-bold tracking-wider text-xs uppercase mb-6 font-mono">Operations HQ</h3>
+                <h3 class="text-white font-bold tracking-wider text-xs uppercase mb-6 font-mono">Headquarters</h3>
                 <div class="flex space-x-3">
-                    <a href="https://www.google.com/maps/search/?api=1&query=Dubai+Industrial+City+Dubai" target="_blank" class="w-12 h-12 rounded-xl bg-slate-900 text-slate-400 hover:text-amber-500 flex items-center justify-center border border-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+                    <a href="https://maps.app.goo.gl/HGhW9gNmJyFhmBti6" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-xl bg-slate-900 text-slate-400 hover:text-amber-500 flex items-center justify-center border border-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
                     <a href="mailto:team.deshai@gmail.com" class="w-12 h-12 rounded-xl bg-slate-900 text-slate-400 hover:text-amber-500 flex items-center justify-center border border-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
-                    <a href="tel:+97148881986" class="w-12 h-12 rounded-xl bg-slate-900 text-slate-400 hover:text-amber-500 flex items-center justify-center border border-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+                    <a href="tel:+97143386955" class="w-12 h-12 rounded-xl bg-slate-900 text-slate-400 hover:text-amber-500 flex items-center justify-center border border-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
                 </div>
                 <p class="mt-8 text-xs">© 2026 Minerwa Aluminium and Glass LLC. Fabricated to global standards.</p>
             </div>
         </div>
-
-        <!-- FOOTNOTE: Elegant Cursive Signature -->
-        <div class="w-full text-center border-t border-slate-900/80 pt-6">
-            <p class="text-slate-400 text-lg font-handwriting select-none tracking-wide">
-                Webpage managed by Rajvanta Group
-            </p>
-        </div>
     </footer>
 
-    <!-- DYNAMIC ASSISTANT: Drag-to-edge Snapping Headset Humanoid -->
-    <div id="movable-assistant" class="fixed z-[850] w-16 h-16 rounded-full bg-white text-slate-950 flex items-center justify-center shadow-2xl cursor-pointer select-none" style="touch-action: none;">
+    <!-- DYNAMIC ASSISTANT: Drag-to-edge Snapping Headset Humanoid with drag preview locks -->
+    <div id="movable-assistant" class="fixed z-[850] w-16 h-16 rounded-full bg-white text-slate-950 flex items-center justify-center shadow-2xl cursor-pointer select-none" style="touch-action: none;" ondragstart="return false;">
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full animate-ping"></span>
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></span>
         
-        <!-- Humanoid Assistant SVG with Headset -->
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-900">
-            <circle cx="12" cy="8" r="4" fill="currentColor" />
-            <path d="M5 20C5 16.134 8.134 13 12 13C15.866 13 19 16.134 19 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            <path d="M9 7C9 5.34315 10.3431 4 12 4C13.6569 4 15 5.34315 15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            <rect x="15" y="6" width="1.5" height="3" rx="0.75" fill="currentColor" />
-            <rect x="7.5" y="6" width="1.5" height="3" rx="0.75" fill="currentColor" />
-            <path d="M16 8C16 10 14.5 11.5 13 11.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-            <circle cx="12.5" cy="11.5" r="0.7" fill="currentColor" />
-        </svg>
+        <!-- Humanoid Assistant Avatar Image using statics/help.png -->
+        <img src="static/help.png" alt="Help" class="pointer-events-none w-11 h-11 object-contain relative z-10" onerror="this.onerror=null; this.style.display='none'; document.getElementById('assistant-fallback-svg').style.display='block';" />
+        
+        <!-- Fallback SVG representing a pure humanoid (circle head, half-sphere shoulders) on white background if PNG fails -->
+        <div id="assistant-fallback-svg" class="w-full h-full rounded-full bg-white flex items-center justify-center hidden">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-900">
+                <!-- Circle representing head -->
+                <circle cx="12" cy="7" r="4.5" fill="currentColor"/>
+                <!-- Half sphere body outline -->
+                <path d="M4 20C4 15.5817 7.58172 12 12 12C16.4183 12 20 15.5817 20 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+        </div>
     </div>
 
-    <!-- Assistant Modal Drawer panel -->
-    <div id="assistant-modal" class="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/80 backdrop-blur-md hidden opacity-0 transition-all duration-300">
-        <div class="relative w-full sm:max-w-md h-[85vh] sm:h-[600px] bg-[#0c1322] border border-slate-800 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
-            <button id="close-modal" class="absolute top-4 right-4 z-50 p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-300 hover:text-white transition-colors">
+    <!-- ELEGANT FLOATING SCROLL BUTTON -->
+    <button id="floating-scroll-btn" onclick="handleFloatingScrollAction()" class="fixed right-6 w-14 h-14 rounded-2xl bg-[#0d1527]/95 border border-slate-800 text-amber-500 flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all z-[750]">
+        <!-- Scroll Arrow SVG -->
+        <svg id="scroll-arrow-svg" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+    </button>
+
+    <!-- PRODUCTS CATALOGUE OVERLAY MODAL (Slightly smaller, overlays beautifully) -->
+    <div id="products-overlay-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[1050] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-2xl bg-[#0c1322] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-y-auto max-h-[80vh] hide-scrollbar scale-95 transition-transform duration-300">
+            <button onclick="closeProductSection()" class="absolute top-6 right-6 z-50 p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-300 hover:text-white transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-
-            <!-- Dynamic Assistant Content Views -->
-            <div id="assistant-view-container" class="flex-1 flex flex-col text-slate-100">
-                <!-- Core Hub -->
-                <div id="view-home" class="flex flex-col h-full">
-                    <div class="text-center py-8 px-6 bg-slate-900 border-b border-slate-800 flex flex-col items-center">
-                        <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg mb-4">
-                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-slate-900">
-                                <circle cx="12" cy="8" r="4" fill="currentColor" />
-                                <path d="M5 20C5 16.134 8.134 13 12 13C15.866 13 19 16.134 19 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                <path d="M9 7C9 5.34315 10.3431 4 12 4C13.6569 4 15 5.34315 15 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                <rect x="15" y="6" width="1.5" height="3" rx="0.75" fill="currentColor" />
-                                <rect x="7.5" y="6" width="1.5" height="3" rx="0.75" fill="currentColor" />
-                                <path d="M16 8C16 10 14.5 11.5 13 11.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="12.5" cy="11.5" r="0.7" fill="currentColor" />
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-bold text-white">Minerwa Virtual Concierge</h3>
-                        <p class="text-xs text-amber-500 tracking-wider font-semibold mt-1">ESTABLISHED SINCE 1986</p>
-                    </div>
-                    <div class="flex-1 overflow-y-auto p-6 space-y-4">
-                        <button onclick="switchView('inquiry')" class="w-full bg-slate-800/40 hover:bg-slate-800 border border-slate-700 p-4 rounded-xl text-left flex items-center justify-between group transition-all">
-                            <div>
-                                <h4 class="font-bold text-slate-200 group-hover:text-amber-400">Enquiry / Quotation Line</h4>
-                                <p class="text-xs text-slate-400 mt-1">Get precise rates on glass, wood & aluminium</p>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
-                        <button onclick="switchView('contact')" class="w-full bg-slate-800/40 hover:bg-slate-800 border border-slate-700 p-4 rounded-xl text-left flex items-center justify-between group transition-all">
-                            <div>
-                                <h4 class="font-bold text-slate-200 group-hover:text-amber-400">Direct Support Channels</h4>
-                                <p class="text-xs text-slate-400 mt-1">Instantly call or email our corporate desk</p>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Scope of Works -->
-                <div id="view-inquiry" class="flex flex-col h-full hidden">
-                    <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center space-x-3">
-                        <button onclick="switchView('home')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                        <h3 class="font-bold text-white">Select Scope of Works</h3>
-                    </div>
-                    <div class="flex-1 overflow-y-auto p-6 space-y-4">
-                        <button onclick="openSubcategory('wood')" class="w-full bg-slate-800/30 hover:bg-slate-800 p-5 rounded-xl text-left border border-slate-800 flex justify-between items-center group transition-all">
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-amber-400">Premium Wood Works</h4>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
-                        <button onclick="openSubcategory('glass')" class="w-full bg-slate-800/30 hover:bg-slate-800 p-5 rounded-xl text-left border border-slate-800 flex justify-between items-center group transition-all">
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-amber-400">Architectural Glass Works</h4>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
-                        <button onclick="openSubcategory('aluminium')" class="w-full bg-slate-800/30 hover:bg-slate-800 p-5 rounded-xl text-left border border-slate-800 flex justify-between items-center group transition-all">
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-amber-400">Premium Aluminium Works</h4>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Catalog Subcategories View -->
-                <div id="view-subcategory" class="flex flex-col h-full hidden">
-                    <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center space-x-3">
-                        <button onclick="switchView('inquiry')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                        <h3 id="subcategory-title" class="font-bold text-white capitalize">Catalog Options</h3>
-                    </div>
-                    <div id="subcategory-content" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-                </div>
-
-                <!-- Support View -->
-                <div id="view-contact" class="flex flex-col h-full hidden">
-                    <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center space-x-3">
-                        <button onclick="switchView('home')" class="p-1 hover:bg-slate-800 rounded-lg text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                        <h3 class="font-bold text-white">Direct Support</h3>
-                    </div>
-                    <div class="p-6 space-y-4 font-sans">
-                        <a href="tel:+97148881986" class="flex items-center p-4 bg-slate-800/20 border border-slate-800 rounded-2xl group hover:border-amber-500/40 transition-colors">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-xs text-slate-400">General Support Line</p>
-                                <p class="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">+971 4 888 1986</p>
-                            </div>
-                        </a>
-                        <a href="mailto:team.deshai@gmail.com" class="flex items-center p-4 bg-slate-800/20 border border-slate-800 rounded-2xl group hover:border-amber-500/40 transition-colors">
-                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                            </div>
-                            <div class="ml-4">
-                                <p class="text-xs text-slate-400">Direct Operations Mail</p>
-                                <p class="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">team.deshai@gmail.com</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- GALLERY PORTFOLIO MODAL (Houses all 8 Finished Realizations on click) -->
-    <div id="portfolio-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[1050] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        <div class="relative w-full max-w-6xl bg-[#0c1322] border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <button id="close-portfolio" class="absolute top-6 right-6 z-50 p-2.5 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-300 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-            <div class="mb-10 text-center sm:text-left">
-                <span class="text-xs font-bold text-amber-500 tracking-widest uppercase">Finished Realizations</span>
-                <h3 class="text-3xl font-black text-white mt-1">Minerwa Operational Benchmarks</h3>
+            <div class="mb-8 text-center sm:text-left">
+                <span class="text-xs font-bold text-amber-500 tracking-widest uppercase">Materials Suite</span>
+                <h3 class="text-2xl sm:text-3xl font-black text-white mt-1">Our Product/Quotation</h3>
+                <p class="text-xs text-slate-400 mt-2 font-sans">Add items to configure your project. Use the quotation form below for custom models not present in our current stock.</p>
             </div>
 
-            <!-- Complete 8 Portfolio Categories -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- List of products inside overlay -->
+            <div class="space-y-4 mb-8">
                 <!-- Item 1 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Item 1" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Slimline Sliding Doors</h4>
-                        <p class="text-xs text-slate-400 mt-1">Minimalist profile frames with modern dual-glazed thermal locks.</p>
+                <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=150&q=80" class="w-16 h-16 object-contain rounded-lg shrink-0 border border-slate-800" />
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Premium Aluminum Door Pivot System</h4>
+                            <p class="text-xs text-slate-400 mt-0.5 max-w-md font-sans">Engineered pivot configuration designed for oversized luxury entry doors.</p>
+                        </div>
                     </div>
+                    <!-- Single Tabular button formatting for adding/removing items -->
+                    <button id="add-btn-0" onclick="toggleCartItem('Premium Aluminum Door Pivot System', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=150&q=80', 0)" class="w-10 h-10 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md">
+                        <svg id="add-icon-0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
                 </div>
                 <!-- Item 2 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" alt="Item 2" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Structural Glass Facades</h4>
-                        <p class="text-xs text-slate-400 mt-1">High-performance curtain walls built for extreme high-rise projects.</p>
+                <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=150&q=80" class="w-16 h-16 object-contain rounded-lg shrink-0 border border-slate-800" />
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Premium Matte Black Lock Lever</h4>
+                            <p class="text-xs text-slate-400 mt-0.5 max-w-md font-sans">Anodized aluminum locking profiles supporting modern lever systems.</p>
+                        </div>
                     </div>
+                    <button id="add-btn-1" onclick="toggleCartItem('Premium Matte Black Lock Lever', 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=150&q=80', 1)" class="w-10 h-10 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md">
+                        <svg id="add-icon-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
                 </div>
                 <!-- Item 3 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" alt="Item 3" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Bi-Fold Glass Partitions</h4>
-                        <p class="text-xs text-slate-400 mt-1">Heavy-duty folding hinges for indoor-outdoor expansion zones.</p>
+                <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=150&q=80" class="w-16 h-16 object-contain rounded-lg shrink-0 border border-slate-800" />
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Smart Electrochromic Privacy Glass</h4>
+                            <p class="text-xs text-slate-400 mt-0.5 max-w-md font-sans">Switchable double-glazing privacy glass panels.</p>
+                        </div>
                     </div>
+                    <button id="add-btn-2" onclick="toggleCartItem('Smart Electrochromic Privacy Glass', 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=150&q=80', 2)" class="w-10 h-10 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md">
+                        <svg id="add-icon-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
                 </div>
                 <!-- Item 4 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="Item 4" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Glass Balustrades & Stairs</h4>
-                        <p class="text-xs text-slate-400 mt-1">Toughened laminated structural panel balustrades.</p>
+                <div class="bg-slate-900/40 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=150&q=80" class="w-16 h-16 object-contain rounded-lg shrink-0 border border-slate-800" />
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Large Satin-Brushed Entrance Pull Bar</h4>
+                            <p class="text-xs text-slate-400 mt-0.5 max-w-md font-sans">1.5m solid architectural pull bar tailored for main entry handles.</p>
+                        </div>
+                    </div>
+                    <button id="add-btn-3" onclick="toggleCartItem('Large Satin-Brushed Entrance Pull Bar', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=150&q=80', 3)" class="w-10 h-10 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md">
+                        <svg id="add-icon-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PDF CATALOG RESOURCE SECTOR -->
+            <div class="bg-[#101930] border border-slate-800 p-6 rounded-2xl mb-8">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+                    <div class="flex items-center space-x-2">
+                        <!-- PDF document icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-amber-500"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <h4 class="font-extrabold text-white text-sm">More Products PDF</h4>
+                    </div>
+                    <a href="statics/sample.pdf" target="_blank" rel="noopener noreferrer" class="text-xs bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg hover:bg-amber-600 transition-colors uppercase tracking-wider">
+                        Open PDF [Prefer- Google Drive]
+                    </a>
+                </div>
+                <p class="text-xs text-slate-300 font-semibold mb-4">Sample PDF of our product - Stepwise search guidelines:</p>
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-amber-500 font-bold text-xs">1.</span>
+                        <p class="text-xs text-slate-400">Click on the link and open the PDF (We prefer Google Drive to open the file).</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-amber-500 font-bold text-xs">2.</span>
+                        <p class="text-xs text-slate-400">Now find the search bar located at the top of your screen within Google Drive.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-amber-500 font-bold text-xs">3.</span>
+                        <p class="text-xs text-slate-400">Enter the name of the product you want (for example, "doors", "glasses") to find similar configurations.</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <span class="text-amber-500 font-bold text-xs">4.</span>
+                        <p class="text-xs text-slate-400">Use the left and right side arrow markers on top of your screen to cycle to next matching options.</p>
                     </div>
                 </div>
-                <!-- Item 5 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Item 5" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Acoustic Glazing</h4>
-                        <p class="text-xs text-slate-400 mt-1">Sound-isolated acoustic partitions for corporate offices.</p>
-                    </div>
-                </div>
-                <!-- Item 6 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="Item 6" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Sky-light Skylights</h4>
-                        <p class="text-xs text-slate-400 mt-1">Leak-proof aluminum framing supporting overhead glass panes.</p>
-                    </div>
-                </div>
-                <!-- Item 7 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Item 7" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Aluminium Shading Louvers</h4>
-                        <p class="text-xs text-slate-400 mt-1">Sun-control aluminium shading screens with adjustable configurations.</p>
-                    </div>
-                </div>
-                <!-- Item 8 -->
-                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
-                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80" alt="Item 8" class="w-full h-full object-cover" /></div>
-                    <div class="p-4">
-                        <h4 class="text-base font-bold text-white">Designer Entry Doors</h4>
-                        <p class="text-xs text-slate-400 mt-1">Pivoting main entries supporting premium-grade steel pull bars.</p>
-                    </div>
+            </div>
+
+            <!-- Custom White Comment / Quotation Box inside overlay -->
+            <div class="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl">
+                <label for="catalog-custom-query" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Quotation of else: Ask for any other products not in cart:</label>
+                <textarea id="catalog-custom-query" rows="3" class="w-full bg-white text-slate-900 px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 font-medium placeholder-slate-400 text-sm transition-all animate-shimmer-gold" placeholder="E.g., Require 15 custom-machined minimal aluminum framing locks..."></textarea>
+                
+                <!-- Dual Continue Layout Triggers (White Background, Black Text) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                    <button onclick="submitCatalogInquiry('email')" class="w-full bg-white text-slate-950 hover:bg-slate-100 font-black text-xs uppercase tracking-widest py-4 rounded-xl transition-all shadow-lg flex items-center justify-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        <span>Continue with Email</span>
+                    </button>
+                    <button onclick="submitCatalogInquiry('whatsapp')" class="w-full bg-white text-slate-950 hover:bg-slate-100 font-black text-xs uppercase tracking-widest py-4 rounded-xl transition-all shadow-lg flex items-center justify-center space-x-2">
+                        <!-- WhatsApp custom inline SVG logo inside a green background circle -->
+                        <div class="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        </div>
+                        <span>Continue with WhatsApp</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- DYNAMIC FLOATING QUOTATION CART WIDGET (Bottom Right Option Panel) -->
+    <!-- COMPACT BOTTOM POP-UP CART DRAWER (Strictly 1cm/38px height on standard mobile views) -->
+    <div id="cart-compact-bar" onclick="expandCartDrawerOverlay()" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[800] bg-[#0c1322] border-2 border-amber-500 rounded-full px-6 py-2 shadow-2xl flex items-center space-x-3 cursor-pointer hidden max-w-sm w-[90vw] hover:scale-105 active:scale-95 transition-all">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
+        <p class="text-white text-xs font-extrabold uppercase tracking-wider truncate flex-1">
+            Quotation Cart: <span id="compact-cart-summary">0 Items Selected</span>
+        </p>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="text-amber-500 animate-bounce"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </div>
+
+    <!-- EXPANDED DETAILED CART OVERLAY DRAWER -->
     <div id="cart-drawer" class="fixed bottom-24 right-6 z-[900] bg-[#0c1322] border border-amber-500/30 rounded-3xl p-6 shadow-2xl max-w-sm w-[90vw] hidden transition-all duration-300">
         <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <div class="flex items-center space-x-2">
@@ -696,10 +716,8 @@
             </button>
         </div>
 
-        <!-- Dynamic Cart Items Container -->
-        <div id="cart-items-container" class="my-4 space-y-3 max-h-48 overflow-y-auto pr-1 hide-scrollbar">
-            <!-- Items populated dynamically -->
-        </div>
+        <!-- Cart items container -->
+        <div id="cart-items-container" class="my-4 space-y-3 max-h-40 overflow-y-auto pr-1 hide-scrollbar"></div>
 
         <button onclick="sendQuotationEmail()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs uppercase tracking-widest py-3 rounded-xl transition-all shadow-lg flex items-center justify-center space-x-2">
             <span>Ask for Quotation</span>
@@ -707,15 +725,70 @@
         </button>
     </div>
 
-    <!-- DYNAMIC NOTIFICATION TOAST BAR -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[1100] bg-emerald-500 text-slate-950 px-6 py-3.5 rounded-2xl shadow-2xl font-bold text-xs tracking-wider uppercase transition-all duration-300 opacity-0 scale-95 pointer-events-none flex items-center space-x-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        <span id="toast-message">Item Added to Quotation Cart</span>
+    <!-- GALLERY PORTFOLIO MODAL (8 Finished Works) -->
+    <div id="portfolio-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[1050] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="relative w-full max-w-4xl bg-[#0c1322] border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl overflow-y-auto max-h-[85vh] hide-scrollbar scale-95 transition-transform duration-300">
+            <button id="close-portfolio" class="absolute top-6 right-6 z-50 p-2.5 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-300 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="mb-10 text-center sm:text-left">
+                <span class="text-xs font-bold text-amber-500 tracking-widest uppercase">Finished Works</span>
+                <h3 class="text-3xl font-black text-white mt-1">Minerwa Operational Benchmarks</h3>
+            </div>
+
+            <!-- Complete 8 Portfolio Categories -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Item 1 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Slimline Doors" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Slimline Sliding Doors</h4></div>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" alt="Facades" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Structural Glass Facades</h4></div>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" alt="Partitions" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Bi-Fold Glass Partitions</h4></div>
+                </div>
+                <!-- Item 4 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" alt="Stairs" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Glass Balustrades & Stairs</h4></div>
+                </div>
+                <!-- Item 5 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" alt="Acoustic" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Acoustic Glazing</h4></div>
+                </div>
+                <!-- Item 6 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="Skylights" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Sky-light Skylights</h4></div>
+                </div>
+                <!-- Item 7 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Louvers" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Aluminium Shading Louvers</h4></div>
+                </div>
+                <!-- Item 8 -->
+                <div class="bg-[#0c1221] border border-slate-850 rounded-2xl overflow-hidden">
+                    <div class="h-44 overflow-hidden"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80" alt="Pivot Entry" class="w-full h-full object-contain bg-slate-950" /></div>
+                    <div class="p-4"><h4 class="text-sm font-bold text-white">Designer Entry Doors</h4></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- JAVASCRIPT FOR DYNAMIC LOGICS -->
+    <!-- JAVASCRIPT LOGIC IMPLEMENTATION -->
     <script>
-        // --- Dynamic Custom Toast Banner Notification ---
+        // --- Custom Company Contacts configurations ---
+        const WHATSAPP_NUMBER = "+97143386955"; 
+        const COMPANY_EMAIL = "team.deshai@gmail.com";
+
+        // --- Custom Toast notifications ---
         function showToast(msg) {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toast-message');
@@ -750,9 +823,78 @@
         sidebarToggle.addEventListener('click', openSidebar);
         sidebarClose.addEventListener('click', closeSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
-        sidebarLinks.forEach(link => link.addEventListener('click', closeSidebar));
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('href');
+                if (targetId && targetId.startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(targetId)?.scrollIntoView({ behavior: 'smooth' });
+                }
+                closeSidebar();
+            });
+        });
 
-        // --- Our Branches Trigger & Reveal Mechanism ---
+        // --- Dropdown Menu Share Controller (Top Right 3-Dots) ---
+        const threeDotsToggle = document.getElementById('three-dots-toggle');
+        const threeDotsDropdown = document.getElementById('three-dots-dropdown');
+        const shareLinkBtn = document.getElementById('share-link-btn');
+
+        threeDotsToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (threeDotsDropdown.classList.contains('hidden')) {
+                threeDotsDropdown.classList.remove('hidden');
+                setTimeout(() => {
+                    threeDotsDropdown.classList.remove('opacity-0', 'scale-95');
+                    threeDotsDropdown.classList.add('opacity-100', 'scale-100');
+                }, 55);
+            } else {
+                closeDropdown();
+            }
+        });
+
+        function closeDropdown() {
+            threeDotsDropdown.classList.remove('opacity-100', 'scale-100');
+            threeDotsDropdown.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+                threeDotsDropdown.classList.add('hidden');
+            }, 300);
+        }
+
+        window.addEventListener('click', () => {
+            if (!threeDotsDropdown.classList.contains('hidden')) {
+                closeDropdown();
+            }
+        });
+
+        shareLinkBtn.addEventListener('click', async () => {
+            const shareData = {
+                title: 'Minerwa Aluminium & Glass LLC',
+                text: 'Minerwa Aluminium & Glass LLC | Premium Architectural Facades Since 1986',
+                url: window.location.href
+            };
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.log('Share action canceled or failed', err);
+                }
+            } else {
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    showToast("Website link copied to clipboard!");
+                } catch (err) {
+                    const el = document.createElement('textarea');
+                    el.value = window.location.href;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    showToast("Website link copied!");
+                }
+            }
+        });
+
+        // --- Our Branches Trigger Mechanics ---
         const showroomCard = document.getElementById('showroom-card');
         const branchesList = document.getElementById('branches-list');
 
@@ -765,126 +907,218 @@
             branchesList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
 
-        // --- Finished Works (Operational Benchmarks Modal Controller) ---
-        const masterpiecesTrigger = document.getElementById('masterpieces-trigger');
-        const portfolioModal = document.getElementById('portfolio-modal');
-        const closePortfolio = document.getElementById('close-portfolio');
+        // --- Our Products Modal Overlay Mechanics ---
+        const productsOverlay = document.getElementById('products-overlay-modal');
 
-        masterpiecesTrigger.addEventListener('click', () => {
-            portfolioModal.classList.remove('hidden');
+        function openProductSection() {
+            productsOverlay.classList.remove('hidden');
             setTimeout(() => {
-                portfolioModal.classList.remove('opacity-0');
-                portfolioModal.classList.add('opacity-100');
+                productsOverlay.classList.remove('opacity-0');
+                productsOverlay.querySelector('div').classList.remove('scale-95');
+                productsOverlay.classList.add('opacity-100');
+                productsOverlay.querySelector('div').classList.add('scale-100');
             }, 50);
-        });
+        }
 
-        closePortfolio.addEventListener('click', () => {
-            portfolioModal.classList.add('opacity-0');
-            portfolioModal.classList.remove('opacity-100');
+        function closeProductSection() {
+            productsOverlay.classList.add('opacity-0');
+            productsOverlay.querySelector('div').classList.remove('scale-100');
+            productsOverlay.querySelector('div').classList.add('scale-95');
             setTimeout(() => {
-                portfolioModal.classList.add('hidden');
+                productsOverlay.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- Finished Works Modal Controller ---
+        const masterpiecesModal = document.getElementById('portfolio-modal');
+        const closeMasterpiecesBtn = document.getElementById('close-portfolio');
+
+        function openFinishedWorks() {
+            masterpiecesModal.classList.remove('hidden');
+            setTimeout(() => {
+                masterpiecesModal.classList.remove('opacity-0');
+                masterpiecesModal.classList.add('opacity-100');
+            }, 50);
+        }
+
+        closeMasterpiecesBtn.addEventListener('click', () => {
+            masterpiecesModal.classList.add('opacity-0');
+            masterpiecesModal.classList.remove('opacity-100');
+            setTimeout(() => {
+                masterpiecesModal.classList.add('hidden');
             }, 300);
         });
 
-        // --- Draggable Edge-Snapping Headset Humanoid Assistant ---
+        // --- Custom Procurement Spec Redirect Logic ---
+        const requirementsBox = document.getElementById('procurement-requirements');
+        const proceedButton = document.getElementById('procurement-proceed');
+
+        proceedButton.addEventListener('click', () => {
+            const specs = requirementsBox.value.trim();
+            if (!specs) {
+                showToast("Please input customisation requirements");
+                return;
+            }
+            const hasDomain = document.getElementById('domain-access-checkbox').checked;
+            const domainText = hasDomain ? "YES (Client owns domain)" : "NO (Request domain procurement)";
+            const bodyMail = `Hi, I am looking to customize the Minerwa procurement layout with the following specifications:\n\nDomain Access: ${domainText}\n\nSpecifications:\n${specs}`;
+            window.location.href = `mailto:${COMPANY_EMAIL}?subject=Custom%20Website%20Procurement%20-%20Minerwa&body=${encodeURIComponent(bodyMail)}`;
+        });
+
+        // --- Custom Catalogue Quotation Box Logic inside Product Section Modal ---
+        function submitCatalogInquiry(channel) {
+            const queryText = document.getElementById('catalog-custom-query').value.trim();
+            let mailBody = "";
+            
+            // Build body based on cart items + comment query
+            if (cart.length > 0) {
+                mailBody += "I would like to request estimates for the following selected items:\n\n";
+                cart.forEach(item => {
+                    mailBody += `- ${item.name} | Qty: ${item.quantity} units\n`;
+                });
+                mailBody += "\n";
+            }
+
+            if (queryText) {
+                mailBody += `Additional customization requirements or other products:\n${queryText}\n`;
+            }
+
+            if (!mailBody) {
+                showToast("Please select items or write a custom description first.");
+                return;
+            }
+
+            if (channel === 'email') {
+                window.location.href = `mailto:${COMPANY_EMAIL}?subject=Minerwa%20Architectural%20Inquiry%20Quotation&body=${encodeURIComponent(mailBody)}`;
+            } else {
+                window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(mailBody)}`, '_blank');
+            }
+        }
+
+        // --- Scroll to Bottom Controller ---
+        const floatingScrollBtn = document.getElementById('floating-scroll-btn');
+        const scrollArrowSvg = document.getElementById('scroll-arrow-svg');
+        let isScrolledToTopView = false;
+
+        floatingScrollBtn.style.bottom = "38px"; // 1cm height up
+
+        window.addEventListener('scroll', () => {
+            const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (window.scrollY / scrollTotal) * 100;
+
+            if (scrollPercent >= 95) {
+                scrollArrowSvg.classList.add('rotate-180');
+                isScrolledToTopView = true;
+            } else {
+                scrollArrowSvg.classList.remove('rotate-180');
+                isScrolledToTopView = false;
+            }
+        });
+
+        function handleFloatingScrollAction() {
+            if (isScrolledToTopView) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // --- Draggable & Edge-Snapping Floating Avatar Assistant ---
         const assistant = document.getElementById('movable-assistant');
-        let isDragging = false;
-        let startX = 0;
-        let startY = 0;
+        let isDraggingAssistant = false;
+        let assistStartX = 0;
+        let assistStartY = 0;
 
-        // Position states defaults (bottom-left)
-        let currentX = 24;
-        let currentY = window.innerHeight - 88;
+        let assistX = 24;
+        let assistY = window.innerHeight - 88;
 
-        assistant.style.left = `${currentX}px`;
-        assistant.style.top = `${currentY}px`;
+        assistant.style.left = `${assistX}px`;
+        assistant.style.top = `${assistY}px`;
 
-        function dragStart(clientX, clientY) {
-            isDragging = true;
-            startX = clientX - currentX;
-            startY = clientY - currentY;
+        function assistDragStart(clientX, clientY) {
+            isDraggingAssistant = true;
+            assistStartX = clientX - assistX;
+            assistStartY = clientY - assistY;
             assistant.classList.remove('duration-300', 'ease-out');
             assistant.classList.add('scale-110');
         }
 
-        function dragMove(clientX, clientY) {
-            if (!isDragging) return;
-            const rawX = clientX - startX;
-            const rawY = clientY - startY;
+        function assistDragMove(clientX, clientY) {
+            if (!isDraggingAssistant) return;
+            const rawX = clientX - assistStartX;
+            const rawY = clientY - assistStartY;
 
             const minX = 16;
             const maxX = window.innerWidth - 80;
             const minY = 96; 
             const maxY = window.innerHeight - 80;
 
-            currentX = Math.max(minX, Math.min(maxX, rawX));
-            currentY = Math.max(minY, Math.min(maxY, rawY));
+            assistX = Math.max(minX, Math.min(maxX, rawX));
+            assistY = Math.max(minY, Math.min(maxY, rawY));
 
-            assistant.style.left = `${currentX}px`;
-            assistant.style.top = `${currentY}px`;
+            assistant.style.left = `${assistX}px`;
+            assistant.style.top = `${assistY}px`;
         }
 
-        function dragEnd() {
-            if (!isDragging) return;
-            isDragging = false;
+        function assistDragEnd() {
+            if (!isDraggingAssistant) return;
+            isDraggingAssistant = false;
             assistant.classList.remove('scale-110');
             assistant.classList.add('duration-300', 'ease-out');
 
             const screenW = window.innerWidth;
             const screenH = window.innerHeight;
 
-            const distLeft = currentX;
-            const distRight = screenW - (currentX + 64);
-            const distTop = currentY;
-            const distBottom = screenH - (currentY + 64);
+            const distLeft = assistX;
+            const distRight = screenW - (assistX + 64);
+            const distTop = assistY;
+            const distBottom = screenH - (assistY + 64);
 
             const minDistance = Math.min(distLeft, distRight, distTop, distBottom);
 
             if (minDistance === distLeft) {
-                currentX = 24;
+                assistX = 24;
             } else if (minDistance === distRight) {
-                currentX = screenW - 88;
+                assistX = screenW - 88;
             } else if (minDistance === distTop) {
-                currentY = 96;
+                assistY = 96;
             } else {
-                currentY = screenH - 88;
+                assistY = screenH - 88;
             }
 
-            currentX = Math.max(16, Math.min(screenW - 88, currentX));
-            currentY = Math.max(96, Math.min(screenH - 88, currentY));
+            assistX = Math.max(16, Math.min(screenW - 88, assistX));
+            assistY = Math.max(96, Math.min(screenH - 88, assistY));
 
-            assistant.style.left = `${currentX}px`;
-            assistant.style.top = `${currentY}px`;
+            assistant.style.left = `${assistX}px`;
+            assistant.style.top = `${assistY}px`;
         }
 
+        // Mouse listeners
         assistant.addEventListener('mousedown', (e) => {
-            dragStart(e.clientX, e.clientY);
+            assistDragStart(e.clientX, e.clientY);
             e.preventDefault();
         });
-        window.addEventListener('mousemove', (e) => dragMove(e.clientX, e.clientY));
-        window.addEventListener('mouseup', dragEnd);
+        window.addEventListener('mousemove', (e) => assistDragMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', assistDragEnd);
 
+        // Mobile touch listeners
         assistant.addEventListener('touchstart', (e) => {
-            dragStart(e.touches[0].clientX, e.touches[0].clientY);
+            assistDragStart(e.touches[0].clientX, e.touches[0].clientY);
         });
         window.addEventListener('touchmove', (e) => {
-            dragMove(e.touches[0].clientX, e.touches[0].clientY);
+            assistDragMove(e.touches[0].clientX, e.touches[0].clientY);
         });
-        window.addEventListener('touchend', dragEnd);
+        window.addEventListener('touchend', assistDragEnd);
 
-        window.addEventListener('resize', () => {
-            currentX = Math.max(16, Math.min(window.innerWidth - 88, currentX));
-            currentY = Math.max(96, Math.min(window.innerHeight - 88, currentY));
-            assistant.style.left = `${currentX}px`;
-            assistant.style.top = `${currentY}px`;
-        });
-
-        // --- Assistant Wizard Panel Controllers ---
+        // --- Assistant Modal Wizard Controller ---
         const assistantModal = document.getElementById('assistant-modal');
         const closeModal = document.getElementById('close-modal');
 
         assistant.addEventListener('click', () => {
-            if (!isDragging) {
+            if (!isDraggingAssistant) {
                 assistantModal.classList.remove('hidden');
                 setTimeout(() => {
                     assistantModal.classList.remove('opacity-0');
@@ -902,7 +1136,13 @@
         });
 
         function switchView(viewId) {
-            const views = ['view-home', 'view-inquiry', 'view-subcategory', 'view-contact'];
+            if (viewId === 'inquiry') {
+                closeModal.click();
+                document.getElementById('products-trigger-section')?.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            const views = ['view-home', 'view-contact'];
             views.forEach(id => {
                 const element = document.getElementById(id);
                 if (id === `view-${viewId}`) {
@@ -913,78 +1153,43 @@
             });
         }
 
-        function openSubcategory(type) {
-            const titleElement = document.getElementById('subcategory-title');
-            const contentElement = document.getElementById('subcategory-content');
-
-            titleElement.innerText = `${type} Options`;
-            
-            let htmlContent = '';
-            if (type === 'glass') {
-                htmlContent = `
-                    <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-xl cursor-pointer hover:border-amber-500/25 transition-all" onclick="addToCart('Frameless Double-Glazed Partition', 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=300&q=80')">
-                        <p class="text-xs text-amber-500 font-mono">GL-803</p>
-                        <h4 class="font-semibold text-slate-200 mt-1">Frameless Double-Glazed Partition</h4>
-                    </div>
-                `;
-            } else if (type === 'wood') {
-                htmlContent = `
-                    <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-xl cursor-pointer hover:border-amber-500/25 transition-all" onclick="addToCart('Premium Wood Framing System', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=300&q=80')">
-                        <p class="text-xs text-amber-500 font-mono">WD-504</p>
-                        <h4 class="font-semibold text-slate-200 mt-1">Premium Wood Framing System</h4>
-                    </div>
-                `;
-            } else {
-                htmlContent = `
-                    <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-xl cursor-pointer hover:border-amber-500/25 transition-all" onclick="addToCart('Thermal Break Aluminum Profile', 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=300&q=80')">
-                        <p class="text-xs text-amber-500 font-mono">AL-209</p>
-                        <h4 class="font-semibold text-slate-200 mt-1">Thermal Break Aluminum Profile</h4>
-                    </div>
-                `;
-            }
-
-            contentElement.innerHTML = htmlContent;
-            switchView('subcategory');
-        }
-
-        // --- Custom Requirements Proceeds Logic ---
-        const requirementsBox = document.getElementById('procurement-requirements');
-        const proceedButton = document.getElementById('procurement-proceed');
-
-        proceedButton.addEventListener('click', () => {
-            const specs = requirementsBox.value.trim();
-            if (!specs) {
-                showToast("Please write down your requirements first");
-                return;
-            }
-            const encodedSpecs = encodeURIComponent(specs);
-            window.location.href = `mailto:team.deshai@gmail.com?subject=Custom%20Website%20Procurement%20-%20Minerwa&body=${encodedSpecs}`;
-        });
-
-        // --- DYNAMIC QUOTATION CART ENGINE (With dynamic quantity controls & pencil icon click trigger) ---
+        // --- DYNAMIC INTERACTIVE CART OVERLAYS (Slightly smaller, fits view elegantly) ---
         let cart = [];
 
-        function addToCart(productName, imageUrl) {
-            const existingItem = cart.find(item => item.name === productName);
-            if (existingItem) {
-                showToast(`Already added to cart!`);
-                return;
+        function toggleCartItem(productName, imageUrl, buttonIndex) {
+            const existingIndex = cart.findIndex(item => item.name === productName);
+            const buttonElement = document.getElementById(`add-btn-${buttonIndex}`);
+            const iconElement = document.getElementById(`add-icon-${buttonIndex}`);
+
+            if (existingIndex > -1) {
+                cart.splice(existingIndex, 1);
+                buttonElement.className = "w-10 h-10 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md";
+                iconElement.innerHTML = `<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>`;
+                showToast(`${productName} removed from cart`);
+            } else {
+                cart.push({ name: productName, image: imageUrl, quantity: 1, btnIndex: buttonIndex });
+                buttonElement.className = "w-10 h-10 bg-rose-600 hover:bg-rose-500 text-white rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md";
+                iconElement.innerHTML = `<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>`;
+                showToast(`${productName} added to cart`);
             }
-            cart.push({ name: productName, image: imageUrl, quantity: 1 });
             updateCartUI();
-            showToast(`${productName} added!`);
         }
 
         function updateCartUI() {
             const cartCountElement = document.getElementById('cart-count');
             const container = document.getElementById('cart-items-container');
             const drawer = document.getElementById('cart-drawer');
+            const compactBar = document.getElementById('cart-compact-bar');
+            const compactSummary = document.getElementById('compact-cart-summary');
 
             cartCountElement.innerText = cart.length;
 
             if (cart.length > 0) {
-                drawer.classList.remove('hidden');
+                // Show compact bar bottom pop up (Strictly ~1cm height limit)
+                compactBar.classList.remove('hidden');
+                compactSummary.innerText = `${cart.length} Item${cart.length > 1 ? 's' : ''} Selected`;
             } else {
+                compactBar.classList.add('hidden');
                 drawer.classList.add('hidden');
             }
 
@@ -993,17 +1198,15 @@
                 const itemDiv = document.createElement('div');
                 itemDiv.className = "flex items-center justify-between bg-slate-900 border border-slate-800 p-3 rounded-xl gap-4";
                 itemDiv.innerHTML = `
-                    <div class="flex items-center space-x-3 w-full">
-                        <img src="${item.image}" alt="${item.name}" class="w-10 h-10 object-cover rounded-lg shrink-0 border border-slate-800" />
+                    <div class="flex items-center space-x-3 w-full font-sans">
+                        <img src="${item.image}" alt="${item.name}" class="w-10 h-10 object-contain rounded-lg shrink-0 border border-slate-800" />
                         <div class="overflow-hidden">
                             <h5 class="text-xs font-bold text-white truncate max-w-[140px]">${item.name}</h5>
-                            <!-- Qty Layout Row -->
                             <div class="flex items-center space-x-1.5 mt-1">
                                 <span class="text-[10px] text-slate-400 uppercase">Qty:</span>
                                 <input type="number" id="qty-input-${idx}" value="${item.quantity}" min="1" disabled 
                                     class="w-10 bg-slate-950 text-white text-[11px] font-bold text-center px-1 py-0.5 rounded border border-slate-800 focus:outline-none focus:border-amber-500 disabled:opacity-75" 
                                     onchange="updateQty(${idx}, this.value)" />
-                                <!-- Edit Pencil Trigger Button -->
                                 <button onclick="enableQtyEdit(${idx})" class="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-all" title="Edit Quantity">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                 </button>
@@ -1016,6 +1219,11 @@
                 `;
                 container.appendChild(itemDiv);
             });
+        }
+
+        function expandCartDrawerOverlay() {
+            const drawer = document.getElementById('cart-drawer');
+            drawer.classList.remove('hidden');
         }
 
         function enableQtyEdit(idx) {
@@ -1036,6 +1244,15 @@
         }
 
         function removeFromCart(idx) {
+            const item = cart[idx];
+            const buttonElement = document.getElementById(`add-btn-${item.btnIndex}`);
+            const iconElement = document.getElementById(`add-icon-${item.btnIndex}`);
+
+            if (buttonElement && iconElement) {
+                buttonElement.className = "w-10 h-10 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg flex items-center justify-center shrink-0 transition-all shadow-md";
+                iconElement.innerHTML = `<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>`;
+            }
+
             cart.splice(idx, 1);
             updateCartUI();
             showToast("Item removed");
@@ -1047,15 +1264,57 @@
         }
 
         function sendQuotationEmail() {
-            if (cart.length === 0) return;
-            let bodyText = "Quotation request from Minerwa site visitor:\n\n";
-            cart.forEach(item => {
-                bodyText += `- ${item.name} | Requested Quantity: ${item.quantity} pieces\n`;
-            });
-            bodyText += "\nPlease reply with structural estimates.";
-            
-            const encodedBody = encodeURIComponent(bodyText);
-            window.location.href = `mailto:team.deshai@gmail.com?subject=Quotation%20Inquiry%20-%20Minerwa&body=${encodedBody}`;
+            submitCatalogInquiry('email');
+        }
+
+        // --- INTERACTIVE DOMAIN ACCESS PRICE CALIBRATION ENGINE ---
+        function toggleDomainAccessState() {
+            const checkbox = document.getElementById('domain-access-checkbox');
+            const priceDisplayNode = document.getElementById('price-display-node');
+            const pointsContainer = document.getElementById('procurement-points');
+            const savingAlert = document.getElementById('saving-alert');
+
+            if (checkbox.checked) {
+                // Apply dynamic reduction to 1249 AED
+                priceDisplayNode.innerText = "1249";
+                
+                // Animate Success Bouncing Saved Alert Block
+                savingAlert.classList.remove('hidden');
+                
+                // Add first congrats point to lists
+                const congratsPoint = document.createElement('div');
+                congratsPoint.id = "congrats-point-node";
+                congratsPoint.className = "flex items-start space-x-4 bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl";
+                congratsPoint.innerHTML = `
+                    <div class="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <span class="text-slate-200 text-sm font-medium text-emerald-400"><strong>Congrats! You saved 250 AED</strong> as you have domain access. We charge that because we need to purchase hosting domains for at least 3 years and GoDaddy control panels for 3 years minimum, but as you have all these, you will save that!</span>
+                `;
+                pointsContainer.insertBefore(congratsPoint, pointsContainer.firstChild);
+
+                // Autohide saving alert when scrolling
+                const hideAlertOnScroll = () => {
+                    savingAlert.classList.add('hidden');
+                    window.removeEventListener('scroll', hideAlertOnScroll);
+                };
+                window.addEventListener('scroll', hideAlertOnScroll);
+
+                // Fail-safe autohide after 2 seconds
+                setTimeout(() => {
+                    savingAlert.classList.add('hidden');
+                }, 2500);
+
+            } else {
+                // Revert price back to 1499 AED
+                priceDisplayNode.innerText = "1499";
+                savingAlert.classList.add('hidden');
+                
+                const congratsPoint = document.getElementById('congrats-point-node');
+                if (congratsPoint) {
+                    congratsPoint.remove();
+                }
+            }
         }
     </script>
 </body>
