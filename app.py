@@ -328,3 +328,6 @@ def serve_numpuzz():
 @app.get("/cam")
 def serve_numpuzz():
     return FileResponse("static/cam.html")
+@app.get("/mag")
+def serve_numpuzz():
+    return FileResponse("static/mag.html")
