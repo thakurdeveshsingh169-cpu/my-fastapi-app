@@ -2,806 +2,1714 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Desh Ai</title>
-  <link rel="icon" type="image/png" href="static/logo.png">
-<link rel="apple-touch-icon" href="static/logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme</title>
+  
+  <!-- SEO & Sharing Metadata (OG Meta Tags) -->
+  <meta name="title" content="𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme">
+  <meta name="description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://deshai.in">
+  <meta property="og:title" content="𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme">
+  <meta property="og:description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai.">
+  <meta property="og:image" content="https://deshai.in/static/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://deshai.in">
+  <meta name="twitter:title" content="𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme">
+  <meta name="twitter:description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai.">
+  <meta name="twitter:image" content="https://deshai.in/static/logo.png">
 
-<meta name="title" content="Desh Ai Official">
-<meta name="description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai ~by Devesh Singh & Team.">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://desh-ai.onrender.com/"> <meta property="og:title" content="Desh Ai Official">
-<meta property="og:description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai ~by Devesh Singh & Team.">
- <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://desh-ai.onrender.com/"> <meta property="twitter:title" content="Desh Ai Official">
-<meta property="twitter:description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai ~by Devesh Singh & Team.">
-<meta property="twitter:image" content="https://desh-ai.onrender.com/static/logo.png">
-
-
-  <!-- MathJa + Marked -->
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Gothic, Handwriting, and Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playwrite+AU+SA:wght@300&family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- MathJax Configuration and Loader -->
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      tex: { 
+        inlineMath: [['$', '$'], ['\\(', '\\)']], 
+        displayMath: [['$$', '$$']] 
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
       svg: { fontCache: 'global' }
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<meta name="google-adsense-account" content="ca-pub-7591552764328087">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
   <style>
+    :root {
+      --bg-white: #ffffff;
+      --ai-bubble: #f1f3f4;
+      --user-purple: #f5b342;
+      --accent-color: #f5b342;
+      --accent-border: rgba(245, 179, 66, 0.25);
+      --neon-blue: #00d2ff;
+      --yt-red: #FF0000;
+      --dull-orange-shadow: rgba(245, 179, 66, 0.15);
+      --mic-red: #ef4444;
+      --border-gray: #e5e7eb;
+      --success-green: #22c55e;
+      --sky-blue: #0ea5e9;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 100px;
+      margin: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background-color: var(--bg-white); height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+      transition: filter 0.3s ease;
     }
-
-    /* Updated Header with logo */
-    .header {
-      background-color: #ffffff00; /* white background like ChatGPT */
-      padding: 20px 25px;
-      border-radius: 25px;
-      margin-top: 10px;
-      margin: auto;
-      width: fit-content;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      box-shadow: 0 0 4px rgb(255, 174, 0);
-    }
-    .header img {
-      height: 45px;
-      width: 45px;
-      border-radius: 50%;
-      margin-right: 25px; /* space between logo and text */
-    }
-    .header h2 {
-      font-size: 20px;
-      font-family: 'Georgia', serif;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    /* Chat area */
-    .chat-wrapper {
-      width: 92%;
-      max-width: 800px;
-      padding: 20px 10px 100px 10px;
-      margin: 0 auto;
-      overflow-y: auto;
-      max-height: calc(100vh - 180px);
-    }
-
-    #answer {
-      margin-top: 20px;
-      padding: 10px;
-      font-size: 17px;
-      line-height: 1.6;
-      color: #000;
-      white-space: pre-wrap;
-    }
-
-    #youtube-results {
-      margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-    .youtube-video {
-      width: 180px;
-      cursor: pointer;
-    }
-    .youtube-video img {
-      width: 100%;
-      border-radius: 12px;
-    }
-    .youtube-video p {
-      font-size: 14px;
-      color: #333;
-      margin: 5px 0 0;
-    }
-
-    img.generated-image {
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-      display: block;
-      margin: 10px auto;
-    }
-
-    .download-link {
-      display: inline-block;
-      margin-top: 10px;
-      color: #bb00ff;
-      font-size: 15px;
-      text-decoration: underline;
-    }
-
-    /* AI loading animation */
-    #loading {
-      margin: 20px;
-      text-align: center;
-    }
-
-    .circle {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: rgb(255, 174, 0);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 0 25px 8px #ff00ff;
-      animation: pulse 0.45s infinite alternate;
-      margin: auto;
-    }
-
-    .circle span {
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      font-family: 'Times New Roman', cursive;
-    }
-
-    @keyframes pulse {
-      from { box-shadow: 0 0 25px 10px #e3e3e3; }
-      to { box-shadow: 0 0 45px 12px #84ff00; }
-    }
-
-    .replying {
-      margin-top: 160px;
-      font-size: 18px;
-      font-weight: bold;
-      font-family: 'Times New Roman', serif;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .replying {
-      display: inline-block;
-      font-weight: bold;
-      color: #000000;
-      text-shadow: 0 0 8px #000000;
-      animation: blinkWord 8s infinite steps(1);
-    }
-
-    @keyframes blinkWord {
-      0%, 20% { opacity: 0.2; text-shadow: none; }
-      40%, 100% { opacity: 1; text-shadow: 0 0 8px #ffffff; }
-    }
-
-    .replying span { animation: blink 0.57s infinite steps(1); }
-    .replying span:nth-child(2) { animation-delay: 0.3s; }
-    .replying span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes blink {
-      0%, 20% { opacity: 0; }
-      40%, 100% { opacity: 1; }
-    }
-
-    /* Bottom input bar */
-    .mobile-bar {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #fff;
-      display: flex;
-      justify-content: center;
-      padding: 8px 0;
-      z-index: 100;
-      border-top: 1px solid #ddd;
-    }
-    .search-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .rgb-border {
-      background: linear-gradient(270deg,#00d12d,#77ff00,#e7e7e7,rgb(255, 174, 0),rgb(255, 174, 0));
-      background-size: 600% 600%;
-      animation: rgbFlow 08s linear infinite alternate;
-      padding: 4px;
-      border-radius: 30px;
-      box-shadow: 0 0 3px 4px rgba(255, 255, 255, 0);
-    }
-    @keyframes rgbFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .input-container {
-      display: flex;
-      align-items: center;
-      background-color: white;
-      border-radius: 30px;
-      padding: 0 10px;
-      height: auto;
-      width: 260px;
-      min-height: 19px;
-      max-height: 110px;
     
+    body.menu-open #chatContainer,
+    body.menu-open .header,
+    body.menu-open .bottom-section,
+    body.menu-open .floating-actions {
+      filter: blur(5px);
+      pointer-events: none;
     }
 
-    #question {
-      flex: 1;
-      padding: 12px 10px;
-      font-size: 16px;
-      border: none;
-      outline: none;
-      background: transparent;
-      resize: none;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      line-height: 20px;
-      min-height: 15px;
-      max-height: 65px;
-      height: 19px;
+    button, .icon-btn, .icon-action-btn, .tool-trigger, .top-menu-btn {
+      border: 1px solid var(--accent-border) !important;
+      transition: all 0.2s ease;
     }
 
-    #micButton {
-      background-color: #ffffff;
-      border: none;
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
+    .header { 
+      padding: 6px 12px; border-bottom: 1px solid #f3f4f6; background: #ffffff; 
+      display: flex; align-items: center; justify-content: space-between;
+      border-radius: 20px; margin: 4px auto; width: 94%; max-width: 800px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.094); z-index: 100;
+      position: relative;
+    }
+    .logo-brand { display: flex; align-items: center; justify-content: center; gap: 4px; margin: 0 auto; }
+    .logo-char-img { height: 40px; width: auto; max-height: 40px; transition: transform 2.5s ease; }
+    .brand-text-rest { font-size: 20px; font-weight: 800; color: #000; }
+    
+    /* Interactive Rotating Border Effect on Hover */
+    .logo-container {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 0 4px rgb(255, 174, 0);
-    }
-    #micButton svg { width: 20px; height: 25px; fill: #000; }
-    #micButton.active { animation: micPulse 1s infinite; }
-
-    @keyframes micPulse {
-      0% { box-shadow: 0 0 0 0 rgb(6,151,255); }
-      70% { box-shadow: 0 0 0 04px rgba(124, 1, 255, 0.717); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 0, 195, 0.422); }
-    }
-.header h1 {
-  font-size: 24px;
-  font-family: 'Georgia', serif; /* Ya koi aur stylish font family */
-  font-weight: bold;
-  margin: 0;
-}
-
-    #searchBtn {
-      width: 25px;
-      height: 36px;
       border-radius: 50%;
-      border: none;
-      background-color: rgb(255, 255, 255);
-      color: rgb(0, 0, 0);
-      font-size: 27px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 0 4px rgb(255, 187, 0);
-    }
-
-
-    #scrollToBottomBtn, #pauseResumeBtn, #pdfBtn {
-      position: fixed;
-      border: none;
-      cursor: pointer;
-      display: none;
-      justify-content: center;
-      align-items: center;
+      padding: 10px;
       transition: all 0.3s ease;
-      z-index: 150;
-      background: rgb(228,228,228);
-      color: #000;
-      box-shadow: 0 0 4px rgb(255, 174, 0);
+    }
+    .logo-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, #fc7e00, #3cff0000, #008bfc00, #ff8000);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .logo-container:hover::before, .logo-container:active::before {
+      opacity: 1;
+      animation: rotateLogoBorder 1.5s linear forwards;
+    }
+    .logo-container:hover .logo-char-img {
+      transform: scale(1.1);
+    }
+    @keyframes rotateLogoBorder {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    #scrollToBottomBtn {
-      bottom: 180px;
-      right: 20px;
-      width: 35px;
-      height: 45px;
-      border-radius: 50%;
-      font-size: 30px;
-      color: #000000;
+    .top-menu-btn { 
+      background: #ffffff; cursor: pointer; padding: 6px; display: flex; 
+      align-items: center; justify-content: center; border-radius: 10px; width: 34px; height: 34px;
+    }
+    .top-menu-btn svg { width: 18px; height: 18px; fill: #333; }
+
+    #chatContainer {
+      flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 24px;
+      width: 100%; max-width: 800px; margin: 0 auto;
+      -webkit-overflow-scrolling: touch; scroll-behavior: smooth;
     }
 
-    #pauseResumeBtn {
-      bottom: 120px;
-      right: 20px;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: #fffcfc;
-      color: #ffffff;
+    /* Welcome/Splash Page Inner Animations */
+    .hello-path {
+        stroke-dasharray: 1800;
+        stroke-dashoffset: 1800;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        animation: drawHelloOnce 3.0s cubic-bezier(0.45, 0, 0.2, 1) forwards;
+    }
+    @keyframes drawHelloOnce { to { stroke-dashoffset: 0; } }
+
+    .smile-mouth-path {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        animation: drawSmile 0.5s cubic-bezier(0.4, 0, 0.2, 1) 2.9s forwards;
+    }
+    @keyframes drawSmile { to { stroke-dashoffset: 0; } }
+
+    .smile-eye {
+        opacity: 0; transform: scale(0);
+        animation: popEye 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    #smileLeftEye { transform-origin: 480px 115px; animation-delay: 3.2s; }
+    #smileRightEye { transform-origin: 500px 115px; animation-delay: 3.35s; }
+    @keyframes popEye { to { opacity: 1; transform: scale(1); } }
+
+    .gothic-text {
+        font-family: 'UnifrakturMaguntia', serif;
+        font-size: 2.2rem;
+        color: #111827;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 3.6s forwards;
+    }
+    .cursive-greet {
+        font-family: 'Playwrite AU SA', cursive;
+        font-size: 1.3rem;
+        color: #111827;
+        opacity: 0;
+        display: inline-block;
+        transform: translateY(10px);
+        animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 4.1s forwards;
+    }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    .ai-msg-wrapper { align-self: flex-start; width: 100%; display: flex; flex-direction: column; gap: 8px; }
+    .ai-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .ai-name { font-weight: 700; font-size: 14px; color: #1f2937; }
+    .ai-content { padding: 4px 0; line-height: 1.6; font-size: 15px; color: #333; }
+
+    .loading-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+    .status-text { font-size: 14px; color: #6b7280; font-weight: 500; transition: all 0.3s ease; }
+    .shimmer-block {
+      height: 16px; width: 90%; border-radius: 4px;
+      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite linear;
+    }
+    .shimmer-block.short { width: 60%; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    .user-msg-wrapper { align-self: flex-end; max-width: 85%; position: relative; }
+    .user-msg { 
+        background-color: var(--accent-color); color: white; padding: 10px 16px; 
+        border-radius: 18px 18px 4px 18px; font-size: 15px; cursor: pointer;
+        user-select: none; -webkit-user-select: none;
+    }
+
+    .edit-popup {
+        position: absolute; bottom: -45px; right: 0; background: white;
+        border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        display: none; align-items: center; gap: 8px; padding: 6px 12px;
+        z-index: 100; border: 1px solid #eee; animation: pop 0.01s ease-out;
+    }
+    @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    /* Absolute position for Floating Actions */
+    .floating-actions {
+      position: fixed; z-index: 1000; touch-action: none;
+      user-select: none; -webkit-user-select: none;
       display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 6px;
+    }
+    .fab-btn {
+      width: 44px; height: 44px; background: white; border-radius: 50%; border: 1px solid #eee;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; transition: transform 0.1s ease;
+    }
+    #scrollBottomBtn { display: flex; }
+    
+    #cancelEditBtn { 
+      display: none; 
+      background-color: #fff1f2; 
+      border: 1.5px solid #fecdd3 !important; 
+      color: #f43f5e; 
+      font-weight: bold; 
+      font-size: 20px; 
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);
+    }
+    #cancelEditBtn:hover {
+      background-color: #ffe4e6;
     }
 
-    #pdfBtn {
-      bottom: 12000px;
-      left: 20px;
-      background-color: #00000000;
-      color: #00000000;
-      font-size: 0px;
-      padding: 0px 0px;
-      border-radius: 0px;
+    .bottom-section { 
+      width: 100%; max-width: 850px; margin: 0 auto; padding: 10px 12px 25px; 
+      display: flex; align-items: center; gap: 8px; position: relative; 
+      background: white; z-index: 101;
     }
-
-    #pauseResumeBtn:hover, #scrollToBottomBtn:hover, #pdfBtn:hover {
-      transform: scale(1.07);
-      opacity: 0.9;
+    .tool-trigger-box { position: relative; flex-shrink: 0; }
+    .tool-trigger {
+      width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-gray);
+      background: #f9fafb; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: 0.3s; box-shadow: 0 4px 12px var(--dull-orange-shadow);
     }
+    .tool-trigger.active { background: #fffcf0; border-color: var(--accent-color) !important; }
+    .cancel-overlay { 
+      position: absolute; top: -2px; right: -2px; background: #ff4444; color: white; 
+      width: 18px; height: 18px; border-radius: 50%; font-size: 11px; display: none;
+      align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; cursor: pointer;
+    }
+    .tool-trigger.active ~ .cancel-overlay { display: flex; }
 
-    @media (min-width: 768px) {
-      #scrollToBottomBtn { right: 570px; }
-      #pauseResumeBtn { left: 900px; }
-      #pdfBtn { right: 815px; }
+    /* Unified Input System */
+    .unified-input-cont {
+      flex: 1; background: #f3f4f6; border-radius: 28px; display: flex; align-items: center;
+      padding: 2px 6px; border: 2.5px solid transparent; transition: all 0.3s ease;
+      position: relative; box-shadow: 0 4px 12px var(--dull-orange-shadow);
+      cursor: text; min-width: 0;
+    }
+    .unified-input-cont.glow-orange { 
+      border-color: var(--accent-color); 
+      background: white;
+      box-shadow: 0 0 14px var(--dull-orange-shadow);
+    }
+    #question {
+      flex: 1; border: none; outline: none; background: transparent; padding: 10px 8px;
+      font-size: 16px; resize: none; max-height: 150px; font-family: inherit; line-height: 1.4;
+      min-width: 0;
+    }
+    .inner-btn {
+      width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; background: transparent; flex-shrink: 0;
+    }
+    .mic-btn.active-mic { background: var(--mic-red) !important; animation: pulse-mic 1.5s infinite; }
+    .mic-btn.active-mic svg { fill: white !important; }
+    @keyframes pulse-mic { 0% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0); } }
+
+    .send-action-btn.active { background: var(--accent-color); }
+    .send-action-btn svg { width: 18px; height: 18px; fill: #4b5563; }
+    .send-action-btn.active svg { fill: white; }
+
+    .tools-menu {
+      position: absolute; bottom: 85px; left: 12px; background: white; border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12); padding: 12px; display: none; flex-direction: column; min-width: 220px;
+      border: 1px solid #f0f0f0; z-index: 1000; position: relative;
+    }
+    .tools-menu.show { display: flex; }
+    .menu-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px;
+      cursor: pointer; font-size: 14px; font-weight: 500; color: #374151; transition: 0.2s;
+    }
+    .menu-item:hover { background: #f9fafb; }
+    .menu-item.active-mode { background: #fffcf0; border: 1px solid var(--accent-border); }
+    
+    .disclaimer {
+        position: fixed; bottom: 4px; left: 0; right: 0; text-align: center;
+        font-size: 10px; color: #000000; pointer-events: none; z-index: 102;
+    }
+    .video-container { margin-top: 12px; border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 16/9; }
+    
+    .image-card { 
+      width: 100%; max-width: 320px; aspect-ratio: 1/1; border-radius: 16px; 
+      overflow: hidden; background: #030008; margin-top: 8px; position: relative; 
+      border: 2px solid var(--accent-border) !important; display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+    .image-card .g-img { width: 100%; height: 100%; object-fit: cover; }
+    .image-card canvas { width: 100% !important; height: 100% !important; display: block; }
+    
+    .success-badge {
+      display: inline-flex; align-items: center; gap: 4px; background: var(--success-green); 
+      color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-top: 6px;
+    }
+    .success-badge svg { fill: white; width: 14px; height: 14px; }
+
+    .status-badge { font-size: 10px; font-weight: 800; color: var(--accent-color); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+    
+    .action-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .icon-action-btn { background: white; border: 1px solid #ddd; padding: 6px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; width: 34px; height: 34px; }
+    .icon-action-btn svg { width: 16px; height: 16px; fill: #555; transition: fill 0.2s ease; }
+    .icon-action-btn.red-active svg { fill: #ef4444 !important; }
+
+    .thunder-btn {
+      border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+      border: 1px solid #ddd !important; background: transparent; cursor: pointer; transition: all 0.3s ease;
+    }
+    .thunder-btn.active {
+      border-color: var(--sky-blue) !important;
+      background: #ffd700;
+    }
+    .thunder-btn.active svg { fill: #ffffff !important; }
+    .thunder-btn svg { fill: #cccccc; }
+
+    /* Modals & Overlays */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+      z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-content {
+      background: white; border-radius: 20px; max-width: 450px; width: 100%; padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 2px solid var(--accent-color);
+      animation: popUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    @keyframes popUp { from { transform: scale(0.9) translateY(20px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+    /* Dropdown Options List on Right Top */
+    .options-dropdown {
+      position: absolute; top: 50px; right: 12px; background: white; border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12); padding: 8px; display: none; flex-direction: column;
+      width: 210px; border: 1px solid var(--accent-border); z-index: 1000; animation: pop 0.2s ease-out;
+    }
+    .options-dropdown.show { display: flex; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px;
+      cursor: pointer; font-size: 13px; font-weight: 500; color: #374151; transition: 0.2s;
+    }
+    .dropdown-item:hover { background: #f3f4f6; color: var(--accent-color); }
+    .dropdown-item svg { fill: #555; width: 16px; height: 16px; }
+
+    /* Side Hamburger Menu drawer with limited accordion scroll heights */
+    .drawer {
+      position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: white;
+      box-shadow: 5px 0 25px rgba(0,0,0,0.1); z-index: 2100; transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column; padding: 24px 16px;
+    }
+    .drawer.open { left: 0; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .drawer-title { font-weight: 800; font-size: 18px; color: #111; }
+    
+    .accordion-section { margin-bottom: 16px; }
+    .accordion-title { font-weight: 700; font-size: 14px; padding: 10px 6px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; user-select: none; align-items: center; }
+    
+    /* Fits both Our Products & Games perfectly into maximum half the viewport height with scrolling */
+    .accordion-items { display: none; flex-direction: column; gap: 8px; padding: 8px; max-height: 25vh; overflow-y: auto; }
+    .accordion-items.show { display: flex; }
+    .accordion-link { color: #555; text-decoration: none; font-size: 13px; padding: 6px; border-radius: 6px; }
+    .accordion-link:hover { background: #f3f4f6; color: var(--accent-color); }
+
+    .thin-arrow {
+      width: 14px; height: 14px; transition: transform 0.2s ease;
+      fill: none; stroke: #666; stroke-width: 1.5;
+    }
+    .accordion-title.active .thin-arrow { transform: rotate(180deg); }
+
+    .help-btn {
+      margin-top: auto; padding: 12px; border: 1px solid #ff4444 !important; border-radius: 25px;
+      background: #fff5f5; color: #ff4444; text-align: center; font-weight: bold; cursor: pointer; text-decoration: none;
+      display: block; transition: 0.2s;
+    }
+    .help-btn:hover { background: #ff4444; color: white; }
+
+    .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 13px; font-weight: bold; color: #555; }
+    .form-control { padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; }
+    .color-swatches { display: flex; gap: 8px; }
+    .color-swatch { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+    .color-swatch.active { border-color: #000; }
+
+    /* Red Background Close/Cut Buttons with Glow Hover Effects */
+    .cut-btn {
+      position: absolute; top: 12px; right: 12px; background: #fee2e2; border: 1.5px solid #fecdd3 !important;
+      cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: bold; color: #f43f5e; transition: all 0.2s ease;
+    }
+    .cut-btn:hover {
+      background: #f43f5e;
+      color: white;
+      box-shadow: 0 0 10px rgba(253, 47, 81, 0.4);
     }
   </style>
 </head>
-<body>
-  <div class="chat-wrapper" id="chatWrapper">
-    <!-- Header wit Logo -->
-<div class="header">
-  <img src="static/logo.png" alt="Desh AI Logo">
-  <h1>Desh AI</h1>
-</div>
+<body onclick="handleGlobalClick(event)">
 
+  <!-- Drawer/Hamburger Menu (Top Left) -->
+  <div class="drawer" id="sidebarDrawer" onclick="event.stopPropagation()">
+    <div class="drawer-header">
+      <span class="drawer-title">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+      <button class="top-menu-btn" onclick="toggleDrawer()">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    
+    <div class="accordion-section">
+      <div class="accordion-title" id="title-products" onclick="toggleAccordion('products')">
+        <span>Our Products</span>
+        <svg class="thin-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="accordion-items" id="products-list">
+        <a href="/vsics" class="accordion-link">About CEO</a>
+        <a href="/mag" class="accordion-link">Minerwa Aluminium&Glass LLC</a>
+        <a href="/study" class="accordion-link">𝕯𝖊𝕾𝖍 𝙰𝚒’s Study Specific</a>
+        <a href="/smart" class="accordion-link">𝚂𝚖𝚊𝚛𝚝 𝙲𝚊𝚝𝚎𝚐𝚘𝚛𝚒𝚣𝚎𝚛</a>
+        <a href="/calculator" class="accordion-link">𝙲𝚊𝚕𝚌𝚞𝚕𝚊𝚝𝚘𝚛</a>
+        <a href="/Dictionary" class="accordion-link">𝙳𝚒𝚌𝚝𝚒𝚘𝚗𝚊𝚛𝚢 (𝐀𝚒+)</a>
+        <a href="/BMI" class="accordion-link">𝙱𝙼𝙸 (𝐀𝚒+)</a>
+        <a href="/cam" class="accordion-link">𝕯𝖊𝕾𝖍 𝙲𝚊𝚖</a>
+        <a href="/50" class="accordion-link">𝚃𝚑𝚎_𝟓𝟎 𝙰𝚒 ✨</a>
+        <a href="/waves" class="accordion-link">Sadhna (🧘🏻‍♂️)</a>
+        <a href="/pdf" class="accordion-link">𝚃𝚎𝚡𝚝 𝚝𝚘 𝙿𝙳𝙵</a>
+      </div>
+    </div>
 
+    <div class="accordion-section">
+      <div class="accordion-title" id="title-games" onclick="toggleAccordion('games')">
+        <span>Games Arcade</span>
+        <svg class="thin-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="accordion-items" id="games-list">
+        <a href="/numpuzz" class="accordion-link">𝙽𝚞𝚖𝙿𝚞𝚣𝚣</a>
+        <a href="/snake" class="accordion-link">𝚂𝚗𝚊𝚔𝚎 𝙶𝚊𝚖𝚎</a>
+        <a href="/Tic" class="accordion-link">𝙲𝚛𝚒𝚌𝚞 (𝙰𝚒+)</a>
+        <a href="/Tac" class="accordion-link">𝚃𝚒𝚌 𝚃𝚊𝚌 𝚃𝚘𝚎(𝙰𝚒+)</a>
+        <a href="/dot" class="accordion-link">𝙲𝚘𝚗𝚗𝚎𝚌𝚝 The 𝙳𝚘𝚝𝚜 (𝙰𝚒+)</a>
+      </div>
+    </div>
 
-    <div id="answer"></div>
-    <div id="youtube-results"></div>
-    <div id="loading"></div>
+    <!-- Help Email section with prefilled values -->
+    <a href="mailto:team.deshai@gmail.com?subject=I need help with Desh Ai&body=Hi team, I want help as I am facing the following issues:-" class="help-btn">
+      Need Urgent Help?
+    </a>
   </div>
 
-  <button id="scrollToBottomBtn">⬇</button>
-  <button id="pauseResumeBtn">
-    <svg viewBox="0 0 24 24" width="20" height="20">
-      <rect x="6" y="5" width="4" height="14" rx="1"></rect>
-      <rect x="14" y="5" width="4" height="14" rx="1"></rect>
-    </svg>
-  </button>
-  <button id="pdfBtn" onclick="downloadAndOpenPDF()">Make PDF of Ans</button>
+  <header class="header" onclick="event.stopPropagation()">
+    <button class="top-menu-btn" onclick="toggleDrawer()">
+      <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+    <div class="logo-brand">
+      <div class="logo-container">
+        <!-- Adaptive Vector Loader swapping immediately into static assets -->
+        <img id="headerLogo" src="static/logo.png" alt="Logo" class="logo-char-img" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+      </div>
+      <span class="brand-text-rest ml-1">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+    </div>
+    
+    <!-- Three dots trigger button -->
+    <button class="top-menu-btn" onclick="toggleThreeDots(event)">
+      <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+    </button>
 
-  <div class="mobile-bar">
-    <div class="search-wrapper">
-      <div class="rgb-border">
-        <div class="input-container">
-          <textarea id="question" placeholder="Ask to 𝕯𝖊𝕾𝖍 𝗔𝐢..." onfocus="scrollIntoViewIfNeeded()"></textarea>
-          <button id="micButton" onclick="startSpeech()">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a 3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2z"/>
-              <path d="M19 11h2a9 9 0 0 1-18 0h2a7 7 0 0 0 14 0z"/>
-            </svg>
-          </button>
+    <!-- Contextual top right options dropdown (Auto-Dismissable) with Close Red Cross -->
+    <div class="options-dropdown" id="topDropdown" onclick="event.stopPropagation()">
+      <button class="cut-btn" onclick="toggleThreeDots(event)">×</button>
+      <div class="dropdown-item mt-6" onclick="openSettingsModal()">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        General Settings
+      </div>
+      <div class="dropdown-item" onclick="triggerFeedback()">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/></svg>
+        Send Feedback
+      </div>
+      <div class="dropdown-item" onclick="triggerShare()">
+        <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+        Share Web App Link
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Chat Section -->
+  <main id="chatContainer" class="relative">
+      <!-- Embedded custom Animated Greeting Screen inside Scroll Pane -->
+      <div id="welcomeScreen" class="flex flex-col items-center justify-center w-full py-12 px-6 select-none my-auto" onclick="replayWelcomeAnimation(event)">
+          <div class="w-full max-w-[360px] md:max-w-[420px] mb-2">
+              <svg class="w-full h-auto overflow-visible" viewBox="0 0 530 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- "hello" Path -->
+                  <path id="helloText" 
+                        class="hello-path" 
+                        d="M 60,150 
+                           C 95,150 110,135 122,90 
+                           C 132,50 140,20 148,25 
+                           C 154,30 142,85 138,125 
+                           C 132,165 130,195 130,195
+                           C 130,195 135,160 148,138 
+                           C 162,112 178,102 190,102 
+                           C 208,102 212,125 206,148 
+                           C 200,172 202,195 215,195 
+                           C 228,195 235,175 240,158
+                           C 245,140 232,140 235,158
+                           C 238,175 248,195 262,180
+                           C 275,165 284,125 291,90
+                           C 298,55 305,20 311,25
+                           C 315,30 306,85 302,125
+                           C 298,165 296,195 303,195
+                           C 310,195 320,165 325,138
+                           C 330,105 338,20 343,25
+                           C 346,30 337,85 332,125
+                           C 327,165 325,195 332,195
+                           C 339,195 350,175 358,158
+                           C 365,142 375,125 364,125
+                           C 354,125 350,145 358,165
+                           C 366,185 382,185 395,165
+                           C 408,145 398,130 385,130
+                           C 372,130 368,142 385,146
+                           C 402,150 435,140 465,132" 
+                        stroke="#111827" 
+                        stroke-width="8.5" />
+                  
+                  <!-- Bracketless Smiley Face "•‿•" -->
+                  <circle id="smileLeftEye" class="smile-eye" cx="480" cy="115" r="5" fill="#111827" />
+                  <circle id="smileRightEye" class="smile-eye" cx="500" cy="115" r="5" fill="#111827" />
+                  <path id="smileMouth" class="smile-mouth-path" d="M 478,128 Q 490,140 502,128" stroke="#111827" stroke-width="7" fill="none" />
+              </svg>
+          </div>
+          <div class="text-center mt-4">
+              <span class="gothic-text inline-block mr-3">𝕯𝖊𝖘𝖍 𝐀𝖎</span>
+              <span class="cursive-greet">greets you</span>
+          </div>
+      </div>
+  </main>
+
+  <!-- Draggable Scroll Action FAB (Snaps to sides) -->
+  <div class="floating-actions" id="fabContainer" style="bottom: 95px; right: 20px;">
+    <!-- Circular Red Cancel Button (White cross, pinkish red background, thin border) -->
+    <div id="cancelEditBtn" class="fab-btn mb-2" onclick="cancelEditing(event)">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </div>
+    <div id="scrollBottomBtn" class="fab-btn">
+      <svg id="scrollFabIcon" viewBox="0 0 24 24" width="20"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="#666"/></svg>
+    </div>
+  </div>
+
+  <!-- Bottom Bar with Search bar shadow & border glowing system -->
+  <div class="bottom-section" id="footerSection" onclick="event.stopPropagation()">
+    <div class="tools-menu" id="toolsMenu" onclick="event.stopPropagation()">
+      <button class="cut-btn" onclick="togglePopup(event)">×</button>
+      <div class="menu-item mt-6" id="mode-image-btn" onclick="setMode('image')">
+        <svg viewBox="0 0 24 24" width="24">
+            <path fill="#8B4513" d="M4 18l5-7 4 5 3-4 4 6H4z"/>
+            <circle fill="#FFD700" cx="17" cy="7" r="2.5"/>
+            <rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="#ccc" stroke-width="1.5"/>
+        </svg>
+        <span>Image Generation</span>
+      </div>
+      <div class="menu-item" id="mode-search-btn" onclick="setMode('search')">
+        <!-- Exact red brand YouTube SVG -->
+        <svg viewBox="0 0 24 24" width="24">
+          <path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z" fill="#FF0000"/>
+          <path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/>
+        </svg>
+        <span>YT Search</span>
+      </div>
+      
+      <!-- Interactive Left Toggle Thunder System (No right side icon layout) -->
+      <div class="menu-item" onclick="toggleThunder()">
+        <svg id="thunderMenuIcon" viewBox="0 0 24 24" width="20" height="20" fill="#cccccc" style="transition: fill 0.2s ease;">
+            <path d="M13 10V3L4 14H11V21L20 10H13Z"/>
+        </svg>
+        <span>Thunder Mode</span>
+      </div>
+    </div>
+
+    <!-- Mode Selector Dynamic Icon Swap -->
+    <div class="tool-trigger-box">
+      <button class="tool-trigger" id="toolBtn" onclick="togglePopup(event)">
+        <div id="activeIconSlot">
+            <svg viewBox="0 0 24 24" width="24" height="24"><circle cx="7" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="11" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="17" x2="13" y2="17" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+      </button>
+      <div class="cancel-overlay" onclick="clearMode(event)">×</div>
+    </div>
+
+    <!-- Unified Input Container -->
+    <div class="unified-input-cont" id="inputCont" onclick="focusInputField()">
+      <!-- Repositioned Continuous Microphone Voice Input (Left side of input bar) -->
+      <button class="inner-btn mic-btn mr-1" id="voiceMicBtn" onclick="toggleSpeechRecording(event)">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="#4b5563">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+        </svg>
+      </button>
+
+      <textarea id="question" placeholder="Ask 𝕯𝖊𝕾𝖍 𝐀𝖎..." rows="1"></textarea>
+
+      <!-- Right Action Button: Wave SVG (Redirect to Neon) / Send Arrow SVG -->
+      <button class="inner-btn send-action-btn ml-1" id="sendBtn">
+        <svg id="waveIcon" viewBox="0 0 24 24" width="18" height="18" fill="#4b5563">
+          <rect x="2" y="10" width="2" height="4" rx="1"/>
+          <rect x="7" y="6" width="2" height="12" rx="1"/>
+          <rect x="12" y="2" width="2" height="20" rx="1"/>
+          <rect x="17" y="6" width="2" height="12" rx="1"/>
+          <rect x="22" y="10" width="2" height="4" rx="1"/>
+        </svg>
+        <svg id="sendIcon" viewBox="0 0 24 24" style="display:none;" width="18" height="18"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="disclaimer">𝕯𝖊𝕾𝖍 𝐀𝖎 can make mistakes. Consider checking important information.</div>
+
+  <!-- Settings Detailed Options Modal -->
+  <div class="modal-overlay" id="settingsModal" onclick="closeModals()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="cut-btn" onclick="closeModals()">×</button>
+      <h3 style="margin-top:0; font-size:16px; margin-bottom:16px;">Customize 𝕯𝖊𝕾𝖍 𝐀𝖎</h3>
+      
+      <div class="form-group">
+        <label>Accent Color Theme</label>
+        <div class="color-swatches">
+          <div class="color-swatch" style="background:#f5b342;" onclick="setAccent('#f5b342', this)"></div>
+          <div class="color-swatch" style="background:#0ea5e9;" onclick="setAccent('#0ea5e9', this)"></div>
+          <div class="color-swatch" style="background:#22c55e;" onclick="setAccent('#22c55e', this)"></div>
+          <div class="color-swatch" style="background:#a855f7;" onclick="setAccent('#a855f7', this)"></div>
+          <div class="color-swatch" style="background:#ec4899;" onclick="setAccent('#ec4899', this)"></div>
         </div>
       </div>
-      <button id="searchBtn" onclick="askQuestion()">↑</button>
-    </div>
-  </div>
-  <!-- 🌐 Hamburger MenuButton -->
-<div id="menuBtn" onclick="toggleMenu()">
-  ☰
-</div>
 
-<!-- 🧭 Side Navigation Panel -->
-<div id="sideMenu">
-<a href="/desh.html" class="menu-single">
-  𝕯𝖊𝖘𝖍 𝐀𝖎 
-  <span class="pro-badge">PRO</span>
-</a>
+      <div class="form-group">
+        <label>Primary Output Language</label>
+        <select id="userLangSelect" class="form-control">
+          <option value="en">English (Default)</option>
+          <option value="hi">Hindi (हिंदी)</option>
+          <option value="es">Spanish (Español)</option>
+          <option value="fr">French (Français)</option>
+          <option value="ar">Arabic (العربية)</option>
+          <option value="de">German (Deutsch)</option>
+        </select>
+      </div>
 
-  <!-- 🔹 OUR PRODUCS -->
-    <!-- 🔹 OUR PRODUCTS -->
-  <div class="menu-section">
-    <div class="menu-header" onclick="toggleSection(this)">
-      Our Products
-    </div>
-    <div class="menu-content">
-      <a href="/vsics">About CEO</a>
-      <a href="/mag">Minerwa Aluminium&Glass LLC</a>
-      <a href="/study">𝕯𝖊𝖘𝖍 𝐀𝖎’s 𝚂𝚝𝚞𝚍𝚢 𝚂𝚙𝚎𝚌𝚒𝚏𝚒𝚌</a>
-      <a href="/smart">𝚂𝚖𝚊𝚛𝚝 𝙲𝚊𝚝𝚎𝚐𝚘𝚛𝚒𝚣𝚎𝚛</a>
-      <a href="/calculator">𝙲𝚊𝚕𝚌𝚞𝚕𝚊𝚝𝚘𝚛</a>
-      <a href="/Dictionary">𝙳𝚒𝚌𝚝𝚒𝚘𝚗𝚊𝚛𝚢 (𝐀𝖎+)</a>
-      <a href="/BMI">𝙱𝙼𝙸 (𝐀𝖎+)</a>
-      <a href="/cam">𝕯𝖊𝖘𝖍 𝙲𝚊𝚖</a>
-      <a href="/50">𝚃𝚑𝚎_𝟓𝟎 𝐀𝖎 ✨</a>
-      <a href="/waves">Sadhna (🧘🏻‍♂️)</a>
-      <a href="/pdf">𝚃𝚎𝚡𝚝 𝚝𝚘 𝙿𝙳𝙵</a>
+      <div style="display:flex; gap:8px; margin-top:20px;">
+        <button class="icon-action-btn" style="flex:1; justify-content:center; background:var(--accent-color); color:white; height:38px;" onclick="saveSettings()">
+          Save & Apply
+        </button>
+        <button class="icon-action-btn" style="flex:1; justify-content:center; background:#f3f4f6; height:38px;" onclick="closeModals()">
+          Cancel
+        </button>
+      </div>
     </div>
   </div>
 
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
 
-  
+    const chat = document.getElementById('chatContainer');
+    const input = document.getElementById('question');
+    const inputCont = document.getElementById('inputCont');
+    const sendBtn = document.getElementById('sendBtn');
+    const menu = document.getElementById('toolsMenu');
+    const toolBtn = document.getElementById('toolBtn');
+    const scrollBottomBtn = document.getElementById('scrollBottomBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const footerSection = document.getElementById('footerSection');
+    const fabContainer = document.getElementById('fabContainer');
+    const voiceMicBtn = document.getElementById('voiceMicBtn');
+    
+    let activeMode = 'text'; 
+    let thunderMode = false;
+    let messageHistory = [];
+    let editingState = null;
+    let autoScroll = true;
+    let selectedAccent = '#f5b342';
+    let outputLanguage = 'en';
+    let speechActive = false;
 
-  <!-- 🎮 GAMES -->
-  <div class="menu-section">
-    <div class="menu-header" onclick="toggleSection(this)">
-      Games
-    </div>
-    <div class="menu-content">
-      <a href="/numpuzz">𝙽𝚞𝚖𝙿𝚞𝚣𝚣 </a>
-      <a href="/snake">𝚂𝚗𝚊𝚔𝚎 𝙶𝚊𝚖𝚎</a>
-      <a href="/Tic">𝙲𝚛𝚒𝚌𝚞 (𝐀𝖎+)</a>
-       <a href="/Tac">𝚃𝚒𝚌 𝚃𝚊𝚌 𝚃𝚘𝚎(𝐀𝖎+)</a>
-      <a href="/dot">𝙲𝚘𝚗𝚗𝚎𝚌𝚝 The 𝙳𝚘𝚝𝚜 (𝐀𝖎+)</a>
-          <!-- Add unlimited games here -->
-    </div>
-  </div>
-</div>
+    const STATUS_PHRASES = ["Analysing...","Searching databases...", "Thinking deeply...","Almost done...", "Formulating beautiful response...","Discussing with multiple AI models...", "Optimizing parameters..."];
 
+    // Mapping languages to voice locales for Speech Synthesis Pronunciation
+    const langVoiceMap = {
+      en: 'en-US',
+      hi: 'hi-IN',
+      es: 'es-ES',
+      fr: 'fr-FR',
+      ar: 'ar-SA',
+      de: 'de-DE'
+    };
 
-<style>
-/* --- Hamburger Icon --- */
+    // Secure Environmental API Keys fallback configuration
+    const POLL_KEY = typeof __poll_key !== 'undefined' ? __poll_key : "sk_R7H6lZh8ozUQlg4SCPI9TJUKCvWjSVJ2";
+    const YT_KEY = typeof __yt_key !== 'undefined' ? __yt_key : "AIzaSyCBM7PzVnA1rZQy0TwlrgejBmYvVeC3VDc";
 
-.pro-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 8px;
-  padding: 3px 8px;
-  font-size: 11px;
-  font-weight: bold;
-  color: #f32121;
-  border: 1.6px solid #f32121;
-  border-radius: 999px;
-  background: rgba(243, 33, 33, 0);
-  box-shadow: 0 0 3px rgb(255, 0, 0);
-}
+    // Global click dismiss handler covering all interactive states and menus (Welcome-screen safe!)
+    window.handleGlobalClick = function(e) {
+      // Dismiss tools menu if open and clicked outside
+      if (menu.classList.contains('show') && !menu.contains(e.target) && !e.target.closest('.tool-trigger')) {
+         closeToolsMenu();
+      }
+      // Dismiss top options 3-dot dropdown if open and clicked outside
+      const dropdown = document.getElementById('topDropdown');
+      if (dropdown.classList.contains('show') && !dropdown.contains(e.target) && !e.target.closest('.top-menu-btn')) {
+         dropdown.classList.remove('show');
+      }
+      // Dismiss hamburger drawer if open and clicked outside
+      const drawer = document.getElementById('sidebarDrawer');
+      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !e.target.closest('.top-menu-btn')) {
+        toggleDrawer();
+      }
+      // Dismiss active Edit Popup action bubble if clicked anywhere on the screen
+      document.querySelectorAll('.edit-popup').forEach((popup) => {
+        if (popup.style.display === 'flex' && !popup.contains(e.target) && !e.target.closest('.user-msg')) {
+          popup.style.display = 'none';
+        }
+      });
+    };
 
+    // Tap to focus anywhere inside search container
+    window.focusInputField = function() {
+      input.focus();
+    };
 
-/* 🔥 DESH AI PRO – same hover animation as menu headers */
-.menu-single {
-  position: relative;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    padding-left 0.3s ease,
-    box-shadow 0.3s ease;
-}
+    input.addEventListener('focus', () => {
+      inputCont.classList.add('glow-orange');
+    });
 
-/* Hover effect */
-.menu-single:hover {
-  background: linear-gradient(90deg, #fff7cc, #ffffff);
-  color: #000;
-  padding-left: 28px;
-  box-shadow: inset 4px 0 0 rgb(255, 174, 0);
-}
+    input.addEventListener('blur', () => {
+      if (input.value.trim().length === 0 && activeMode === 'text') {
+        inputCont.classList.remove('glow-orange');
+      }
+    });
 
-/* Underline animation */
-.menu-single::after {
-  content: "";
-  position: absolute;
-  bottom: 8px;
-  left: 20px;
-  width: 0;
-  height: 2px;
-  background: rgb(255, 174, 0);
-  transition: width 0.3s ease;
-}
+    function toggleThreeDots(e) {
+      e.stopPropagation();
+      const dropdown = document.getElementById('topDropdown');
+      dropdown.classList.toggle('show');
+    }
 
-.menu-single:hover::after {
-  width: 70%;
-}
+    function openSettingsModal() {
+      document.getElementById('topDropdown').classList.remove('show');
+      document.getElementById('settingsModal').style.display = 'flex';
+    }
 
-/* PRO badge glow on hover */
-.menu-single:hover .pro-badge {
-  color: #ff0000;
-  border-color: #ff0000;
-  box-shadow: 0 0 6px rgba(255, 0, 0, 0.8);
-  background: rgba(255, 0, 0, 0.08);
-}
+    function closeModals() {
+      document.getElementById('settingsModal').style.display = 'none';
+    }
 
+    function setAccent(color, element) {
+      selectedAccent = color;
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+      if(element) element.classList.add('active');
+    }
 
-#menuBtn {
-  position: fixed;
+    function saveSettings() {
+      outputLanguage = document.getElementById('userLangSelect').value;
+      localStorage.setItem('deshai_lang', outputLanguage);
+      document.documentElement.style.setProperty('--accent-color', selectedAccent);
+      document.documentElement.style.setProperty('--user-purple', selectedAccent);
+      document.documentElement.style.setProperty('--accent-border', selectedAccent + '4d'); 
+      closeModals();
+    }
 
-  top: 15px;
-  left: 15px;
-  font-size: 28px;
-  cursor: pointer;
-  color: rgb(0, 0, 0);
-  background: #ffffff00;
-  border-radius: 11px;
-  padding: 6px 12px;
-  z-index: 1001;
-  transition: background 0.3s;
-  box-shadow: 0 0 4px rgb(255, 174, 0);
-}
-#menuBtn:hover { background: #e8e8e8c0; }
+    // Retrieve saved language settings on initialization
+    const savedLang = localStorage.getItem('deshai_lang');
+    if (savedLang) {
+      outputLanguage = savedLang;
+      document.getElementById('userLangSelect').value = savedLang;
+    }
 
-/* --- Side Menu Panel --- */
-#sideMenu {
-  position: fixed;
-  
-  top: 0px;
-  left: -260px;
-  width: 240px;
-  height: 100%;
-  background-color: #ffffff;
-  color: rgb(0, 0, 0);
-  overflow-x: hidden;
-  transition: 0.4s;
-  padding-top: 85px;
-  z-index: 1000;
-  box-shadow: 02px 0 3px  rgba(255, 174, 0, 0.982);
-}
-#sideMenu h3 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-#sideMenu a {
-  display: block;
-  padding: 10px 20px;
-  color: rgb(0, 0, 0);
-  text-decoration: none;
-  transition: background 0.3s;
-}
-#sideMenu a:hover {
-  background: #b4b4b400;
-  
-}
-.menu-section {
-  margin-bottom: 20px;
-}
+    function triggerFeedback() {
+      const email = "team.deshai@gmail.com";
+      const subject = encodeURIComponent("Share Experience on 𝕯𝖊𝖘𝖍 𝐀𝖎");
+      const body = encodeURIComponent('Hey dear sir, "I am here to share my experience after using your 𝕯𝖊𝖘𝖍 𝐀𝖎 and I want to say that ');
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      document.getElementById('topDropdown').classList.remove('show');
+    }
 
-.menu-section h3 {
-  text-align: center;
-  margin: 10px 0;
-  font-size: 16px;
-  color: #ffffff;
-}
+    function triggerShare() {
+      const inputEl = document.createElement('textarea');
+      inputEl.value = 'https://deshai.in';
+      document.body.appendChild(inputEl);
+      inputEl.select();
+      document.execCommand('copy');
+      document.body.removeChild(inputEl);
+      document.getElementById('topDropdown').classList.remove('show');
+    }
 
-#sideMenu hr {
-  border: none;
-  border-top: 1px solid rgba(239, 1, 1, 0.701);
-  margin: 15px 10px;
-}
-/* Section wrapper */
-.menu-section {
-  margin-bottom: 10px;
-}
+    function toggleDrawer() {
+      const sidebar = document.getElementById('sidebarDrawer');
+      sidebar.classList.toggle('open');
+      if(sidebar.classList.contains('open')) {
+        document.body.classList.add('menu-open');
+      } else {
+        document.body.classList.remove('menu-open');
+      }
+    }
 
-/* Clickable header */
-.menu-header {
-  padding: 12px 20px;
-  cursor: pointer;
-  font-weight: bold;
-  background: rgb(255, 255, 255);
-  user-select: none;
-}
-.menu-content {
-  background: rgb(145, 145, 145);
-}
-/* Hidden content (default closed) */
-.menu-content {
-  max-height: 0;
-  overflow-y: auto;
-  transition: max-height 0.35s ease;
-  background: rgba(233, 233, 233, 0.797);
-  
-}
+    function toggleAccordion(id) {
+      const content = document.getElementById(`${id}-list`);
+      const title = document.getElementById(`title-${id}`);
+      
+      // Auto-collapse other open section before expanding new accordion to fit screen space cleanly
+      const otherId = id === 'products' ? 'games' : 'products';
+      const otherContent = document.getElementById(`${otherId}-list`);
+      const otherTitle = document.getElementById(`title-${otherId}`);
+      if (otherContent.classList.contains('show')) {
+        otherContent.classList.remove('show');
+        otherTitle.classList.remove('active');
+      }
 
-/* Scroll when items are many */
-.menu-content.open {
-  max-height: 180px; /* scroll starts after this */
-}
+      content.classList.toggle('show');
+      title.classList.toggle('active');
+    }
 
-/* Links */
-.menu-content a {
-  display: block;
-  padding: 10px 25px;
-  color: rgb(255, 255, 255);
-  text-decoration: none;
-}
+    function togglePopup(e) { 
+        e.stopPropagation(); 
+        menu.classList.toggle('show'); 
+    }
 
-.menu-content :hover {
-  background: rgb(145, 145, 145);
-}
-/* 🔥 Hover effect for Our Products & Games */
-.menu-header {
-  position: relative;
-  transition: 
-    background 0.3s ease,
-    color 0.3s ease,
-    padding-left 0.3s ease,
-    box-shadow 0.3s ease;
-}
+    function closeToolsMenu() {
+        menu.classList.remove('show');
+    }
 
-/* Hover animation */
-.menu-header:hover {
-  background: linear-gradient(90deg, #fff7cc, #ffffff);
-  color: #000;
-  padding-left: 28px;
-  box-shadow: inset 4px 0 0 rgb(255, 174, 0);
-}
+    // Toolbox selections dynamic icon swap (featuring Brown Mountains image icon)
+    function setMode(mode) {
+      activeMode = mode;
+      toolBtn.classList.add('active');
+      
+      document.getElementById('mode-image-btn').classList.remove('active-mode');
+      document.getElementById('mode-search-btn').classList.remove('active-mode');
+      
+      if (mode === 'image') {
+        document.getElementById('mode-image-btn').classList.add('active-mode');
+        document.getElementById('activeIconSlot').innerHTML = `
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#8B4513">
+            <path d="M4 18l5-7 4 5 3-4 4 6H4z"/>
+            <circle cx="17" cy="7" r="2.5" fill="#FFD700"/>
+            <rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="#8B4513" stroke-width="1.5"/>
+          </svg>`;
+      } else if (mode === 'search') {
+        document.getElementById('mode-search-btn').classList.add('active-mode');
+        document.getElementById('activeIconSlot').innerHTML = `
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--yt-red)">
+            <path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z"/>
+            <path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/>
+          </svg>`;
+      }
+      closeToolsMenu();
+      inputCont.classList.add('glow-orange');
+    }
 
-/* Optional underline glow */
-.menu-header::after {
-  content: "";
-  position: absolute;
-  bottom: 6px;
-  left: 20px;
-  width: 0;
-  height: 2px;
-  background: rgb(255, 174, 0);
-  transition: width 0.3s ease;
-}
+    function clearMode(e) {
+      if(e) e.stopPropagation();
+      activeMode = 'text';
+      toolBtn.classList.remove('active');
+      document.getElementById('mode-image-btn').classList.remove('active-mode');
+      document.getElementById('mode-search-btn').classList.remove('active-mode');
+      document.getElementById('activeIconSlot').innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="7" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="11" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="4" y1="17" x2="13" y2="17" stroke="currentColor" stroke-width="2"/></svg>`;
+      inputCont.classList.remove('glow-orange');
+    }
 
-.menu-header:hover::after {
-  width: 60%;
-}
+    function toggleThunder() {
+      thunderMode = !thunderMode;
+      const toggleIcon = document.getElementById('thunderMenuIcon');
+      if(thunderMode) {
+        toggleIcon.setAttribute('fill', '#ffd700');
+      } else {
+        toggleIcon.setAttribute('fill', '#cccccc');
+      }
+      closeToolsMenu();
+    }
 
-</style>
+    // Dynamic Scroll FAB indicator
+    chat.onscroll = () => {
+      const threshold = 120;
+      const isNearBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight < threshold;
+      autoScroll = isNearBottom;
+      
+      const icon = document.getElementById('scrollFabIcon');
+      if (isNearBottom) {
+        icon.innerHTML = `<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" fill="#666"/>`;
+      } else {
+        icon.innerHTML = `<path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="#666"/>`;
+      }
 
-<script>
-function toggleMenu() {
-  const menu = document.getElementById("sideMenu");
-  menu.style.left = (menu.style.left === "0px") ? "-260px" : "0px";
-}
-</script>
-<script>
-function toggleSection(header) {
-  const content = header.nextElementSibling;
-  content.classList.toggle("open");
-}
-</script>
+      // Scroll FAB Appears only when required (chat content overflows the viewport)
+      if (chat.scrollHeight > chat.clientHeight) {
+        fabContainer.style.display = 'block';
+      } else {
+        fabContainer.style.display = 'none';
+      }
+    };
 
-  <script>
-    /* --- JavaScript stays exactly same --- */
-    let lastAnswer = "", autoScroll = true, isPaused = false, typingInterval;
-    const chatWrapper=document.getElementById('chatWrapper'),
-          scrollBtn=document.getElementById('scrollToBottomBtn'),
-          pauseBtn=document.getElementById('pauseResumeBtn'),
-          searchBtn=document.getElementById('searchBtn'),
-          pdfBtn=document.getElementById('pdfBtn');
+    function handleScrollFabClick() {
+      const threshold = 120;
+      const isNearBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight < threshold;
+      if (isNearBottom) {
+        chat.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        scrollToBottom(true);
+      }
+    }
 
-    chatWrapper.addEventListener('scroll',()=>{ const atBottom=chatWrapper.scrollHeight - chatWrapper.scrollTop <= chatWrapper.clientHeight + 50;
-      autoScroll=atBottom; scrollBtn.style.display=atBottom?'none':'flex'; });
-    scrollBtn.addEventListener('click',()=>{ chatWrapper.scrollTop=chatWrapper.scrollHeight; autoScroll=true; scrollBtn.style.display='none'; });
+    function scrollToBottom(force = false) {
+        if (force || autoScroll) {
+            chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+        }
+    }
 
-    function updatePauseIcon(){ if(isPaused){
-      pauseBtn.innerHTML = `
-  <svg viewBox="0 0 24 24" width="20" height="20">
-    <path d="M8 5v14l11-7z"></path>
-  </svg>`;
+    // Draggable Scroll FAB Controller with snap to nearest edge
+    const draggableFab = document.getElementById('fabContainer');
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
 
-      pauseBtn.setAttribute('aria-pressed','true'); pauseBtn.setAttribute('aria-label','Resume reply');
-    } else {
-      pauseBtn.innerHTML = `
-  <svg viewBox="0 0 24 24" width="20" height="20">
-    <rect x="6" y="5" width="4" height="14" rx="1"></rect>
-    <rect x="14" y="5" width="4" height="14" rx="1"></rect>
-  </svg>`;
+    draggableFab.addEventListener('mousedown', dragStart);
+    draggableFab.addEventListener('touchstart', dragStart, { passive: true });
 
-      pauseBtn.setAttribute('aria-pressed','false'); pauseBtn.setAttribute('aria-label','Pause reply'); } }
+    function dragStart(e) {
+      if (e.target.closest('#cancelEditBtn')) return;
+      isDragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      startX = clientX;
+      startY = clientY;
+      
+      const rect = draggableFab.getBoundingClientRect();
+      initialX = rect.left;
+      initialY = rect.top;
 
-    pauseBtn.addEventListener('click',()=>{ isPaused = !isPaused; updatePauseIcon(); });
-    searchBtn.addEventListener("click", () => { pauseBtn.style.display = "flex"; });
+      document.addEventListener('mousemove', dragMove);
+      document.addEventListener('touchmove', dragMove, { passive: false });
+      document.addEventListener('mouseup', dragEnd);
+      document.addEventListener('touchend', dragEnd);
+    }
 
-    async function askQuestion(){
-      const q=document.getElementById('question').value.trim();
-      if(!q) return;
-      const answerDiv=document.getElementById('answer'),
-            loading=document.getElementById('loading'),
-            youtube=document.getElementById('youtube-results');
-      answerDiv.innerHTML=""; youtube.innerHTML="";
-      loading.innerHTML=`<div class="circle"><span>𝕯𝖊𝕾𝖍 𝗔𝐢</span></div><div class="replying">𝐑𝐞𝐩𝐥𝐲𝐢𝐧𝐠 𝐒𝐨𝐨𝐧<span>.</span><span>.</span><span>.</span></div>`;
-      pauseBtn.style.display='flex'; pdfBtn.style.display='flex';
+    function dragMove(e) {
+      if (!isDragging) return;
+      if (e.cancelable) e.preventDefault();
+      
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      
+      let newX = initialX + dx;
+      let newY = initialY + dy;
+
+      newX = Math.max(10, Math.min(window.innerWidth - 60, newX));
+      newY = Math.max(10, Math.min(window.innerHeight - 100, newY));
+
+      draggableFab.style.left = `${newX}px`;
+      draggableFab.style.top = `${newY}px`;
+      draggableFab.style.bottom = 'auto';
+      draggableFab.style.right = 'auto';
+    }
+
+    function dragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+
+      document.removeEventListener('mousemove', dragMove);
+      document.removeEventListener('touchmove', dragMove);
+      document.removeEventListener('mouseup', dragEnd);
+      document.removeEventListener('touchend', dragEnd);
+
+      const rect = draggableFab.getBoundingClientRect();
+      const screenW = window.innerWidth;
+      const screenH = window.innerHeight;
+
+      const distToLeft = rect.left;
+      const distToRight = screenW - (rect.left + rect.width);
+      const distToTop = rect.top;
+      const distToBottom = screenH - (rect.top + rect.height);
+
+      const minDistance = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+
+      draggableFab.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+      
+      if (minDistance === distToLeft) {
+        draggableFab.style.left = '16px';
+      } else if (minDistance === distToRight) {
+        draggableFab.style.left = `${screenW - 60}px`;
+      } else if (minDistance === distToTop) {
+        draggableFab.style.top = '16px';
+      } else {
+        draggableFab.style.top = `${screenH - 120}px`;
+      }
+
+      setTimeout(() => {
+        draggableFab.style.transition = 'none';
+      }, 300);
+
+      handleScrollFabClick();
+    }
+
+    input.oninput = () => {
+      input.style.height = "auto";
+      input.style.height = input.scrollHeight + "px";
+      const val = input.value.trim();
+      if(val.length > 0) {
+        inputCont.classList.add('glow-orange');
+        sendBtn.classList.add('active');
+        document.getElementById('waveIcon').style.display = 'none';
+        document.getElementById('sendIcon').style.display = 'block';
+      } else {
+        if(activeMode === 'text') inputCont.classList.remove('glow-orange');
+        sendBtn.classList.remove('active');
+        document.getElementById('waveIcon').style.display = 'block';
+        document.getElementById('sendIcon').style.display = 'none';
+      }
+    };
+
+    // Continuous Speech listening pipeline
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+    if(recognition) {
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.onresult = (e) => { 
+           const resultText = e.results[e.results.length - 1][0].transcript;
+           input.value = (input.value + " " + resultText).trim(); 
+           input.oninput(); 
+        };
+        recognition.onend = () => { 
+           if (speechActive) {
+             recognition.start(); 
+           } else {
+             voiceMicBtn.classList.remove('active-mic');
+           }
+        };
+    }
+
+    function toggleSpeechRecording(e) {
+       e.stopPropagation();
+       if (!recognition) {
+         return;
+       }
+       if (speechActive) {
+         speechActive = false;
+         recognition.stop();
+         voiceMicBtn.classList.remove('active-mic');
+       } else {
+         speechActive = true;
+         recognition.start();
+         voiceMicBtn.classList.add('active-mic');
+       }
+    }
+
+    // Dynamic clean empty/blank home page state trigger animations
+    window.replayWelcomeAnimation = function(e) {
+        if(e) e.stopPropagation();
+        const helloPath = document.getElementById('helloText');
+        const smileMouth = document.getElementById('smileMouth');
+        const smileLeftEye = document.getElementById('smileLeftEye');
+        const smileRightEye = document.getElementById('smileRightEye');
+        const gothicText = document.querySelector('.gothic-text');
+        const cursiveGreet = document.querySelector('.cursive-greet');
+
+        const elements = [helloPath, smileMouth, smileLeftEye, smileRightEye, gothicText, cursiveGreet];
+        elements.forEach(el => el.style.animation = 'none');
+        void helloPath.offsetWidth; 
+
+        helloPath.style.animation = 'drawHelloOnce 3.0s cubic-bezier(0.45, 0, 0.2, 1) forwards';
+        smileMouth.style.animation = 'drawSmile 0.5s cubic-bezier(0.4, 0, 0.2, 1) 2.9s forwards';
+        smileLeftEye.style.animation = 'popEye 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 3.2s forwards';
+        smileRightEye.style.animation = 'popEye 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 3.35s forwards';
+        gothicText.style.animation = 'fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 3.6s forwards';
+        cursiveGreet.style.animation = 'fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 4.1s forwards';
+    }
+
+    // Submit thread
+    async function handleRequest() {
+      const q = input.value.trim();
+      if(!q) {
+         location.href = "static/neon.html";
+         return;
+      }
+
+      // Hide Blank welcome page
+      const welcome = document.getElementById('welcomeScreen');
+      if (welcome) welcome.remove();
+
+      if(editingState !== null) {
+        const removed = messageHistory.slice(editingState.index);
+        removed.forEach(m => m.element.remove());
+        messageHistory = messageHistory.slice(0, editingState.index);
+        editingState = null;
+      }
+
+      cancelEditBtn.style.display = 'none';
+      appendMsg('user', q);
+      input.value = ''; input.oninput();
+      
+      if(activeMode === 'image') {
+        await genImage(q);
+      } else {
+        await genText(q, activeMode === 'search');
+      }
+    }
+
+    function appendMsg(role, text) {
+        const msgId = Date.now();
+        const wrapper = document.createElement('div');
+        wrapper.className = role === 'user' ? 'user-msg-wrapper' : 'ai-msg-wrapper';
+        wrapper.id = 'msg-' + msgId;
+        
+        if(role === 'user') {
+            wrapper.innerHTML = `
+                <div class="user-msg" onmousedown="startPress(event, ${msgId})" ontouchstart="startPress(event, ${msgId})" onmouseup="cancelPress()" ontouchend="cancelPress()">
+                    ${text}
+                </div>
+                <div class="edit-popup" id="edit-${msgId}" onclick="triggerEdit(${msgId}, '${text.replace(/'/g, "\\'")}', event)">
+                    <svg viewBox="0 0 24 24" width="16" fill="#666"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    <span style="font-size:12px; font-weight:bold; margin-left:4px;">Edit</span>
+                </div>
+            `;
+            chat.appendChild(wrapper);
+            messageHistory.push({ id: msgId, role, text, element: wrapper });
+            scrollToBottom(true); 
+        }
+    }
+
+    let longPressTimer;
+    function startPress(e, id) {
+        cancelPress();
+        longPressTimer = setTimeout(() => {
+            closePopups();
+            document.getElementById('edit-' + id).style.display = 'flex';
+        }, 600);
+    }
+    function cancelPress() { clearTimeout(longPressTimer); }
+
+    // Keeps all above chat visible and untouched while editing is active
+    function triggerEdit(id, text, e) {
+        if(e) e.stopPropagation();
+        const index = messageHistory.findIndex(m => m.id === id);
+        if(index === -1) return;
+        editingState = { index };
+        input.value = text;
+        input.focus();
+        input.oninput();
+        closePopups();
+        cancelEditBtn.style.display = 'flex';
+        // Make sure fab Container displays to hold the cancel button above input bar
+        fabContainer.style.display = 'block';
+    }
+
+    function cancelEditing(e) {
+        if(e) e.stopPropagation();
+        editingState = null;
+        input.value = '';
+        input.oninput();
+        cancelEditBtn.style.display = 'none';
+        scrollToBottom(true);
+    }
+
+    async function genText(q, isSearch) {
+      const loader = document.createElement('div');
+      loader.className = 'ai-msg-wrapper';
+      loader.innerHTML = `
+        <div class="ai-header">
+            <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+            <span class="ai-name">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+        </div>
+        <div class="loading-container">
+            <div class="status-text" id="status-label">Searching...</div>
+            <div class="shimmer-block"></div>
+            <div class="shimmer-block short"></div>
+        </div>`;
+      chat.appendChild(loader);
+      scrollToBottom(true);
+
+      let phraseIdx = 0;
+      const phraseInterval = setInterval(() => {
+        phraseIdx = (phraseIdx + 1) % STATUS_PHRASES.length;
+        const label = loader.querySelector('#status-label');
+        if(label) label.innerText = STATUS_PHRASES[phraseIdx];
+      }, 1200);
+
+      // Persistent localized translation directive
+      const languageDirective = outputLanguage !== 'en' ? ` (Translate response to language locale: ${outputLanguage} and answer strictly in that language)` : ' (Answer strictly in English language layout)';
+      const optimizedQuery = `${q}${languageDirective}`;
 
       try {
-        const res=await fetch("https://deshai-ebecb8c5cbdxeee8.southeastasia-01.azurewebsites.net/ask",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({question:q}) });
-        if(!res.ok) throw new Error(`Server error: ${res.status}`);
-        const data=await res.json(); loading.innerHTML="";
+        const res = await fetch("https://deshai-ebecb8c5cbdxeee8.southeastasia-01.azurewebsites.net/ask", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: optimizedQuery })
+        });
+        const data = await res.json();
+        
+        clearInterval(phraseInterval);
+        loader.remove();
 
-        if(data.image_url){
-          answerDiv.innerHTML=`<div>Here is your HD image:</div><a href="${data.image_url}" class="download-link" download>🖼 Click to download HD image</a>`;
-          lastAnswer="";
+        const id = 'txt-' + Date.now();
+        const div = createAIBox();
+        
+        const ytBadgeHtml = isSearch ? `
+          <div class="status-badge" style="color: var(--yt-red); gap:6px;">
+            <svg viewBox="0 0 24 24" width="16" fill="var(--yt-red)"><path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z"/><path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/></svg>
+            YouTube Mode Connected
+          </div>` : '';
+
+        div.innerHTML = `
+            <div class="ai-header">
+              <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+              <span class="ai-name">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+            </div>
+            ${ytBadgeHtml}
+            <div class="ai-content" id="${id}"></div>
+            <div class="action-row" id="act-${id}"></div>`;
+        
+        chat.appendChild(div);
+        messageHistory.push({ id: Date.now(), role: 'ai', element: div });
+
+        const content = data.answer || data.response || "No response received.";
+        if(thunderMode) {
+          document.getElementById(id).innerHTML = marked.parse(content);
+          if (window.MathJax) await MathJax.typesetPromise();
+          scrollToBottom();
         } else {
-          const rendered=marked.parse(data.answer||"No response.");
-          typeWriterHTML(rendered,answerDiv,async()=>{ if(window.MathJax) await MathJax.typesetPromise(); pauseBtn.style.display='none'; });
-          lastAnswer=data.answer||"";
+          await typeEffect(id, content);
         }
-
-        if(data.youtube_videos){
-          data.youtube_videos.forEach(v=>{ const div=document.createElement('div'); div.className='youtube-video';
-            div.innerHTML=`<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank"><img src="${v.thumbnail}" alt="Video"><p>${v.title}</p></a>`;
-            youtube.appendChild(div); });
-        }
-      } catch(e){
-        loading.innerHTML=""; answerDiv.innerHTML="Error fetching answer."; console.error(e); pauseBtn.style.display='none';
+        addActions(`act-${id}`, id, false, '', content);
+        if(isSearch) fetchYT(q, div);
+      } catch (e) {
+        clearInterval(phraseInterval);
+        loader.remove();
+        appendMsg('ai', "Neural Link Error. System offline.");
       }
-      document.getElementById('question').value=""; autoResizeTextarea(document.getElementById('question'));
     }
 
-    function typeWriterHTML(html,el,cb){
-      let i=0,temp=document.createElement("div"); temp.innerHTML=html; const content=temp.innerHTML;
-      (function typing(){ if(!isPaused && i<content.length){ el.innerHTML=content.substring(0,i+1);
-        if(autoScroll) chatWrapper.scrollTop=chatWrapper.scrollHeight; i++; typingInterval=setTimeout(typing,10);
-      } else if(i<content.length){ typingInterval=setTimeout(typing,50);
-      } else if(cb) cb(); })();
+    async function typeEffect(id, text) {
+      const el = document.getElementById(id);
+      const words = text.split(' ');
+      for(let i=0; i<words.length; i++){
+        el.innerHTML = marked.parse(words.slice(0, i+1).join(' '));
+        scrollToBottom();
+        await new Promise(r => setTimeout(r, 20));
+      }
+      // Re-trigger LaTeX layout typesetting pass cleanly on final output completion
+      if (window.MathJax) {
+         try {
+           await MathJax.typesetPromise([el]);
+         } catch (err) {}
+      }
     }
 
-    function scrollIntoViewIfNeeded(){ setTimeout(()=>document.getElementById('question').scrollIntoView({behavior:'smooth',block:'center'}),300); }
-    function autoResizeTextarea(el){ el.style.height="auto"; el.style.height=(el.scrollHeight)+"px"; }
-    const questionInput=document.getElementById('question');
-    questionInput.addEventListener('input',()=>autoResizeTextarea(questionInput));
+    // 1:1 Aspect Frame Integrated Infinite Particle Ocean Animation Loop 
+    function initParticleOcean(cardId, canvasId) {
+      const container = document.getElementById(cardId);
+      const canvas = document.getElementById(canvasId);
+      if (!canvas || !container) return;
 
-    async function downloadAndOpenPDF(){
-      const content=lastAnswer; if(!content){ alert("No answer to save."); return; }
-      try{
-        const res=await fetch("https://desh-ai.onrender.com/create_pdf",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({content}) });
-        const blob=await res.blob(); const url=URL.createObjectURL(blob);
-        const a=document.createElement('a'); a.href=url; a.download="DeshAI_Answer.pdf"; a.click(); URL.revokeObjectURL(url);
-      } catch(e){ console.error(e); alert("Error creating PDF."); }
-    }
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 2000);
+      camera.position.z = 180;
 
-    /* 🧠 Improved continuous mic logic */
-    let rec; let isListening = false;
-    function startSpeech() {
-      const micBtn = document.getElementById('micButton');
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+      });
 
-      if (isListening) {
-        rec.stop();
-        micBtn.classList.remove('active');
-        isListening = false;
-        return;
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      renderer.setPixelRatio(dpr);
+      renderer.setSize(container.clientWidth, container.clientHeight);
+
+      const pointer = new THREE.Vector2(999.0, 999.0);
+      const lerpedPointer = new THREE.Vector2(999.0, 999.0);
+      let isInteracting = false;
+      let interactionStrength = 0.0;
+
+      const PARTICLE_COUNT = 9500;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(PARTICLE_COUNT * 3);
+      const colors = new Float32Array(PARTICLE_COUNT * 3);
+      const scales = new Float32Array(PARTICLE_COUNT);
+      const color = new THREE.Color();
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const i3 = i * 3;
+        const radius = Math.random() * 420;
+        const angle = Math.random() * Math.PI * 2;
+
+        positions[i3] = Math.cos(angle) * radius;
+        positions[i3 + 1] = (Math.random() - 0.5) * 220;
+        positions[i3 + 2] = Math.sin(angle) * radius;
+
+        const mix = Math.random();
+        if (mix < 0.33) {
+          color.setRGB(1.0, 0.1, 0.7); // Pink
+        } else if (mix < 0.66) {
+          color.setRGB(0.1, 0.6, 1.0); // Blue
+        } else {
+          color.setRGB(0.5, 0.1, 1.0); // Violet
+        }
+
+        colors[i3] = color.r;
+        colors[i3 + 1] = color.g;
+        colors[i3 + 2] = color.b;
+        scales[i] = Math.random();
       }
 
-      isListening = true;
-      micBtn.classList.add('active');
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 
-      rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      rec.lang = 'en-IN';
-      rec.continuous = true; // ✅ continuous listening
-      rec.interimResults = false;
+      const material = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexColors: true,
+        uniforms: {
+          time: { value: 0 },
+          uMouse: { value: new THREE.Vector2(999.0, 999.0) },
+          uInteractionStrength: { value: 0.0 },
+          uRadius: { value: 0.55 }
+        },
+        vertexShader: `
+          attribute float scale;
+          varying vec3 vColor;
+          varying float vEffectFactor;
+          uniform float time;
+          uniform vec2 uMouse;
+          uniform float uInteractionStrength;
+          uniform float uRadius;
 
-      rec.onresult = (e) => {
-        const transcript = Array.from(e.results)
-          .map(result => result[0].transcript)
-          .join(' ');
-        document.getElementById('question').value = transcript.trim();
-      };
+          void main() {
+            vec3 p = position;
+            float wave1 = sin((p.x * 0.015) + time * 0.4) * 10.0;
+            float wave2 = cos((p.z * 0.02) + time * 0.35) * 10.0;
+            float wave3 = sin((p.x + p.z) * 0.01 + time * 0.2) * 14.0;
+            p.y += wave1 + wave2 + wave3;
 
-      rec.onerror = (e) => {
-        console.error('Speech recognition error:', e.error);
-        if (e.error !== 'no-speech') {
-          micBtn.classList.remove('active');
-          isListening = false;
+            float swirl = sin(time * 0.1 + length(p.xz) * 0.02);
+            p.x += swirl * 4.0;
+            p.z += swirl * 4.0;
+
+            vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+            vec4 projectedPosition = projectionMatrix * mvPosition;
+            vec2 ndcPos = projectedPosition.xy / projectedPosition.w;
+            float screenDist = length(ndcPos - uMouse);
+
+            vEffectFactor = 0.0;
+
+            if (uInteractionStrength > 0.0 && screenDist < uRadius) {
+              float effect = smoothstep(uRadius, 0.0, screenDist) * uInteractionStrength;
+              vEffectFactor = effect;
+              float localFastTime = time * 14.0;
+              p.x += (sin(localFastTime + p.y * 0.08) * 20.0) * effect;
+              p.y += (cos(localFastTime + p.x * 0.08) * 28.0) * effect;
+              p.z += (sin(localFastTime * 1.2 + p.z * 0.08) * 20.0) * effect;
+              p.y += (sin(time * 3.0) * 10.0) * effect;
+
+              mvPosition = modelViewMatrix * vec4(p, 1.0);
+              projectedPosition = projectionMatrix * mvPosition;
+            }
+
+            gl_PointSize = (2.5 + scale * 4.0) * (300.0 / -mvPosition.z);
+            if (vEffectFactor > 0.0) {
+              gl_PointSize *= (1.0 + vEffectFactor * 0.6);
+            }
+            gl_Position = projectedPosition;
+            vec3 coreColor = mix(vec3(0.1, 0.95, 1.0), vec3(1.0, 1.0, 1.0), vEffectFactor * 0.5);
+            vColor = mix(color, coreColor, vEffectFactor * 0.9);
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          varying float vEffectFactor;
+          void main() {
+            float d = distance(gl_PointCoord, vec2(0.5));
+            float strength = smoothstep(0.5, 0.0, d);
+            float glowPower = mix(2.0, 1.4, vEffectFactor);
+            strength = pow(strength, glowPower);
+            vec3 glow = vColor * strength;
+            gl_FragColor = vec4(glow, strength);
+          }
+        `
+      });
+
+      const particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+
+      function updatePointerCoords(e) {
+        const rect = container.getBoundingClientRect();
+        const clientX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const clientY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        pointer.x = (clientX / rect.width) * 2 - 1;
+        pointer.y = -(clientY / rect.height) * 2 + 1;
+      }
+
+      container.addEventListener('pointerdown', (e) => {
+        isInteracting = true;
+        updatePointerCoords(e);
+        lerpedPointer.copy(pointer);
+        interactionStrength = 1.0;
+      }, { passive: true });
+
+      container.addEventListener('pointermove', (e) => {
+        if (isInteracting) {
+          updatePointerCoords(e);
+          lerpedPointer.copy(pointer);
         }
+      }, { passive: true });
+
+      // Immediate zero-delay dissipation of vortex magnetism on lift
+      const clearMagnetism = () => {
+         isInteracting = false;
+         interactionStrength = 0.0;
+         pointer.set(999.0, 999.0);
+         lerpedPointer.set(999.0, 999.0);
       };
 
-      rec.onend = () => {
-        if (isListening) rec.start();
-        else micBtn.classList.remove('active');
-      };
+      container.addEventListener('pointerup', clearMagnetism, { passive: true });
+      container.addEventListener('pointerleave', clearMagnetism, { passive: true });
+      container.addEventListener('touchend', clearMagnetism, { passive: true });
 
-      rec.start();
+      const clock = new THREE.Clock();
+      let reqId;
+
+      renderer.render(scene, camera);
+
+      function renderLoop() {
+        if (!document.getElementById(canvasId)) {
+          cancelAnimationFrame(reqId);
+          renderer.dispose();
+          return;
+        }
+        reqId = requestAnimationFrame(renderLoop);
+        const t = clock.getElapsedTime();
+
+        if (isInteracting) {
+          interactionStrength = 1.0;
+          lerpedPointer.copy(pointer);
+        } else {
+          interactionStrength = 0.0;
+          lerpedPointer.set(999.0, 999.0);
+        }
+
+        material.uniforms.time.value = t;
+        material.uniforms.uInteractionStrength.value = interactionStrength;
+        material.uniforms.uMouse.value.copy(lerpedPointer);
+
+        camera.position.x = Math.sin(t * 0.08) * 8;
+        camera.position.y = Math.cos(t * 0.06) * 5;
+        camera.lookAt(scene.position);
+
+        particles.rotation.y = t * 0.03;
+        particles.rotation.x = Math.sin(t * 0.05) * 0.05;
+
+        renderer.render(scene, camera);
+      }
+
+      renderLoop();
+
+      const ro = new ResizeObserver(() => {
+        if (canvas && container) {
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+      });
+      ro.observe(container);
     }
+
+    async function genImage(q) {
+      const id = 'img-' + Date.now();
+      const canvasId = 'canvas-' + id;
+      const div = createAIBox();
+      
+      div.innerHTML = `
+        <div class="ai-header">
+            <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+            <span class="ai-name">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+        </div>
+        <div class="status-badge" id="status-badge-${id}">
+           🔄 Generating Image...
+        </div>
+        
+        <div class="image-card" id="${id}">
+          <canvas id="${canvasId}"></canvas>
+          <img class="g-img" crossOrigin="anonymous" style="width:100%; height:100%; object-fit:cover; display:none; position:absolute; top:0; left:0; z-index:10;">
+        </div>
+        
+        <div id="check-${id}" style="display:none;">
+           <span class="success-badge">
+             <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+             Generation Complete
+           </span>
+        </div>
+        
+        <div class="action-row" id="act-${id}"></div>
+      `;
+      chat.appendChild(div);
+      messageHistory.push({ id: Date.now(), role: 'ai', element: div });
+      scrollToBottom(true);
+
+      initParticleOcean(id, canvasId);
+
+      const seed = Math.floor(Math.random() * 1000000);
+      const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(q)}?seed=${seed}&width=1024&height=1024&nologo=true&key=${POLL_KEY}`;
+      const img = div.querySelector('.g-img');
+      img.src = imgUrl;
+
+      img.onload = () => {
+        const oldCanvas = document.getElementById(canvasId);
+        if (oldCanvas) oldCanvas.remove();
+        img.style.display = 'block';
+        
+        document.getElementById(`status-badge-${id}`).innerHTML = "✓ Finished Successfully";
+        document.getElementById(`check-${id}`).style.display = "inline-flex";
+        
+        addActions(`act-${id}`, id, true, imgUrl);
+        scrollToBottom();
+      };
+
+      img.onerror = () => {
+         document.getElementById(`status-badge-${id}`).innerHTML = "⚠️ Generation Error. Try again.";
+      };
+    }
+
+    async function fetchYT(q, container) {
+      try {
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(q)}&type=video&key=${YT_KEY}`);
+        const data = await res.json();
+        if(data.items?.[0]) {
+          const vid = document.createElement('div');
+          vid.className = 'video-container';
+          vid.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${data.items[0].id.videoId}" frameborder="0" allowfullscreen></iframe>`;
+          container.appendChild(vid);
+          scrollToBottom();
+        }
+      } catch(e) {}
+    }
+
+    // Action button layouts with 1-second temporary red highlights and TTS synchronization
+    function addActions(containerId, contentId, isImg, imgUrl = '', textData = '') {
+      const cont = document.getElementById(containerId);
+      cont.innerHTML = ''; 
+
+      // Copy Button Action
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'icon-action-btn';
+      copyBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>`;
+      copyBtn.onclick = () => {
+        copyBtn.classList.add('red-active');
+        const copyPayload = isImg ? imgUrl : document.getElementById(contentId).innerText;
+        const tempText = document.createElement('textarea');
+        tempText.value = copyPayload;
+        document.body.appendChild(tempText);
+        tempText.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempText);
+        // Reset states in exactly 1 second
+        setTimeout(() => copyBtn.classList.remove('red-active'), 1000);
+      };
+
+      // Download/Save Button Action
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'icon-action-btn';
+      dlBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7-7-7zM5 18v2h14v-2H5z"/></svg>`;
+      dlBtn.onclick = () => {
+        dlBtn.classList.add('red-active');
+        if(isImg) {
+          downloadImage(imgUrl);
+        } else {
+          exportPdf(contentId);
+        }
+        // Reset states in exactly 1 second
+        setTimeout(() => dlBtn.classList.remove('red-active'), 1000);
+      };
+
+      cont.appendChild(copyBtn);
+      cont.appendChild(dlBtn);
+
+      // Speak Button Action (Highlight active state matches voice synthesizer output duration)
+      if (!isImg) {
+        const ttsBtn = document.createElement('button');
+        ttsBtn.className = 'icon-action-btn';
+        ttsBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`;
+        ttsBtn.onclick = () => {
+          if ('speechSynthesis' in window) {
+             window.speechSynthesis.cancel();
+             ttsBtn.classList.add('red-active');
+             
+             const utterance = new SpeechSynthesisUtterance(textData);
+             // Read aloud respecting selected persistent language code natively
+             utterance.lang = langVoiceMap[outputLanguage] || 'en-US'; 
+             
+             utterance.onend = () => {
+                ttsBtn.classList.remove('red-active');
+             };
+             utterance.onerror = () => {
+                ttsBtn.classList.remove('red-active');
+             };
+             
+             window.speechSynthesis.speak(utterance);
+          }
+        };
+        cont.appendChild(ttsBtn);
+      }
+    }
+
+    async function downloadImage(url) {
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `DeshAI_Visual_${Date.now()}.png`;
+        link.click();
+      } catch (err) {
+        window.open(url, '_blank');
+      }
+    }
+
+    async function exportPdf(id) {
+      const {jsPDF} = window.jspdf;
+      const el = document.getElementById(id);
+      
+      html2canvas(el, {
+        scale: 2, 
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      }).then((canvas) => {
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 190; 
+        const pageHeight = 295;  
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 10;
+
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        
+        pdf.save(`DeshAI_Report_${Date.now()}.pdf`);
+      }).catch((e) => {});
+    }
+
+    function createAIBox() { const d = document.createElement('div'); d.className = 'ai-msg-wrapper'; return d; }
+    function closePopups() { menu.classList.remove('show'); }
+    
+    // Explicit global scope mapping for ES modules
+    window.toggleDrawer = toggleDrawer;
+    window.toggleAccordion = toggleAccordion;
+    window.togglePopup = togglePopup;
+    window.setMode = setMode;
+    window.clearMode = clearMode;
+    window.toggleThunder = toggleThunder;
+    window.handleScrollFabClick = handleScrollFabClick;
+    window.cancelEditing = cancelEditing;
+    window.toggleThreeDots = toggleThreeDots;
+    window.openSettingsModal = openSettingsModal;
+    window.closeModals = closeModals;
+    window.setAccent = setAccent;
+    window.saveSettings = saveSettings;
+    window.triggerFeedback = triggerFeedback;
+    window.triggerShare = triggerShare;
+    window.triggerEdit = triggerEdit;
+    window.startPress = startPress;
+    window.cancelPress = cancelPress;
+    window.toggleSpeechRecording = toggleSpeechRecording;
+    window.replayWelcomeAnimation = replayWelcomeAnimation;
+    window.handleGlobalClick = handleGlobalClick;
+
+    sendBtn.onclick = () => handleRequest();
+    input.onkeydown = (e) => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); handleRequest(); }};
+    
+    // Auto start splash on load
+    window.onload = () => {
+      replayWelcomeAnimation();
+    };
   </script>
 </body>
 </html>
-
-
-
-
-
 
 
 
