@@ -111,7 +111,6 @@ def summarize_text(text: str, max_tokens: int = 1000) -> str:
     words = text.split()
     estimated_limit = max_tokens * 0.75
     return ' '.join(words[:int(estimated_limit)]) + '... (summary)'
-
 # -------------------------
 # Groq API helper
 def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
@@ -122,7 +121,7 @@ def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, tempera
         # Create client dynamically with current active key
         client = Groq(api_key=GROQ_API_KEY)
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",  # 👈 Updated to GPT-OSS 120B model
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens
@@ -130,6 +129,7 @@ def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, tempera
         return completion.choices[0].message.content
     except Exception as e:
         return f"❌ Seems like server issue, Try after a while: {str(e)}"
+
 
 
 
