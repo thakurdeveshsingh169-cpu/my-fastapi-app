@@ -113,11 +113,11 @@ def summarize_text(text: str, max_tokens: int = 1000) -> str:
     return ' '.join(words[:int(estimated_limit)]) + '... (summary)'
 
 # -------------------------
-# Groq API helper (Updated to official SDK)
+# Groq API helper
 def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
     try:
         completion = groq_client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="llama-3.3-70b-versatile",  # 👈 Changed to 70B model string
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens
@@ -125,6 +125,7 @@ def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, tempera
         return completion.choices[0].message.content
     except Exception as e:
         return f"❌ Seems like server issue, Try after a while: {str(e)}"
+
 
 # -------------------------
 # Hugging Face Image helper
