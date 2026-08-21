@@ -16,16 +16,16 @@ load_dotenv()
 
 # -------------------------
 # API Keys & Clients
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "YOUR_KEY")
-HF_API_KEY = os.getenv("HF_API_KEY", "YOUR_HF_KEY")
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "YOUR_YT_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+HF_API_KEY = os.getenv("HF_API_KEY")
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
-# Initialize official Groq client
-groq_client = Groq(api_key=GROQ_API_KEY)
+# Prevent invalid default keys
+if not GROQ_API_KEY or GROQ_API_KEY == "YOUR_KEY":
+    print("⚠️ WARNING: GROQ_API_KEY is missing or invalid in Environment Variables!")
 
 HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
-# -------------------------
 # Usage Limits & Storage
 image_limit_per_day = 5
 question_limit_per_day = 200
@@ -115,9 +115,14 @@ def summarize_text(text: str, max_tokens: int = 1000) -> str:
 # -------------------------
 # Groq API helper
 def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
+    if not GROQ_API_KEY or GROQ_API_KEY == "YOUR_KEY":
+        return "❌ Server configuration error: GROQ_API_KEY is not set on host environment."
+        
     try:
-        completion = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",  # 👈 Changed to 70B model string
+        # Create client dynamically with current active key
+        client = Groq(api_key=GROQ_API_KEY)
+        completion = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens
@@ -125,6 +130,7 @@ def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, tempera
         return completion.choices[0].message.content
     except Exception as e:
         return f"❌ Seems like server issue, Try after a while: {str(e)}"
+
 
 
 # -------------------------
