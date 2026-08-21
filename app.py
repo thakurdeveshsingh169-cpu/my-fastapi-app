@@ -8,20 +8,21 @@ import os, requests, time, langid, re, io
 from typing import Dict, List
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+from gtts import gTTS  # 👈 Added missing import
+from groq import Groq  # 👈 Added Groq SDK
 
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 # Load environment variables
 load_dotenv()
 
 # -------------------------
-# API Keys
+# API Keys & Clients
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "YOUR_KEY")
 HF_API_KEY = os.getenv("HF_API_KEY", "YOUR_HF_KEY")
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "YOUR_YT_KEY")
 
-GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+# Initialize official Groq client
+groq_client = Groq(api_key=GROQ_API_KEY)
+
 HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
 # -------------------------
@@ -88,14 +89,17 @@ def fetch_youtube_videos(query: str, max_results: int = 1):
         "key": YOUTUBE_API_KEY,
         "maxResults": max_results
     }
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        items = response.json().get("items", [])
-        return [{
-            "title": item["snippet"]["title"],
-            "thumbnail": item["snippet"]["thumbnails"]["medium"]["url"],
-            "videoId": item["id"]["videoId"]
-        } for item in items]
+    try:
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            items = response.json().get("items", [])
+            return [{
+                "title": item["snippet"]["title"],
+                "thumbnail": item["snippet"]["thumbnails"]["medium"]["url"],
+                "videoId": item["id"]["videoId"]
+            } for item in items]
+    except Exception:
+        pass
     return []
 
 def ensure_token_safe_response(full_text: str, max_tokens: int = 1500) -> str:
@@ -109,27 +113,17 @@ def summarize_text(text: str, max_tokens: int = 1000) -> str:
     return ' '.join(words[:int(estimated_limit)]) + '... (summary)'
 
 # -------------------------
-# Groq API helper
+# Groq API helper (Updated to official SDK)
 def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
-    payload = {
-        "model": "llama-3.1-8b-instant",
-        "messages": messages,
-        "temperature": temperature,
-        "max_tokens": max_tokens
-    }
-    headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
-    }
     try:
-        res = requests.post(GROQ_URL, headers=headers, json=payload, timeout=30)
-        res.raise_for_status()
-        data = res.json()
-        if "choices" in data and len(data["choices"]) > 0:
-            return data["choices"][0]["message"]["content"]
-        else:
-            return "❌ Seems like server issue, Try after a while"
-    except requests.exceptions.RequestException as e:
+        completion = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return completion.choices[0].message.content
+    except Exception as e:
         return f"❌ Seems like server issue, Try after a while: {str(e)}"
 
 # -------------------------
@@ -175,17 +169,17 @@ async def ask_question(data: Question, request: Request):
     prompt_lower = prompt.lower()
 
     founder_keywords = [
-        "founder of", "who is your founder", "who made desh ai", "who created you", "Creates you", "created you" , "founded you" , "your founder" , "makes you" , "CEO of desh Ai" , "owner of Desh Ai" 
+        "founder of", "who is your founder", "who made desh ai", "who created you", "creates you", "created you" , "founded you" , "your founder" , "makes you" , "ceo of desh ai" , "owner of desh ai" 
     ]
     if any(kw in prompt_lower for kw in founder_keywords):
-        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led  by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾), 𝗔𝗵𝗮𝗮𝗻 𝗦𝗶𝗻𝗴𝗵 (𝙲𝚘-𝙵𝚘𝚞𝚗𝚍𝚎𝚛) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙵𝚘𝚞𝚗𝚍𝚎𝚛 & 𝙼𝚊𝚗𝚊𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝚎𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
-​Leadership and Board:
+        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾), 𝗔𝗵𝗮𝗮𝗻 𝗦𝗶𝗻𝗴𝗵 (𝙲𝚘-𝙵𝚘𝚞𝚗𝚍𝚎𝚛) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙵𝚘𝚞𝚗𝚍𝚎𝚛 & 𝙼𝚊𝚗𝚊𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝗲𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
+Leadership and Board:
 The strategic direction is spearheaded by a dynamic duo. Shreya Singh serves as the CEO and primary architect of the vision and scaling strategies. Devesh Singh is the 𝙵𝚘𝚞𝚍𝚎𝚛 & Managing Director and the technical force driving the core architecture and integration. Whereas Ahaan Singh(Co-Founder) gives his best Contribution with Devesh & whole Team DSR in making DBMS & Ai's data Training. 
-​Core Capabilities and Innovations:
+Core Capabilities and Innovations:
 The platform distinguishes itself through a suite of integrated tools designed for utility and entertainment. It features high-performance conversational engines with voice synthesis and real-time response capabilities. The multi-functional utility suite includes dynamic PDF solutions for generators and editors, and creative tools like FaceTalk in 𝕯𝖊𝖘𝖍 𝐀𝖎 Pro which isn't currently in top Ai of today's market But You'll get in Our Aí.
-​Interactive Entertainment and API:
+Interactive Entertainment and API:
 Unique projects like the Hand Cricket game utilize pattern-recognition for a personalized experience. The platform leverages top-tier models ensuring sophisticated language processing for all users.
-​The 2025 Milestone:
+The 2025 Milestone:
 Founded during a pivotal year for artificial intelligence, the platform focuses on clean UI and functional web-based tools to bridge the gap between complex coding and daily needs. And we are rapidly developing & integrating new features for our Users"""
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
@@ -216,7 +210,7 @@ Founded during a pivotal year for artificial intelligence, the platform focuses 
         return {"error": f"Error fetching answer: {str(e)}"}
 
 # -------------------------
-# 🆕 TTS Route (gTTS integration)
+# TTS Route
 @app.post("/tts")
 async def text_to_speech(request: Request):
     data = await request.json()
@@ -254,80 +248,75 @@ async def download_pdf(request: Request):
         headers={"Content-Disposition": "attachment; filename=chat_answer.pdf"}
     )
 
+# Static file routes
 @app.get("/numpuzz")
 def serve_numpuzz():
     return FileResponse("static/numpuzz.html")
 
 @app.get("/snake")
-def serve_numpuzz():
+def serve_snake():
     return FileResponse("static/snake.html")
 
 @app.get("/calculator")
-def serve_numpuzz():
+def serve_calculator():
     return FileResponse("static/calculator.html")
 
-
 @app.get("/BMI")
-def serve_numpuzz():
+def serve_bmi():
     return FileResponse("static/BMI.html")
 
-
-
 @app.get("/Dictionary")
-def serve_numpuzz():
+def serve_dictionary():
     return FileResponse("static/Dictionary.html")
 
-
 @app.get("/desh.html")
-def serve_numpuzz():
+def serve_desh():
     return FileResponse("static/desh.html")
 
-
-
 @app.get("/Tic")
-def serve_numpuzz():
+def serve_tic():
     return FileResponse("static/Tic.html")
 
 @app.get("/Tac")
-def serve_numpuzz():
+def serve_tac():
     return FileResponse("static/Tac.html")
 
 @app.get("/50")
-def serve_numpuzz():
+def serve_50():
     return FileResponse("static/50.html")
 
 @app.get("/neon")
-def serve_numpuzz():
+def serve_neon():
     return FileResponse("static/neon.html")
 
 @app.get("/waves")
-def serve_numpuzz():
+def serve_waves():
     return FileResponse("static/waves.html")
 
-
-
 @app.get("/dot")
-def serve_numpuzz():
+def serve_dot():
     return FileResponse("static/grid.html")
 
-
 @app.get("/pdf")
-def serve_numpuzz():
+def serve_pdf():
     return FileResponse("static/pdf.html")
 
 @app.get("/smart")
-def serve_numpuzz():
+def serve_smart():
     return FileResponse("static/smart.html")
 
 @app.get("/study")
-def serve_numpuzz():
+def serve_study():
     return FileResponse("static/study.html")
+
 @app.get("/vsics")
-def serve_numpuzz():
+def serve_vsics():
     return FileResponse("static/vsics.html")
+
 @app.get("/cam")
-def serve_numpuzz():
+def serve_cam():
     return FileResponse("static/cam.html")
+
 @app.get("/mag")
-def serve_numpuzz():
+def serve_mag():
     return FileResponse("static/mag.html")
