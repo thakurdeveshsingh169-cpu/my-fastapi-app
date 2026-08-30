@@ -9,7 +9,8 @@ from typing import Dict, List
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from gtts import gTTS
-from mistralai import Mistral  # Official Mistral SDK
+import mistralai  # Direct import to bypass namespace shadowing issue
+Mistral = mistralai.Mistral
 
 # Load environment variables
 load_dotenv()
@@ -324,3 +325,4 @@ def serve_cam(): return FileResponse("static/cam.html")
 
 @app.get("/mag")
 def serve_mag(): return FileResponse("static/mag.html")
+
