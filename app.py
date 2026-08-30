@@ -28,7 +28,7 @@ else:
     # Initialize client once globally
     mistral_client = Mistral(api_key=MISTRAL_API_KEY)
 
-HF_IMAGE_URL = "[https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell](https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell)"
+HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
 # Usage Limits & Storage
 image_limit_per_day = 5
@@ -87,7 +87,7 @@ def reset_if_new_day(ip: str):
 def fetch_youtube_videos(query: str, max_results: int = 1):
     if not YOUTUBE_API_KEY:
         return []
-    url = "[https://www.googleapis.com/youtube/v3/search](https://www.googleapis.com/youtube/v3/search)"
+    url = "https://www.googleapis.com/youtube/v3/search"
     params = {
         "part": "snippet",
         "q": query,
@@ -165,7 +165,7 @@ def generate_image_hf(prompt: str, ip: str):
     return {"error": f"Image generation failed: {res.text}"}
 
 # -------------------------
-# Main Chat Route (Using synchronous def to run blocking operations in worker threads)
+# Main Chat Route
 @app.post("/ask")
 def ask_question(data: Question, request: Request):
     prompt = data.question.strip()
@@ -184,7 +184,7 @@ def ask_question(data: Question, request: Request):
         "creates you", "created you", "founded you", "your founder", "makes you", 
         "ceo of desh ai", "owner of desh ai" 
     ]
-        if any(kw in prompt_lower for kw in founder_keywords):
+    if any(kw in prompt_lower for kw in founder_keywords):
         reply = (
             "The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully AI-driven system "
             "established in 2025 to democratize advanced technology. Led by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (CEO), "
@@ -206,8 +206,6 @@ def ask_question(data: Question, request: Request):
         )
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
-
-
 
     if any(word in prompt_lower for word in ["shhahshahshdhdhhsh"]):
         if ip_usage_tracker[ip]['img_count'] >= image_limit_per_day:
@@ -233,7 +231,7 @@ def ask_question(data: Question, request: Request):
         return {"error": f"Error fetching answer: {str(e)}"}
 
 # -------------------------
-# TTS Route (Streams in-memory MP3 without writing to shared disk file)
+# TTS Route
 @app.post("/tts")
 def text_to_speech(data: dict):
     text = data.get("text", "")
@@ -326,4 +324,3 @@ def serve_cam(): return FileResponse("static/cam.html")
 
 @app.get("/mag")
 def serve_mag(): return FileResponse("static/mag.html")
-
