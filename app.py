@@ -9,214 +9,6 @@ from typing import Dict, List
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from gtts import gTTS
-from mistralai import Mistral
-
-# Load environment variables
-load_dotenv()
-
-# -------------------------
-# API Keys & Clients
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
-HF_API_KEY = os.getenv("HF_API_KEY", "")
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "")
-
-# Initialize Mistral Client safely
-client = Mistral(api_key=MISTRAL_API_KEY) if MISTRAL_API_KEY else None
-
-if not MISTRAL_API_KEY:
-    print("⚠️ WARNING: MISTRAL_API_KEY is missing in Environment Variables!")
-
-HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
-
-# Usage Limits & Storage
-image_limit_per_day = 5
-question_limit_per_day = 200
-ip_usage_tracker: Dict[str, Dict[str, int]] = {}
-chat_history: Dict[str, List[Dict[str, str]]] = {}
-last_answer: Dict[str, str] = {}  # Store last answer per IP for PDF & TTS
-
-# -------------------------
-# FastAPI setup
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-@app.get("/")
-def serve_homepage():
-    return FileResponse("static/index.html")
-
-class Question(BaseModel):
-    question: str
-
-# -------------------------
-# Utility functions
-def convert_to_latex_math(text: str) -> str:
-    replacements = {
-        r'\b1\s+upon\s+2\b': r'\\frac{1}{2}',
-        r'\b1\s+upon\s+3\b': r'\\frac{1}{3}',
-        r'\bsquare\s+root\s+of\s+(\w+)': r'\\sqrt{\1}',
-        r'\bcube\s+root\s+of\s+(\w+)': r'\\sqrt[3]{\1}',
-        r'\bx\s+square\b': r'x^2',
-        r'\bx\s+cube\b': r'x^3',
-        r'\bx\s+power\s+(\d+)': r'x^{\1}',
-        r'\bupon\b': '/',
-        r'\btimes\b': r'\\times ',
-    }
-    for pattern, replacement in replacements.items():
-        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
-    return text
-
-def detect_language(text: str) -> str:
-    lang, _ = langid.classify(text)
-    return lang
-
-def reset_if_new_day(ip: str):
-    now = time.localtime()
-    today = f"{now.tm_year}-{now.tm_mon}-{now.tm_mday}"
-    if ip not in ip_usage_tracker or ip_usage_tracker[ip]['date'] != today:
-        ip_usage_tracker[ip] = {'count': 0, 'img_count': 0, 'date': today}
-        chat_history[ip] = []
-
-def fetch_youtube_videos(query: str, max_results: int = 1):
-    if not YOUTUBE_API_KEY:
-        return []
-    url = "https://www.googleapis.com/youtube/v3/search"
-    params = {
-        "part": "snippet",
-        "q": query,
-        "type": "video",
-        "key": YOUTUBE_API_KEY,
-        "maxResults": max_results
-    }
-    try:
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            items = response.json().get("items", [])
-            return [{
-                "title": item["snippet"]["title"],
-                "thumbnail": item["snippet"]["thumbnails"]["medium"]["url"],
-                "videoId": item["id"]["videoId"]
-            } for item in items]
-    except Exception:
-        pass
-    return []
-
-def ensure_token_safe_response(full_text: str, max_tokens: int = 1500) -> str:
-    if len(full_text) / 4 > max_tokens:
-        return f"🔍 Summary due to length:\n{summarize_text(full_text, max_tokens)}"
-    return full_text
-
-def summarize_text(text: str, max_tokens: int = 1000) -> str:
-    words = text.split()
-    estimated_limit = max_tokens * 0.75
-    return ' '.join(words[:int(estimated_limit)]) + '... (summary)'
-
-# -------------------------
-# Mistral API Helper
-def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
-    if not client:
-        return "❌ Server configuration error: MISTRAL_API_KEY is not set on host environment."
-        
-    try:
-        response = client.chat.complete(
-            model="mistral-small-latest",
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"❌ Seems like server issue, Try after a while: {str(e)}"
-
-# -------------------------
-# Hugging Face Image helper
-def generate_image_hf(prompt: str, ip: str):
-    headers = {"Authorization": f"Bearer {HF_API_KEY}"}
-    payload = {
-        "inputs": prompt,
-        "parameters": {"width": 1024, "height": 768, "num_inference_steps": 30}
-    }
-    res = requests.post(HF_IMAGE_URL, headers=headers, json=payload, timeout=60)
-    if res.status_code == 200:
-        image_bytes = res.content
-        file_name = f"generated_{int(time.time())}.png"
-        file_path = f"static/{file_name}"
-        with open(file_path, "wb") as f:
-            f.write(image_bytes)
-
-        ip_usage_tracker[ip]['img_count'] += 1
-        notice = (
-            "🖼 Your image is ready:\n"
-            f"[📥 Click to View Image](/static/{file_name})\n\n"
-            f"⚠ Limit: {image_limit_per_day} per day"
-        )
-        reply = notice
-        last_answer[ip] = reply
-        return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
-    return {"error": f"Image generation failed: {res.text}"}
-
-# -------------------------
-# Main Chat Route
-@app.post("/ask")
-async def ask_question(data: Question, request: Request):
-    prompt = data.question.strip()
-    ip = request.client.host
-    reset_if_new_day(ip)
-
-    if ip_usage_tracker[ip]['count'] >= question_limit_per_day:
-        return {"answer": f"❌ Limit reached ({question_limit_per_day}/day)"}
-
-    ip_usage_tracker[ip]['count'] += 1
-    detected_lang = detect_language(prompt)
-    prompt_lower = prompt.lower()
-
-    founder_keywords = [
-        "founder of", "who is your founder", "who made desh ai", "who created you", "creates you", "created you" , "founded you" , "your founder" , "makes you" , "ceo of desh ai" , "owner of desh ai" 
-    ]
-    if any(kw in prompt_lower for kw in founder_keywords):
-        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾), 𝗔𝗵𝗮𝗮𝗻 𝗦𝗶𝗻𝗴𝗵 (𝙲𝚘-𝙵𝚘𝚞𝚗𝚍𝚎𝚛) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (Here is a review of your FastAPI application code, along with key observations, potential bug fixes, and optimization recommendations.
-
----
-
-## 🔍 Code Review & Optimization Highlights
-
-### 1. **Mistral Client Re-initialization (Performance Fix)**
-In `ask_grok_api`, the `client = Mistral(api_key=MISTRAL_API_KEY)` call runs inside every single function call. Instantiating the client once globally at module load saves unnecessary setup overhead per HTTP request.
-
-### 2. **Blocking Network Calls (`requests` in Async Routes)**
-FastAPI endpoints defined with `async def` run on the main asyncio event loop. Using synchronous `requests.get()` or `requests.post()` inside an `async def` route (e.g., in `/ask`, `/tts`, and HF image generation) **blocks the entire server event loop** for all connected users while waiting for the HTTP response.
-* **Fix Options:** Either convert network calls to `httpx.AsyncClient` or define those FastAPI endpoints with standard synchronous functions (`def` instead of `async def`), which forces FastAPI to run them in a background thread pool.
-
-### 3. **Blocking File I/O (`gTTS.save`)**
-In `/tts`, `tts.save(filename)` writes directly to disk synchronously. Writing to a static local file name (`tts_output.mp3`) also creates a **race condition** if multiple users request TTS at the exact same time (one request overwrites the file while another is reading it).
-* **Fix:** Use `io.BytesIO()` to stream the audio directly from memory rather than writing to a shared file on disk.
-
-### 4. **PDF Generation Memory Streaming**
-The PDF download route correctly uses `io.BytesIO()` with `StreamingResponse`. However, plain `Paragraph` objects in ReportLab do not automatically parse HTML/Markdown formatting like standard line breaks or raw markdown symbols. Wrapping long response text in basic standard styles works well for simple text.
-
----
-
-## 🛠 Refactored Code
-
-Here is the updated code incorporating these stability and performance enhancements:
-
-```python
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, StreamingResponse, JSONResponse
-from pydantic import BaseModel
-from dotenv import load_dotenv
-import os, requests, time, langid, re, io
-from typing import Dict, List
-from reportlab.platypus import SimpleDocTemplate, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
-from gtts import gTTS
 from mistralai import Mistral  # Official Mistral SDK
 
 # Load environment variables
@@ -392,7 +184,7 @@ def ask_question(data: Question, request: Request):
         "creates you", "created you", "founded you", "your founder", "makes you", 
         "ceo of desh ai", "owner of desh ai" 
     ]
-    if any(kw in prompt_lower for kw in founder_keywords):
+        if any(kw in prompt_lower for kw in founder_keywords):
         reply = (
             "The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully AI-driven system "
             "established in 2025 to democratize advanced technology. Led by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (CEO), "
@@ -414,6 +206,8 @@ def ask_question(data: Question, request: Request):
         )
         last_answer[ip] = reply
         return {"answer": reply, "youtube_videos": fetch_youtube_videos(prompt)}
+
+
 
     if any(word in prompt_lower for word in ["shhahshahshdhdhhsh"]):
         if ip_usage_tracker[ip]['img_count'] >= image_limit_per_day:
