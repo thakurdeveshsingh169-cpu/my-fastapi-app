@@ -6,4 +6,4 @@ requests
 langid
 reportlab
 gTTS
-mistralai>=1.0.0
+mistralai==2.9.4
