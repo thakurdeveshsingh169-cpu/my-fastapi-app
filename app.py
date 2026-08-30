@@ -8,21 +8,21 @@ import os, requests, time, langid, re, io
 from typing import Dict, List
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
-from gtts import gTTS  # 👈 Added missing import
-from groq import Groq  # 👈 Added Groq SDK
+from gtts import gTTS
+from mistralai import Mistral  # 👈 Switched to official Mistral SDK
 
 # Load environment variables
 load_dotenv()
 
 # -------------------------
 # API Keys & Clients
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")  # 👈 Strictly reads from environment variable
 HF_API_KEY = os.getenv("HF_API_KEY")
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 # Prevent invalid default keys
-if not GROQ_API_KEY or GROQ_API_KEY == "YOUR_KEY":
-    print("⚠️ WARNING: GROQ_API_KEY is missing or invalid in Environment Variables!")
+if not MISTRAL_API_KEY or MISTRAL_API_KEY == "YOUR_KEY":
+    print("⚠️ WARNING: MISTRAL_API_KEY is missing or invalid in Environment Variables!")
 
 HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
@@ -111,27 +111,27 @@ def summarize_text(text: str, max_tokens: int = 1000) -> str:
     words = text.split()
     estimated_limit = max_tokens * 0.75
     return ' '.join(words[:int(estimated_limit)]) + '... (summary)'
+
 # -------------------------
-# Groq API helper
+# Mistral API Helper
 def ask_grok_api(messages: List[Dict[str, str]], max_tokens: int = 1500, temperature: float = 0.7):
-    if not GROQ_API_KEY or GROQ_API_KEY == "YOUR_KEY":
-        return "❌ Server configuration error: GROQ_API_KEY is not set on host environment."
+    if not MISTRAL_API_KEY or MISTRAL_API_KEY == "YOUR_KEY":
+        return "❌ Server configuration error: MISTRAL_API_KEY is not set on host environment."
         
     try:
-        # Create client dynamically with current active key
-        client = Groq(api_key=GROQ_API_KEY)
-        completion = client.chat.completions.create(
-            model="openai/gpt-oss-120b",  # 👈 Updated to GPT-OSS 120B model
+        # Initialize Mistral client using environment variable key
+        client = Mistral(api_key=MISTRAL_API_KEY)
+        
+        # Calling Mistral API
+        response = client.chat.complete(
+            model="mistral-small-latest",
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens
         )
-        return completion.choices[0].message.content
+        return response.choices[0].message.content
     except Exception as e:
         return f"❌ Seems like server issue, Try after a while: {str(e)}"
-
-
-
 
 # -------------------------
 # Hugging Face Image helper
@@ -179,7 +179,7 @@ async def ask_question(data: Question, request: Request):
         "founder of", "who is your founder", "who made desh ai", "who created you", "creates you", "created you" , "founded you" , "your founder" , "makes you" , "ceo of desh ai" , "owner of desh ai" 
     ]
     if any(kw in prompt_lower for kw in founder_keywords):
-        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾), 𝗔𝗵𝗮𝗮𝗻 𝗦𝗶𝗻𝗴𝗵 (𝙲𝚘-𝙵𝚘𝚞𝚗𝚍𝚎𝚛) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙵𝚘𝚞𝚗𝚍𝚎𝚛 & 𝙼𝚊𝚗𝚊𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝗲𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
+        reply = """The Vision Behind 𝕯𝖊𝖘𝖍 𝐀𝖎: This platform is a cutting-edge fully Aí-driven system established in 2025 to democratize advanced technology. Led by 𝗦𝗵𝗿𝗲𝘆𝗮 𝗦𝗶𝗻𝗴𝗵 (𝙲𝙴𝙾), 𝗔𝗵𝗮𝗮𝗻 𝗦𝗶𝗻𝗴𝗵 (𝙲𝚘-𝙵𝚘𝚞𝚗𝚍𝚎𝚛) and 𝗗𝗲𝘃𝗲𝘀𝗵 𝗦𝗶𝗻𝗴𝗵 (𝙵𝚘𝚞𝖓𝖉𝖊𝖗 & 𝙼𝖆𝖓𝖆𝚐𝚒𝚗𝚐 𝙳𝚒𝚛𝚎𝚌𝚝𝚘𝚛), the company has evolved into a powerhouse of digital innovation.
 Leadership and Board:
 The strategic direction is spearheaded by a dynamic duo. Shreya Singh serves as the CEO and primary architect of the vision and scaling strategies. Devesh Singh is the 𝙵𝚘𝚞𝚍𝚎𝚛 & Managing Director and the technical force driving the core architecture and integration. Whereas Ahaan Singh(Co-Founder) gives his best Contribution with Devesh & whole Team DSR in making DBMS & Ai's data Training. 
 Core Capabilities and Innovations:
