@@ -9,8 +9,7 @@ from typing import Dict, List
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from gtts import gTTS
-import mistralai  # Direct import to bypass namespace shadowing issue
-Mistral = mistralai.Mistral
+from mistralai import Mistral  # Standard SDK import for v2.x
 
 # Load environment variables
 load_dotenv()
@@ -21,13 +20,12 @@ MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 HF_API_KEY = os.getenv("HF_API_KEY")
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
-# Prevent invalid default keys
 if not MISTRAL_API_KEY or MISTRAL_API_KEY == "YOUR_KEY":
     print("⚠️ WARNING: MISTRAL_API_KEY is missing or invalid in Environment Variables!")
     mistral_client = None
 else:
-    # Initialize client once globally
     mistral_client = Mistral(api_key=MISTRAL_API_KEY)
+
 
 HF_IMAGE_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
