@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme</title>
   
-  <!-- SEO & Sharing Metadata (OG Meta Tags) -->
+  <!-- SEO & Sharing Metadata -->
   <meta name="title" content="𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme">
   <meta name="description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://deshai.in">
+  <meta property="og:url" content="https://deshai.in/">
   <meta property="og:title" content="𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme">
   <meta property="og:description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai.">
   <meta property="og:image" content="https://deshai.in/static/logo.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://deshai.in">
+  <meta name="twitter:url" content="https://deshai.in/">
   <meta name="twitter:title" content="𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme">
   <meta name="twitter:description" content="A professional AI Assistant by Team DSR. Chat, learn, and explore with Desh Ai.">
   <meta name="twitter:image" content="https://deshai.in/static/logo.png">
@@ -82,13 +82,13 @@
     .header { 
       padding: 6px 12px; border-bottom: 1px solid #f3f4f6; background: #ffffff; 
       display: flex; align-items: center; justify-content: space-between;
-      border-radius: 20px; margin: 4px auto; width: 94%; max-width: 800px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.094); z-index: 100;
+      border-radius: 20px; margin: 8px auto; width: 94%; max-width: 800px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04); z-index: 100;
       position: relative;
     }
     .logo-brand { display: flex; align-items: center; justify-content: center; gap: 4px; margin: 0 auto; }
-    .logo-char-img { height: 40px; width: auto; max-height: 40px; transition: transform 2.5s ease; }
-    .brand-text-rest { font-size: 20px; font-weight: 800; color: #000; }
+    .logo-char-img { height: 35px; width: auto; max-height: 35px; transition: transform 0.5s ease; }
+    .brand-text-rest { font-size: 16px; font-weight: 800; color: #000; }
     
     /* Interactive Rotating Border Effect on Hover */
     .logo-container {
@@ -97,7 +97,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      padding: 10px;
+      padding: 4px;
       transition: all 0.3s ease;
     }
     .logo-container::before {
@@ -105,8 +105,8 @@
       position: absolute;
       inset: 0;
       border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, #fc7e00, #3cff0000, #008bfc00, #ff8000);
+      padding: 2px;
+      background: linear-gradient(135deg, #f5b342, #ef4444, #3b82f6);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -137,6 +137,33 @@
       -webkit-overflow-scrolling: touch; scroll-behavior: smooth;
     }
 
+    /* Embedded Chat Search Bar Layout (Inside the screen bounds) */
+    .chat-search-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid var(--border-gray);
+      border-radius: 14px;
+      padding: 8px 12px;
+      margin: 4px auto;
+      width: 94%;
+      max-width: 800px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      z-index: 102;
+    }
+    .search-match-highlight {
+      background-color: rgba(245, 179, 66, 0.4);
+      border-bottom: 2px solid #f5b342;
+      border-radius: 2px;
+      padding: 1px 2px;
+      transition: background-color 0.2s;
+    }
+    .search-match-highlight.active-match {
+      background-color: rgba(239, 68, 68, 0.4) !important;
+      border-bottom-color: #ef4444;
+    }
+
     /* Welcome/Splash Page Inner Animations */
     .hello-path {
         stroke-dasharray: 1800;
@@ -158,7 +185,7 @@
 
     .smile-eye {
         opacity: 0; transform: scale(0);
-        animation: popEye 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        animation: popEye 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
     #smileLeftEye { transform-origin: 480px 115px; animation-delay: 3.2s; }
     #smileRightEye { transform-origin: 500px 115px; animation-delay: 3.35s; }
@@ -210,7 +237,7 @@
         position: absolute; bottom: -45px; right: 0; background: white;
         border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         display: none; align-items: center; gap: 8px; padding: 6px 12px;
-        z-index: 100; border: 1px solid #eee; animation: pop 0.01s ease-out;
+        z-index: 100; border: 1px solid #eee; animation: pop 0.2s ease-out;
     }
     @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -227,6 +254,7 @@
     }
     #scrollBottomBtn { display: flex; }
     
+    /* Soft UI Cancel Red Edit Button */
     #cancelEditBtn { 
       display: none; 
       background-color: #fff1f2; 
@@ -240,6 +268,7 @@
       background-color: #ffe4e6;
     }
 
+    /* Fixed Screen fitting configuration for Mobile published pages */
     .bottom-section { 
       width: 100%; max-width: 850px; margin: 0 auto; padding: 10px 12px 25px; 
       display: flex; align-items: center; gap: 8px; position: relative; 
@@ -259,7 +288,7 @@
     }
     .tool-trigger.active ~ .cancel-overlay { display: flex; }
 
-    /* Unified Input System */
+    /* Unified Input Container */
     .unified-input-cont {
       flex: 1; background: #f3f4f6; border-radius: 28px; display: flex; align-items: center;
       padding: 2px 6px; border: 2.5px solid transparent; transition: all 0.3s ease;
@@ -273,7 +302,7 @@
     }
     #question {
       flex: 1; border: none; outline: none; background: transparent; padding: 10px 8px;
-      font-size: 16px; resize: none; max-height: 150px; font-family: inherit; line-height: 1.4;
+      font-size: 16px; resize: none; max-height: 120px; font-family: inherit; line-height: 1.4;
       min-width: 0;
     }
     .inner-btn {
@@ -288,10 +317,11 @@
     .send-action-btn svg { width: 18px; height: 18px; fill: #4b5563; }
     .send-action-btn.active svg { fill: white; }
 
+    /* Float tools menu strictly above the input bar preventing shifting layout */
     .tools-menu {
       position: absolute; bottom: 85px; left: 12px; background: white; border-radius: 18px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.12); padding: 12px; display: none; flex-direction: column; min-width: 220px;
-      border: 1px solid #f0f0f0; z-index: 1000; position: relative;
+      border: 1px solid #f0f0f0; z-index: 1000;
     }
     .tools-menu.show { display: flex; }
     .menu-item {
@@ -301,9 +331,10 @@
     .menu-item:hover { background: #f9fafb; }
     .menu-item.active-mode { background: #fffcf0; border: 1px solid var(--accent-border); }
     
-    .disclaimer {
+    .disclaimer-banner {
         position: fixed; bottom: 4px; left: 0; right: 0; text-align: center;
-        font-size: 10px; color: #000000; pointer-events: none; z-index: 102;
+        font-size: 10px; color: #999; pointer-events: none; z-index: 102;
+        transition: opacity 0.5s ease-out; opacity: 0;
     }
     .video-container { margin-top: 12px; border-radius: 14px; overflow: hidden; background: #000; aspect-ratio: 16/9; }
     
@@ -367,20 +398,20 @@
     .dropdown-item:hover { background: #f3f4f6; color: var(--accent-color); }
     .dropdown-item svg { fill: #555; width: 16px; height: 16px; }
 
-    /* Side Hamburger Menu drawer with limited accordion scroll heights */
+    /* Side Hamburger Menu drawer */
     .drawer {
       position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: white;
       box-shadow: 5px 0 25px rgba(0,0,0,0.1); z-index: 2100; transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex; flex-direction: column; padding: 24px 16px;
     }
     .drawer.open { left: 0; }
-    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 8px; }
     .drawer-title { font-weight: 800; font-size: 18px; color: #111; }
     
     .accordion-section { margin-bottom: 16px; }
     .accordion-title { font-weight: 700; font-size: 14px; padding: 10px 6px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; user-select: none; align-items: center; }
     
-    /* Fits both Our Products & Games perfectly into maximum half the viewport height with scrolling */
+    /* Limited Accordion Scroll Heights (Max half viewport) */
     .accordion-items { display: none; flex-direction: column; gap: 8px; padding: 8px; max-height: 25vh; overflow-y: auto; }
     .accordion-items.show { display: flex; }
     .accordion-link { color: #555; text-decoration: none; font-size: 13px; padding: 6px; border-radius: 6px; }
@@ -415,7 +446,57 @@
     .cut-btn:hover {
       background: #f43f5e;
       color: white;
-      box-shadow: 0 0 10px rgba(253, 47, 81, 0.4);
+      box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+    }
+
+    /* Hands-free Voice Wave Circular Ocean Viewport Layout Container */
+    #voice-visualizer-container {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 10px 12px;
+        position: relative;
+    }
+    .voice-circle-viewport {
+        width: 72px;
+        height: 72px;
+        border: 2.5px solid var(--accent-color);
+        border-radius: 50%;
+        overflow: hidden;
+        background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06), 0 0 25px rgba(245, 179, 66, 0.2);
+    }
+    .voice-circle-viewport canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+    }
+    .voice-cut-btn {
+        position: absolute;
+        right: 20px;
+        bottom: 25px;
+        background-color: #fee2e2;
+        border: 1.5px solid #fecdd3 !important;
+        color: #f43f5e;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .voice-cut-btn:hover {
+        background-color: #f43f5e;
+        color: white;
+        box-shadow: 0 0 14px rgba(244, 63, 94, 0.5);
     }
   </style>
 </head>
@@ -423,30 +504,39 @@
 
   <!-- Drawer/Hamburger Menu (Top Left) -->
   <div class="drawer" id="sidebarDrawer" onclick="event.stopPropagation()">
-    <div class="drawer-header">
-      <span class="drawer-title">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
-      <button class="top-menu-btn" onclick="toggleDrawer()">
-        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-      </button>
+    <!-- Permanent Drawer Search Component (Always docked at top left of menu) -->
+    <div class="flex flex-col gap-2 border-b border-gray-100 pb-3 mb-3">
+      <div class="flex items-center justify-between">
+        <span class="drawer-title">𝕯𝖊𝕾𝖍 Systems</span>
+        <button class="top-menu-btn" onclick="toggleDrawer()">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <!-- Premium Integrated Product/Game Search Input -->
+      <div class="flex items-center bg-gray-100 rounded-lg px-2 py-1.5 mt-1">
+        <svg viewBox="0 0 24 24" width="14" height="14" class="fill-gray-400 mr-1.5"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="drawerSearchInput" class="w-full bg-transparent text-xs text-gray-700 outline-none" placeholder="Search products & games..." oninput="handleDrawerSearch()">
+      </div>
     </div>
     
-    <div class="accordion-section">
+    <!-- Collapsible Sections -->
+    <div class="accordion-section" id="section-products">
       <div class="accordion-title" id="title-products" onclick="toggleAccordion('products')">
         <span>Our Products</span>
         <svg class="thin-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="accordion-items" id="products-list">
-        <a href="/vsics" class="accordion-link">About CEO</a>
-        <a href="/mag" class="accordion-link">Minerwa Aluminium&Glass LLC</a>
-        <a href="/study" class="accordion-link">𝕯𝖊𝕾𝖍 𝙰𝚒’s Study Specific</a>
-        <a href="/smart" class="accordion-link">𝚂𝚖𝚊𝚛𝚝 𝙲𝚊𝚝𝚎𝚐𝚘𝚛𝚒𝚣𝚎𝚛</a>
-        <a href="/calculator" class="accordion-link">𝙲𝚊𝚕𝚌𝚞𝚕𝚊𝚝𝚘𝚛</a>
-        <a href="/Dictionary" class="accordion-link">𝙳𝚒𝚌𝚝𝚒𝚘𝚗𝚊𝚛𝚢 (𝐀𝚒+)</a>
-        <a href="/BMI" class="accordion-link">𝙱𝙼𝙸 (𝐀𝚒+)</a>
-        <a href="/cam" class="accordion-link">𝕯𝖊𝕾𝖍 𝙲𝚊𝚖</a>
-        <a href="/50" class="accordion-link">𝚃𝚑𝚎_𝟓𝟎 𝙰𝚒 ✨</a>
-        <a href="/waves" class="accordion-link">Sadhna (🧘🏻‍♂️)</a>
-        <a href="/pdf" class="accordion-link">𝚃𝚎𝚡𝚝 𝚝𝚘 𝙿𝙳𝙵</a>
+        <a href="/vsics" class="accordion-link" data-name="about ceo">About CEO</a>
+        <a href="/mag" class="accordion-link" data-name="minerwa aluminium & glass llc">Minerwa Aluminium&Glass LLC</a>
+        <a href="/study" class="accordion-link" data-name="desh ai study specific">𝕯𝖊𝕾𝖍 𝙰𝚒’s Study Specific</a>
+        <a href="/smart" class="accordion-link" data-name="smart categorizer">𝚂𝚖α𝚛𝚝 𝙲α𝚝𝚎𝚐𝚘𝚛𝚒𝚣𝚎𝚛</a>
+        <a href="/calculator" class="accordion-link" data-name="calculator">𝙲α𝚕𝚌𝚞𝚕α𝚝𝚘𝚛</a>
+        <a href="/Dictionary" class="accordion-link" data-name="dictionary (ai+)">𝙳𝚒𝚌𝚝𝚒𝚘𝚗α𝚛𝚢 (𝐀𝚒+)</a>
+        <a href="/BMI" class="accordion-link" data-name="bmi (ai+)">𝙱𝙼𝙸 (𝐀𝚒+)</a>
+        <a href="/cam" class="accordion-link" data-name="desh cam">𝕯𝖊𝕾𝖍 𝙲α𝚖</a>
+        <a href="/50" class="accordion-link" data-name="the_50 ai">𝚃𝚑𝚎_𝟓𝟎 𝙰𝚒 ✨</a>
+        <a href="/waves" class="accordion-link" data-name="sadhna meditation waves">Sadhna (🧘🏻‍♂️)</a>
+        <a href="/pdf" class="accordion-link" data-name="text to pdf saver">𝚃𝚎𝚡𝚝 𝚝𝚘 𝙿𝙳𝙵</a>
       </div>
     </div>
 
@@ -456,15 +546,14 @@
         <svg class="thin-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="accordion-items" id="games-list">
-        <a href="/numpuzz" class="accordion-link">𝙽𝚞𝚖𝙿𝚞𝚣𝚣</a>
-        <a href="/snake" class="accordion-link">𝚂𝚗𝚊𝚔𝚎 𝙶𝚊𝚖𝚎</a>
-        <a href="/Tic" class="accordion-link">𝙲𝚛𝚒𝚌𝚞 (𝙰𝚒+)</a>
-        <a href="/Tac" class="accordion-link">𝚃𝚒𝚌 𝚃𝚊𝚌 𝚃𝚘𝚎(𝙰𝚒+)</a>
-        <a href="/dot" class="accordion-link">𝙲𝚘𝚗𝚗𝚎𝚌𝚝 The 𝙳𝚘𝚝𝚜 (𝙰𝚒+)</a>
+        <a href="/numpuzz" class="accordion-link" data-name="numpuzz sliding numbers"></b>𝙽𝚞𝚖𝙿𝚞𝚣𝚣</a>
+        <a href="/snake" class="accordion-link" data-name="retro classic snake game">𝚂𝚗α𝚔𝚎 𝙶α𝚖𝚎</a>
+        <a href="/Tic" class="accordion-link" data-name="cricu cricket (ai+)">𝙲𝚛𝚒𝚌𝚞 (𝙰𝚒+)</a>
+        <a href="/Tac" class="accordion-link" data-name="tic tac toe (ai+)">𝚃𝚒𝚌 𝚃α𝚌 𝚃𝚘𝚎(𝙰𝚒+)</a>
+        <a href="/dot" class="accordion-link" data-name="connect the dots link game">Connect The 𝙳𝚘𝚝𝚜 (𝙰𝚒+)</a>
       </div>
     </div>
 
-    <!-- Help Email section with prefilled values -->
     <a href="mailto:team.deshai@gmail.com?subject=I need help with Desh Ai&body=Hi team, I want help as I am facing the following issues:-" class="help-btn">
       Need Urgent Help?
     </a>
@@ -476,18 +565,23 @@
     </button>
     <div class="logo-brand">
       <div class="logo-container">
-        <!-- Adaptive Vector Loader swapping immediately into static assets -->
-        <img id="headerLogo" src="static/logo.png" alt="Logo" class="logo-char-img" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+        <img id="headerLogo" src="stactic/logo.png" alt="Logo" class="logo-char-img" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
       </div>
       <span class="brand-text-rest ml-1">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
     </div>
     
-    <!-- Three dots trigger button -->
-    <button class="top-menu-btn" onclick="toggleThreeDots(event)">
-      <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-    </button>
+    <div class="flex items-center gap-2">
+      <!-- Search Activation Trigger (Hidden initially, visible only when welcoming panel is gone) -->
+      <button id="searchTriggerBtn" class="top-menu-btn" style="display:none;" onclick="openSearchPanel(event)">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#333"/></svg>
+      </button>
+      
+      <button class="top-menu-btn" onclick="toggleThreeDots(event)">
+        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      </button>
+    </div>
 
-    <!-- Contextual top right options dropdown (Auto-Dismissable) with Close Red Cross -->
+    <!-- options dropdown with Manual Close cross button -->
     <div class="options-dropdown" id="topDropdown" onclick="event.stopPropagation()">
       <button class="cut-btn" onclick="toggleThreeDots(event)">×</button>
       <div class="dropdown-item mt-6" onclick="openSettingsModal()">
@@ -505,9 +599,30 @@
     </div>
   </header>
 
+  <!-- Expandable Chat Content Search Overlay inside the screen boundaries -->
+  <div id="searchBarPanel" class="chat-search-bar" onclick="event.stopPropagation()">
+    <div class="flex items-center gap-2 flex-1 mr-2">
+      <svg viewBox="0 0 24 24" width="16" height="16" class="fill-gray-400 flex-shrink-0"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" id="searchInputField" class="w-full bg-transparent text-sm text-gray-800 focus:outline-none" placeholder="Search chat history..." oninput="executeChatSearch()">
+    </div>
+    <div class="flex items-center gap-2">
+      <span id="searchResultMeta" class="text-[11px] text-gray-500 font-bold select-none whitespace-nowrap">0 of 0</span>
+      <!-- Search navigation Up / Down SVGs -->
+      <button class="top-menu-btn !p-1 !w-7 !h-7" onclick="navigateSearchMatch(-1)">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="#555"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+      </button>
+      <button class="top-menu-btn !p-1 !w-7 !h-7" onclick="navigateSearchMatch(1)">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="#555"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+      </button>
+      <button class="top-menu-btn !p-1 !w-7 !h-7 !bg-rose-50 !border-rose-200" onclick="closeSearchPanel()">
+        <span class="text-rose-500 font-bold text-xs select-none">×</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Main Chat Section -->
   <main id="chatContainer" class="relative">
-      <!-- Embedded custom Animated Greeting Screen inside Scroll Pane -->
+      <!-- Welcome/Splash Page Inner Animations -->
       <div id="welcomeScreen" class="flex flex-col items-center justify-center w-full py-12 px-6 select-none my-auto" onclick="replayWelcomeAnimation(event)">
           <div class="w-full max-w-[360px] md:max-w-[420px] mb-2">
               <svg class="w-full h-auto overflow-visible" viewBox="0 0 530 240" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -544,7 +659,6 @@
                         stroke="#111827" 
                         stroke-width="8.5" />
                   
-                  <!-- Bracketless Smiley Face "•‿•" -->
                   <circle id="smileLeftEye" class="smile-eye" cx="480" cy="115" r="5" fill="#111827" />
                   <circle id="smileRightEye" class="smile-eye" cx="500" cy="115" r="5" fill="#111827" />
                   <path id="smileMouth" class="smile-mouth-path" d="M 478,128 Q 490,140 502,128" stroke="#111827" stroke-width="7" fill="none" />
@@ -557,9 +671,41 @@
       </div>
   </main>
 
+  <!-- Interactive Modal for Voice Modes (Voice Talk Direct Directives or Redirect options) -->
+  <div class="modal-overlay" id="voiceModeModal" onclick="closeVoiceModal()">
+    <div class="modal-content !max-w-md" onclick="event.stopPropagation()">
+      <button class="cut-btn" onclick="closeVoiceModal()">×</button>
+      <h3 style="margin-top:0; font-size:16px; margin-bottom:18px; font-weight:800; color:#1f2937; text-align:center;">Select Voice Mode</h3>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Voice Talk Mode Direct on Chat Card -->
+        <div class="flex flex-col items-center justify-center p-4 border border-dashed rounded-2xl cursor-pointer hover:bg-amber-50 hover:border-amber-400 transition" onclick="activateDirectVoiceMode()">
+          <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#f5b342">
+              <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-bold text-center text-gray-800">Voice Talk Mode</span>
+          <span class="text-[10px] text-gray-400 mt-1 text-center">Hands-free active conversation</span>
+        </div>
+
+        <!-- Face Talk Mode Card (Redirect to static/neon.html) -->
+        <div class="flex flex-col items-center justify-center p-4 border border-dashed rounded-2xl cursor-pointer hover:bg-sky-50 hover:border-sky-400 transition" onclick="redirectFaceTalkMode()">
+          <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center mb-3">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#0ea5e9">
+              <path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5zm0 10a7 7 0 0 0-7 7v3h14v-3a7 7 0 0 0-7-7z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-bold text-center text-gray-800">Face Talk Mode</span>
+          <span class="text-[10px] text-gray-400 mt-1 text-center">Immersive Hologram Mode</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Draggable Scroll Action FAB (Snaps to sides) -->
   <div class="floating-actions" id="fabContainer" style="bottom: 95px; right: 20px;">
-    <!-- Circular Red Cancel Button (White cross, pinkish red background, thin border) -->
+    <!-- Circular Red Cancel Button -->
     <div id="cancelEditBtn" class="fab-btn mb-2" onclick="cancelEditing(event)">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
@@ -570,8 +716,22 @@
     </div>
   </div>
 
+  <!-- 1-Inch Circular Hands-free voice responsive visualizer container -->
+  <div id="voice-visualizer-container" onclick="event.stopPropagation()">
+    <div class="voice-circle-viewport">
+      <canvas id="voice-particle-canvas"></canvas>
+    </div>
+    <!-- Red Background Close/Cut Button -->
+    <button class="voice-cut-btn" onclick="deactivateDirectVoiceMode(event)">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
   <!-- Bottom Bar with Search bar shadow & border glowing system -->
   <div class="bottom-section" id="footerSection" onclick="event.stopPropagation()">
+    <!-- Floating tools menu (Absolute position layout above input container) -->
     <div class="tools-menu" id="toolsMenu" onclick="event.stopPropagation()">
       <button class="cut-btn" onclick="togglePopup(event)">×</button>
       <div class="menu-item mt-6" id="mode-image-btn" onclick="setMode('image')">
@@ -583,7 +743,6 @@
         <span>Image Generation</span>
       </div>
       <div class="menu-item" id="mode-search-btn" onclick="setMode('search')">
-        <!-- Exact red brand YouTube SVG -->
         <svg viewBox="0 0 24 24" width="24">
           <path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z" fill="#FF0000"/>
           <path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/>
@@ -591,7 +750,6 @@
         <span>YT Search</span>
       </div>
       
-      <!-- Interactive Left Toggle Thunder System (No right side icon layout) -->
       <div class="menu-item" onclick="toggleThunder()">
         <svg id="thunderMenuIcon" viewBox="0 0 24 24" width="20" height="20" fill="#cccccc" style="transition: fill 0.2s ease;">
             <path d="M13 10V3L4 14H11V21L20 10H13Z"/>
@@ -621,8 +779,8 @@
 
       <textarea id="question" placeholder="Ask 𝕯𝖊𝕾𝖍 𝐀𝖎..." rows="1"></textarea>
 
-      <!-- Right Action Button: Wave SVG (Redirect to Neon) / Send Arrow SVG -->
-      <button class="inner-btn send-action-btn ml-1" id="sendBtn">
+      <!-- Right Action Button: Launches Interactive Voice popup modal / Send Trigger -->
+      <button class="inner-btn send-action-btn ml-1" id="sendBtn" onclick="handleSendActionBtnClick(event)">
         <svg id="waveIcon" viewBox="0 0 24 24" width="18" height="18" fill="#4b5563">
           <rect x="2" y="10" width="2" height="4" rx="1"/>
           <rect x="7" y="6" width="2" height="12" rx="1"/>
@@ -635,7 +793,8 @@
     </div>
   </div>
 
-  <div class="disclaimer">𝕯𝖊𝕾𝖍 𝐀𝖎 can make mistakes. Consider checking important information.</div>
+  <!-- Dynamic Disclaimer Notice: Disappears after 3 seconds on response streams -->
+  <div class="disclaimer-banner" id="disclaimerBanner">𝕯𝖊𝕾𝖍 𝐀𝖎 can make mistakes. Consider checking important information.</div>
 
   <!-- Settings Detailed Options Modal -->
   <div class="modal-overlay" id="settingsModal" onclick="closeModals()">
@@ -691,6 +850,8 @@
     const footerSection = document.getElementById('footerSection');
     const fabContainer = document.getElementById('fabContainer');
     const voiceMicBtn = document.getElementById('voiceMicBtn');
+    const disclaimerBanner = document.getElementById('disclaimerBanner');
+    const voiceVisualizerContainer = document.getElementById('voice-visualizer-container');
     
     let activeMode = 'text'; 
     let thunderMode = false;
@@ -700,8 +861,20 @@
     let selectedAccent = '#f5b342';
     let outputLanguage = 'en';
     let speechActive = false;
+    let activeDirectVoiceConv = false; 
 
-    const STATUS_PHRASES = ["Analysing...","Searching databases...", "Thinking deeply...","Almost done...", "Formulating beautiful response...","Discussing with multiple AI models...", "Optimizing parameters..."];
+    // Visualizer Orbit Physics State
+    let voiceScene, voiceCamera, voiceRenderer, voiceParticles, voiceMaterial, voiceAnalyser, voiceAudioContext, voiceAudioBuffer;
+    let voiceIsDragging = false, voicePointer = new THREE.Vector2(999, 999), voiceLerpedPointer = new THREE.Vector2(999, 999);
+    let voiceOrbitAngle = 0, voiceSmoothedLevel = 0.0, voiceTargetX = 999.0, voiceTargetY = 999.0;
+    let voiceAnimationFrameId;
+
+    // Search States
+    let currentSearchQuery = "";
+    let searchResults = [];
+    let currentSearchMatchIndex = -1;
+
+    const STATUS_PHRASES = ["Searching databases...", "Thinking deeply...", "Formulating response...", "Optimizing parameters..."];
 
     // Mapping languages to voice locales for Speech Synthesis Pronunciation
     const langVoiceMap = {
@@ -713,27 +886,23 @@
       de: 'de-DE'
     };
 
-    // Secure Environmental API Keys fallback configuration
-    const POLL_KEY = typeof __poll_key !== 'undefined' ? __poll_key : "sk_R7H6lZh8ozUQlg4SCPI9TJUKCvWjSVJ2";
-    const YT_KEY = typeof __yt_key !== 'undefined' ? __yt_key : "AIzaSyCBM7PzVnA1rZQy0TwlrgejBmYvVeC3VDc";
+    // Authentic Hardcoded API Keys fallbacks
+    const POLL_KEY = "sk_R7H6lZh8ozUQlg4SCPI9TJUKCvWjSVJ2";
+    const YT_KEY = "AIzaSyCBM7PzVnA1rZQy0TwlrgejBmYvVeC3VDc";
 
     // Global click dismiss handler covering all interactive states and menus (Welcome-screen safe!)
     window.handleGlobalClick = function(e) {
-      // Dismiss tools menu if open and clicked outside
       if (menu.classList.contains('show') && !menu.contains(e.target) && !e.target.closest('.tool-trigger')) {
          closeToolsMenu();
       }
-      // Dismiss top options 3-dot dropdown if open and clicked outside
       const dropdown = document.getElementById('topDropdown');
       if (dropdown.classList.contains('show') && !dropdown.contains(e.target) && !e.target.closest('.top-menu-btn')) {
          dropdown.classList.remove('show');
       }
-      // Dismiss hamburger drawer if open and clicked outside
       const drawer = document.getElementById('sidebarDrawer');
       if (drawer.classList.contains('open') && !drawer.contains(e.target) && !e.target.closest('.top-menu-btn')) {
         toggleDrawer();
       }
-      // Dismiss active Edit Popup action bubble if clicked anywhere on the screen
       document.querySelectorAll('.edit-popup').forEach((popup) => {
         if (popup.style.display === 'flex' && !popup.contains(e.target) && !e.target.closest('.user-msg')) {
           popup.style.display = 'none';
@@ -741,7 +910,6 @@
       });
     };
 
-    // Tap to focus anywhere inside search container
     window.focusInputField = function() {
       input.focus();
     };
@@ -786,7 +954,6 @@
       closeModals();
     }
 
-    // Retrieve saved language settings on initialization
     const savedLang = localStorage.getItem('deshai_lang');
     if (savedLang) {
       outputLanguage = savedLang;
@@ -801,14 +968,32 @@
       document.getElementById('topDropdown').classList.remove('show');
     }
 
+    // Direct system sharing with fallback
     function triggerShare() {
+      const shareData = {
+        title: '𝕯𝖊𝕾𝖍 𝐀𝖎 - Neural Supreme',
+        text: 'Chat, learn, and explore with 𝕯𝖊𝕾𝖍 𝐀𝖎! Check out this incredible AI Assistant.',
+        url: 'https://deshai.in'
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData)
+          .catch((err) => {
+             copyShareLinkFallback();
+          });
+      } else {
+        copyShareLinkFallback();
+      }
+      document.getElementById('topDropdown').classList.remove('show');
+    }
+
+    function copyShareLinkFallback() {
       const inputEl = document.createElement('textarea');
       inputEl.value = 'https://deshai.in';
       document.body.appendChild(inputEl);
       inputEl.select();
       document.execCommand('copy');
       document.body.removeChild(inputEl);
-      document.getElementById('topDropdown').classList.remove('show');
     }
 
     function toggleDrawer() {
@@ -825,7 +1010,6 @@
       const content = document.getElementById(`${id}-list`);
       const title = document.getElementById(`title-${id}`);
       
-      // Auto-collapse other open section before expanding new accordion to fit screen space cleanly
       const otherId = id === 'products' ? 'games' : 'products';
       const otherContent = document.getElementById(`${otherId}-list`);
       const otherTitle = document.getElementById(`title-${otherId}`);
@@ -838,6 +1022,7 @@
       title.classList.toggle('active');
     }
 
+    // Tools Popup Toggle
     function togglePopup(e) { 
         e.stopPropagation(); 
         menu.classList.toggle('show'); 
@@ -847,7 +1032,6 @@
         menu.classList.remove('show');
     }
 
-    // Toolbox selections dynamic icon swap (featuring Brown Mountains image icon)
     function setMode(mode) {
       activeMode = mode;
       toolBtn.classList.add('active');
@@ -867,7 +1051,7 @@
         document.getElementById('mode-search-btn').classList.add('active-mode');
         document.getElementById('activeIconSlot').innerHTML = `
           <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--yt-red)">
-            <path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z"/>
+            <path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z"/>
             <path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/>
           </svg>`;
       }
@@ -896,7 +1080,6 @@
       closeToolsMenu();
     }
 
-    // Dynamic Scroll FAB indicator
     chat.onscroll = () => {
       const threshold = 120;
       const isNearBottom = chat.scrollHeight - chat.scrollTop - chat.clientHeight < threshold;
@@ -909,7 +1092,6 @@
         icon.innerHTML = `<path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="#666"/>`;
       }
 
-      // Scroll FAB Appears only when required (chat content overflows the viewport)
       if (chat.scrollHeight > chat.clientHeight) {
         fabContainer.style.display = 'block';
       } else {
@@ -933,7 +1115,6 @@
         }
     }
 
-    // Draggable Scroll FAB Controller with snap to nearest edge
     const draggableFab = document.getElementById('fabContainer');
     let isDragging = false;
     let startX, startY, initialX, initialY;
@@ -1038,7 +1219,6 @@
       }
     };
 
-    // Continuous Speech listening pipeline
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = SpeechRecognition ? new SpeechRecognition() : null;
     if(recognition) {
@@ -1046,11 +1226,17 @@
         recognition.interimResults = false;
         recognition.onresult = (e) => { 
            const resultText = e.results[e.results.length - 1][0].transcript;
-           input.value = (input.value + " " + resultText).trim(); 
-           input.oninput(); 
+           if (activeDirectVoiceConv) {
+              // Voice mode directly transmits the recognized text to the chat
+              input.value = resultText;
+              handleRequest();
+           } else {
+              input.value = (input.value + " " + resultText).trim(); 
+              input.oninput(); 
+           }
         };
         recognition.onend = () => { 
-           if (speechActive) {
+           if (speechActive || activeDirectVoiceConv) {
              recognition.start(); 
            } else {
              voiceMicBtn.classList.remove('active-mic');
@@ -1074,7 +1260,102 @@
        }
     }
 
-    // Dynamic clean empty/blank home page state trigger animations
+    // Modal Interaction logic
+    window.handleSendActionBtnClick = function(e) {
+      e.stopPropagation();
+      const val = input.value.trim();
+      if (val.length > 0) {
+        handleRequest();
+      } else {
+        document.getElementById('voiceModeModal').style.display = 'flex';
+      }
+    };
+
+    window.closeVoiceModal = function() {
+      document.getElementById('voiceModeModal').style.display = 'none';
+    };
+
+    // Voice conversational Direct Modes (Hide all normal input UI, enable voice orb and listeners)
+    window.activateDirectVoiceMode = async function() {
+      closeVoiceModal();
+      activeDirectVoiceConv = true;
+      speechActive = true;
+      
+      // Hide normal keyboard/text entry bars entirely
+      toolBtn.style.display = 'none';
+      inputCont.style.display = 'none';
+      
+      // Render 1" Circular Visualizer Panel at the bottom
+      voiceVisualizerContainer.style.display = 'flex';
+
+      // Initialize Three.js visualizer inside the Circular frame
+      initVoiceParticleOcean('voice-visualizer-container', 'voice-particle-canvas');
+
+      // Start Recording Streams
+      try {
+         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+         voiceAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+         voiceAnalyser = voiceAudioContext.createAnalyser();
+         voiceAnalyser.fftSize = 256;
+         const source = voiceAudioContext.createMediaStreamSource(stream);
+         source.connect(voiceAnalyser);
+         voiceAudioBuffer = new Uint8Array(voiceAnalyser.frequencyBinCount);
+      } catch(e) {}
+
+      recognition.start();
+    };
+
+    window.deactivateDirectVoiceMode = function(e) {
+      if(e) e.stopPropagation();
+      activeDirectVoiceConv = false;
+      speechActive = false;
+      recognition.stop();
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+      // Shut down audio contextual pipelines
+      if (voiceAudioContext) {
+         voiceAudioContext.close();
+      }
+
+      // Restore typical keyboard input controls
+      voiceVisualizerContainer.style.display = 'none';
+      toolBtn.style.display = 'flex';
+      inputCont.style.display = 'flex';
+
+      // Terminate render looping
+      cancelAnimationFrame(voiceAnimationFrameId);
+    };
+
+    // Humanoid face talk redirections
+    window.redirectFaceTalkMode = function() {
+      closeVoiceModal();
+      location.href = "static/neon.html";
+    };
+
+    // Hamburger search filters
+    window.handleDrawerSearch = function() {
+      const query = document.getElementById('drawerSearchInput').value.trim().toLowerCase();
+      const links = document.querySelectorAll('.accordion-link');
+      
+      if (query) {
+        document.getElementById('products-list').classList.add('show');
+        document.getElementById('games-list').classList.add('show');
+        
+        links.forEach((link) => {
+          const name = link.getAttribute('data-name') || '';
+          if (name.includes(query)) {
+            link.style.display = 'block';
+          } else {
+            link.style.display = 'none';
+          }
+        });
+      } else {
+        document.getElementById('products-list').classList.remove('show');
+        document.getElementById('games-list').classList.remove('show');
+        links.forEach(l => l.style.display = 'block');
+      }
+    };
+
     window.replayWelcomeAnimation = function(e) {
         if(e) e.stopPropagation();
         const helloPath = document.getElementById('helloText');
@@ -1096,6 +1377,101 @@
         cursiveGreet.style.animation = 'fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 4.1s forwards';
     }
 
+    // In-Page Chat Content Searching Engine
+    window.openSearchPanel = function(e) {
+      if(e) e.stopPropagation();
+      const panel = document.getElementById('searchBarPanel');
+      panel.style.display = 'flex';
+      document.getElementById('searchInputField').focus();
+    };
+
+    window.closeSearchPanel = function() {
+      const panel = document.getElementById('searchBarPanel');
+      panel.style.display = 'none';
+      document.getElementById('searchInputField').value = "";
+      clearSearchHighlights();
+    };
+
+    function clearSearchHighlights() {
+      const highlights = document.querySelectorAll('.search-match-highlight');
+      highlights.forEach((hl) => {
+        const textNode = document.createTextNode(hl.textContent);
+        hl.parentNode.replaceChild(textNode, hl);
+      });
+      searchResults = [];
+      currentSearchMatchIndex = -1;
+      document.getElementById('searchResultMeta').innerText = "0 of 0";
+    }
+
+    window.executeChatSearch = function() {
+      const query = document.getElementById('searchInputField').value.trim().toLowerCase();
+      clearSearchHighlights();
+      
+      if (!query) return;
+      currentSearchQuery = query;
+
+      const userMsgs = document.querySelectorAll('.user-msg');
+      const aiContents = document.querySelectorAll('.ai-content');
+      const targets = [...userMsgs, ...aiContents];
+
+      targets.forEach((elem) => {
+        const innerHTML = elem.innerHTML;
+        const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+        
+        let textNodes = [];
+        const walk = document.createTreeWalker(elem, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        while(node = walk.nextNode()) {
+          textNodes.push(node);
+        }
+
+        textNodes.forEach((node) => {
+          const val = node.nodeValue;
+          if (regex.test(val)) {
+            const span = document.createElement('span');
+            span.innerHTML = val.replace(regex, `<span class="search-match-highlight">$1</span>`);
+            node.parentNode.replaceChild(span, node);
+          }
+        });
+      });
+
+      searchResults = Array.from(document.querySelectorAll('.search-match-highlight'));
+      
+      if (searchResults.length > 0) {
+        currentSearchMatchIndex = 0;
+        highlightActiveMatch();
+      } else {
+        document.getElementById('searchResultMeta').innerText = "No similar text found";
+      }
+    };
+
+    function highlightActiveMatch() {
+      searchResults.forEach((hl, index) => {
+        if (index === currentSearchMatchIndex) {
+          hl.classList.add('active-match');
+          hl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          hl.classList.remove('active-match');
+        }
+      });
+      document.getElementById('searchResultMeta').innerText = `${currentSearchMatchIndex + 1} of ${searchResults.length}`;
+    }
+
+    window.navigateSearchMatch = function(direction) {
+      if (searchResults.length === 0) return;
+      currentSearchMatchIndex += direction;
+      if (currentSearchMatchIndex >= searchResults.length) {
+         currentSearchMatchIndex = 0;
+      } else if (currentSearchMatchIndex < 0) {
+         currentSearchMatchIndex = searchResults.length - 1;
+      }
+      highlightActiveMatch();
+    };
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
     // Submit thread
     async function handleRequest() {
       const q = input.value.trim();
@@ -1104,9 +1480,10 @@
          return;
       }
 
-      // Hide Blank welcome page
       const welcome = document.getElementById('welcomeScreen');
       if (welcome) welcome.remove();
+
+      document.getElementById('searchTriggerBtn').style.display = 'block';
 
       if(editingState !== null) {
         const removed = messageHistory.slice(editingState.index);
@@ -1158,7 +1535,6 @@
     }
     function cancelPress() { clearTimeout(longPressTimer); }
 
-    // Keeps all above chat visible and untouched while editing is active
     function triggerEdit(id, text, e) {
         if(e) e.stopPropagation();
         const index = messageHistory.findIndex(m => m.id === id);
@@ -1169,7 +1545,6 @@
         input.oninput();
         closePopups();
         cancelEditBtn.style.display = 'flex';
-        // Make sure fab Container displays to hold the cancel button above input bar
         fabContainer.style.display = 'block';
     }
 
@@ -1188,7 +1563,7 @@
       loader.innerHTML = `
         <div class="ai-header">
             <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
-            <span class="ai-name">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+            <span class="ai-name">𝕯𝖊𝕾𝖍 𝕬𝖎</span>
         </div>
         <div class="loading-container">
             <div class="status-text" id="status-label">Searching...</div>
@@ -1205,12 +1580,11 @@
         if(label) label.innerText = STATUS_PHRASES[phraseIdx];
       }, 1200);
 
-      // Persistent localized translation directive
       const languageDirective = outputLanguage !== 'en' ? ` (Translate response to language locale: ${outputLanguage} and answer strictly in that language)` : ' (Answer strictly in English language layout)';
       const optimizedQuery = `${q}${languageDirective}`;
 
       try {
-        const res = await fetch("https://deshai-ebecb8c5cbdxeee8.southeastasia-01.azurewebsites.net/ask", {
+        const res = await fetch("https://deshai.in/ask", {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question: optimizedQuery })
         });
@@ -1224,37 +1598,74 @@
         
         const ytBadgeHtml = isSearch ? `
           <div class="status-badge" style="color: var(--yt-red); gap:6px;">
-            <svg viewBox="0 0 24 24" width="16" fill="var(--yt-red)"><path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z"/><path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/></svg>
+            <svg viewBox="0 0 24 24" width="16" fill="var(--yt-red)"><path d="M23.5 6.2c-.3-1.1-1.1-1.9-2.2-2.2C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.3.5C1.6 4.3.8 5.1.5 6.2 0 8.2 0 12.4 0 12.4s0 4.2.5 6.2c.3 1.1 1.1 1.9 2.2 2.2 2 1.1 9.3 1.1s7.3 0 9.3-1.1c1.1-.3 1.9-1.1 2.2-2.2.5-2 .5-6.2.5-6.2s0-4.2-.5-6.2z"/><path d="M9.5 15.5V8.5l6.5 3.5-6.5 3.5z" fill="#FFFFFF"/></svg>
             YouTube Mode Connected
           </div>` : '';
 
-        div.innerHTML = `
-            <div class="ai-header">
-              <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
-              <span class="ai-name">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
-            </div>
-            ${ytBadgeHtml}
-            <div class="ai-content" id="${id}"></div>
-            <div class="action-row" id="act-${id}"></div>`;
-        
-        chat.appendChild(div);
-        messageHistory.push({ id: Date.now(), role: 'ai', element: div });
-
-        const content = data.answer || data.response || "No response received.";
-        if(thunderMode) {
-          document.getElementById(id).innerHTML = marked.parse(content);
-          if (window.MathJax) await MathJax.typesetPromise();
+        if (data.image_url) {
+          // Accurate Azure engine single-play direct URL display format
+          div.innerHTML = `
+              <div class="ai-header">
+                <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+                <span class="ai-name">𝕯𝖊𝕾𝖍 𝕬𝖎</span>
+              </div>
+              <div class="status-badge" style="gap:6px;">
+                <svg viewBox="0 0 24 24" width="14" fill="#22c55e"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span class="success-text">Image Generated Successfully</span>
+              </div>
+              <div class="image-card" id="${id}">
+                <img class="g-img" src="${data.image_url}" crossOrigin="anonymous" style="width:100%; height:100%; object-fit:cover;">
+              </div>
+              <div class="action-row" id="act-${id}"></div>`;
+          chat.appendChild(div);
+          messageHistory.push({ id: Date.now(), role: 'ai', element: div });
+          addActions(`act-${id}`, id, true, data.image_url);
           scrollToBottom();
         } else {
-          await typeEffect(id, content);
+          // Standard markdown layout text configurations
+          div.innerHTML = `
+              <div class="ai-header">
+                <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+                <span class="ai-name">𝕯𝖊𝕾𝖍 𝕬𝖎</span>
+              </div>
+              ${ytBadgeHtml}
+              <div class="ai-content" id="${id}"></div>
+              <div class="action-row" id="act-${id}"></div>`;
+          chat.appendChild(div);
+          messageHistory.push({ id: Date.now(), role: 'ai', element: div });
+
+          const content = data.answer || data.response || "No response received.";
+          if(thunderMode) {
+            document.getElementById(id).innerHTML = marked.parse(content);
+            if (window.MathJax) await MathJax.typesetPromise();
+            scrollToBottom();
+          } else {
+            await typeEffect(id, content);
+          }
+          addActions(`act-${id}`, id, false, '', content);
+          if(isSearch) fetchYT(q, div);
+
+          // Continuous hands-free active conversational speech readout
+          if (activeDirectVoiceConv) {
+            speakDirectly(content);
+          }
         }
-        addActions(`act-${id}`, id, false, '', content);
-        if(isSearch) fetchYT(q, div);
+
+        // Show Disclaimer Banner only on response completion for exactly 3 seconds
+        showDisclaimerBanner();
+
       } catch (e) {
         clearInterval(phraseInterval);
         loader.remove();
         appendMsg('ai', "Neural Link Error. System offline.");
       }
+    }
+
+    function showDisclaimerBanner() {
+      disclaimerBanner.style.opacity = '1';
+      setTimeout(() => {
+        disclaimerBanner.style.opacity = '0';
+      }, 3000);
     }
 
     async function typeEffect(id, text) {
@@ -1265,7 +1676,6 @@
         scrollToBottom();
         await new Promise(r => setTimeout(r, 20));
       }
-      // Re-trigger LaTeX layout typesetting pass cleanly on final output completion
       if (window.MathJax) {
          try {
            await MathJax.typesetPromise([el]);
@@ -1273,7 +1683,202 @@
       }
     }
 
-    // 1:1 Aspect Frame Integrated Infinite Particle Ocean Animation Loop 
+    // Voice Visualizer Particle system
+    function initVoiceParticleOcean(cardId, canvasId) {
+      const container = document.getElementById(cardId);
+      const canvas = document.getElementById(canvasId);
+      if (!canvas || !container) return;
+
+      voiceScene = new THREE.Scene();
+      voiceCamera = new THREE.PerspectiveCamera(65, 1, 0.1, 2000);
+      voiceCamera.position.z = 180;
+
+      voiceRenderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance"
+      });
+
+      const dpr = Math.min(window.devicePixelRatio, 2);
+      voiceRenderer.setPixelRatio(dpr);
+      voiceRenderer.setSize(container.clientWidth, container.clientHeight);
+
+      const PARTICLE_COUNT = 3000; // Scaled down for 1" Circular viewport
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(PARTICLE_COUNT * 3);
+      const colors = new Float32Array(PARTICLE_COUNT * 3);
+      const scales = new Float32Array(PARTICLE_COUNT);
+      const color = new THREE.Color();
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const i3 = i * 3;
+        const radius = Math.random() * 220;
+        const angle = Math.random() * Math.PI * 2;
+
+        positions[i3] = Math.cos(angle) * radius;
+        positions[i3 + 1] = (Math.random() - 0.5) * 80;
+        positions[i3 + 2] = Math.sin(angle) * radius;
+
+        const mix = Math.random();
+        if (mix < 0.33) {
+          color.setRGB(1.0, 0.1, 0.7); // Pink
+        } else if (mix < 0.66) {
+          color.setRGB(0.1, 0.6, 1.0); // Blue
+        } else {
+          color.setRGB(0.5, 0.1, 1.0); // Violet
+        }
+
+        colors[i3] = color.r;
+        colors[i3 + 1] = color.g;
+        colors[i3 + 2] = color.b;
+        scales[i] = Math.random();
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+
+      voiceMaterial = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexColors: true,
+        uniforms: {
+          time: { value: 0 },
+          uMouse: { value: new THREE.Vector2(999.0, 999.0) },
+          uInteractionStrength: { value: 0.0 },
+          uRadius: { value: 0.55 }
+        },
+        vertexShader: `
+          attribute float scale;
+          varying vec3 vColor;
+          varying float vEffectFactor;
+          uniform float time;
+          uniform vec2 uMouse;
+          uniform float uInteractionStrength;
+          uniform float uRadius;
+
+          void main() {
+            vec3 p = position;
+            float wave1 = sin((p.x * 0.015) + time * 0.4) * 10.0;
+            float wave2 = cos((p.z * 0.02) + time * 0.35) * 10.0;
+            float wave3 = sin((p.x + p.z) * 0.01 + time * 0.2) * 14.0;
+            p.y += wave1 + wave2 + wave3;
+
+            float swirl = sin(time * 0.1 + length(p.xz) * 0.02);
+            p.x += swirl * 4.0;
+            p.z += swirl * 4.0;
+
+            vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+            vec4 projectedPosition = projectionMatrix * mvPosition;
+            vec2 ndcPos = projectedPosition.xy / projectedPosition.w;
+            float screenDist = length(ndcPos - uMouse);
+
+            vEffectFactor = 0.0;
+
+            if (uInteractionStrength > 0.0 && screenDist < uRadius) {
+              float effect = smoothstep(uRadius, 0.0, screenDist) * uInteractionStrength;
+              vEffectFactor = effect;
+              float localFastTime = time * 14.0;
+              p.x += (sin(localFastTime + p.y * 0.08) * 20.0) * effect;
+              p.y += (cos(localFastTime + p.x * 0.08) * 28.0) * effect;
+              p.z += (sin(localFastTime * 1.2 + p.z * 0.08) * 20.0) * effect;
+              p.y += (sin(time * 3.0) * 10.0) * effect;
+
+              mvPosition = modelViewMatrix * vec4(p, 1.0);
+              projectedPosition = projectionMatrix * mvPosition;
+            }
+
+            gl_PointSize = (1.5 + scale * 3.0) * (300.0 / -mvPosition.z);
+            if (vEffectFactor > 0.0) {
+              gl_PointSize *= (1.0 + vEffectFactor * 0.6);
+            }
+            gl_Position = projectedPosition;
+            vec3 coreColor = mix(vec3(0.1, 0.95, 1.0), vec3(1.0, 1.0, 1.0), vEffectFactor * 0.5);
+            vColor = mix(color, coreColor, vEffectFactor * 0.9);
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          varying float vEffectFactor;
+          void main() {
+            float d = distance(gl_PointCoord, vec2(0.5));
+            float strength = smoothstep(0.5, 0.0, d);
+            float glowPower = mix(2.0, 1.4, vEffectFactor);
+            strength = pow(strength, glowPower);
+            vec3 glow = vColor * strength;
+            gl_FragColor = vec4(glow, strength);
+          }
+        `
+      });
+
+      voiceParticles = new THREE.Points(geometry, voiceMaterial);
+      voiceScene.add(voiceParticles);
+
+      const clock = new THREE.Clock();
+
+      function renderLoop() {
+        if (!document.getElementById(canvasId)) {
+          cancelAnimationFrame(voiceAnimationFrameId);
+          voiceRenderer.dispose();
+          return;
+        }
+        voiceAnimationFrameId = requestAnimationFrame(renderLoop);
+        const t = clock.getElapsedTime();
+
+        // Voice reactivity amplification
+        if (speechActive && voiceAnalyser) {
+          voiceAnalyser.getByteFrequencyData(voiceAudioBuffer);
+          let total = 0;
+          for(let i=0; i<voiceAudioBuffer.length; i++) {
+            total += voiceAudioBuffer[i];
+          }
+          const amp = total / voiceAudioBuffer.length / 255;
+          voiceSmoothedLevel += (amp - voiceSmoothedLevel) * 0.15;
+        }
+
+        if (speechActive) {
+          if (voiceSmoothedLevel > 0.02) {
+            voiceOrbitAngle += 0.025;
+            interactionStrength = THREE.MathUtils.lerp(interactionStrength, 0.4 + (voiceSmoothedLevel * 1.5), 0.1);
+          } else {
+            interactionStrength = THREE.MathUtils.lerp(interactionStrength, 0.0, 0.05);
+          }
+          voiceTargetX = Math.cos(voiceOrbitAngle) * 0.55;
+          voiceTargetY = Math.sin(voiceOrbitAngle) * 0.55;
+        } else {
+          interactionStrength = THREE.MathUtils.lerp(interactionStrength, 0.0, 0.1);
+          voiceTargetX = THREE.MathUtils.lerp(voiceTargetX, 999.0, 0.1);
+          voiceTargetY = THREE.MathUtils.lerp(voiceTargetY, 999.0, 0.1);
+        }
+
+        voiceLerpedPointer.x = THREE.MathUtils.lerp(voiceLerpedPointer.x, voiceTargetX, 0.15);
+        voiceLerpedPointer.y = THREE.MathUtils.lerp(voiceLerpedPointer.y, voiceTargetY, 0.15);
+
+        voiceMaterial.uniforms.time.value = t;
+        voiceMaterial.uniforms.uInteractionStrength.value = interactionStrength;
+        voiceMaterial.uniforms.uMouse.value.copy(voiceLerpedPointer);
+
+        if (speechActive) {
+          voiceMaterial.uniforms.uRadius.value = 0.4 + (voiceSmoothedLevel * 0.85);
+        } else {
+          voiceMaterial.uniforms.uRadius.value = 0.55;
+        }
+
+        voiceCamera.position.x = Math.sin(t * 0.12) * 12;
+        voiceCamera.position.y = Math.cos(t * 0.1) * 8;
+        voiceCamera.lookAt(voiceScene.position);
+
+        voiceParticles.rotation.y = t * 0.025;
+        voiceParticles.rotation.x = Math.sin(t * 0.04) * 0.04;
+
+        voiceRenderer.render(voiceScene, voiceCamera);
+      }
+
+      renderLoop();
+    }
+
     function initParticleOcean(cardId, canvasId) {
       const container = document.getElementById(cardId);
       const canvas = document.getElementById(canvasId);
@@ -1385,7 +1990,7 @@
               projectedPosition = projectionMatrix * mvPosition;
             }
 
-            gl_PointSize = (2.5 + scale * 4.0) * (300.0 / -mvPosition.z);
+            gl_PointSize = (1.5 + scale * 4.5) * (300.0 / -mvPosition.z);
             if (vEffectFactor > 0.0) {
               gl_PointSize *= (1.0 + vEffectFactor * 0.6);
             }
@@ -1433,7 +2038,6 @@
         }
       }, { passive: true });
 
-      // Immediate zero-delay dissipation of vortex magnetism on lift
       const clearMagnetism = () => {
          isInteracting = false;
          interactionStrength = 0.0;
@@ -1447,8 +2051,6 @@
 
       const clock = new THREE.Clock();
       let reqId;
-
-      renderer.render(scene, camera);
 
       function renderLoop() {
         if (!document.getElementById(canvasId)) {
@@ -1499,8 +2101,8 @@
       
       div.innerHTML = `
         <div class="ai-header">
-            <img class="logo-char-img" src="static/logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
-            <span class="ai-name">𝕯𝖊𝕾𝖍 𝐀𝖎</span>
+            <img class="logo-char-img" src="logo.png" alt="Logo" onload="this.style.opacity='1'" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2103/2103633.png'">
+            <span class="ai-name">𝕯𝖊𝕾𝖍 𝕬𝖎</span>
         </div>
         <div class="status-badge" id="status-badge-${id}">
            🔄 Generating Image...
@@ -1562,7 +2164,6 @@
       } catch(e) {}
     }
 
-    // Action button layouts with 1-second temporary red highlights and TTS synchronization
     function addActions(containerId, contentId, isImg, imgUrl = '', textData = '') {
       const cont = document.getElementById(containerId);
       cont.innerHTML = ''; 
@@ -1580,14 +2181,17 @@
         tempText.select();
         document.execCommand('copy');
         document.body.removeChild(tempText);
-        // Reset states in exactly 1 second
         setTimeout(() => copyBtn.classList.remove('red-active'), 1000);
       };
 
-      // Download/Save Button Action
+      // Exact double-path vector folder download SVG
       const dlBtn = document.createElement('button');
       dlBtn.className = 'icon-action-btn';
-      dlBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7-7-7zM5 18v2h14v-2H5z"/></svg>`;
+      dlBtn.innerHTML = `
+        <svg class="text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+        </svg>`;
       dlBtn.onclick = () => {
         dlBtn.classList.add('red-active');
         if(isImg) {
@@ -1595,38 +2199,40 @@
         } else {
           exportPdf(contentId);
         }
-        // Reset states in exactly 1 second
         setTimeout(() => dlBtn.classList.remove('red-active'), 1000);
       };
 
       cont.appendChild(copyBtn);
       cont.appendChild(dlBtn);
 
-      // Speak Button Action (Highlight active state matches voice synthesizer output duration)
+      // Speak Button Action (TTS)
       if (!isImg) {
         const ttsBtn = document.createElement('button');
         ttsBtn.className = 'icon-action-btn';
         ttsBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>`;
         ttsBtn.onclick = () => {
-          if ('speechSynthesis' in window) {
-             window.speechSynthesis.cancel();
-             ttsBtn.classList.add('red-active');
-             
-             const utterance = new SpeechSynthesisUtterance(textData);
-             // Read aloud respecting selected persistent language code natively
-             utterance.lang = langVoiceMap[outputLanguage] || 'en-US'; 
-             
-             utterance.onend = () => {
-                ttsBtn.classList.remove('red-active');
-             };
-             utterance.onerror = () => {
-                ttsBtn.classList.remove('red-active');
-             };
-             
-             window.speechSynthesis.speak(utterance);
-          }
+          speakDirectly(textData, ttsBtn);
         };
         cont.appendChild(ttsBtn);
+      }
+    }
+
+    function speakDirectly(textData, targetButton = null) {
+      if ('speechSynthesis' in window) {
+         window.speechSynthesis.cancel();
+         if (targetButton) targetButton.classList.add('red-active');
+         
+         const utterance = new SpeechSynthesisUtterance(textData);
+         utterance.lang = langVoiceMap[outputLanguage] || 'en-US'; 
+         
+         utterance.onend = () => {
+            if (targetButton) targetButton.classList.remove('red-active');
+         };
+         utterance.onerror = () => {
+            if (targetButton) targetButton.classList.remove('red-active');
+         };
+         
+         window.speechSynthesis.speak(utterance);
       }
     }
 
@@ -1699,19 +2305,22 @@
     window.toggleSpeechRecording = toggleSpeechRecording;
     window.replayWelcomeAnimation = replayWelcomeAnimation;
     window.handleGlobalClick = handleGlobalClick;
+    window.handleSendActionBtnClick = handleSendActionBtnClick;
+    window.closeVoiceModal = closeVoiceModal;
+    window.activateDirectVoiceMode = activateDirectVoiceMode;
+    window.deactivateDirectVoiceMode = deactivateDirectVoiceMode;
+    window.redirectFaceTalkMode = redirectFaceTalkMode;
+    window.handleDrawerSearch = handleDrawerSearch;
 
-    sendBtn.onclick = () => handleRequest();
+    sendBtn.onclick = (e) => handleSendActionBtnClick(e);
     input.onkeydown = (e) => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); handleRequest(); }};
     
-    // Auto start splash on load
     window.onload = () => {
       replayWelcomeAnimation();
     };
   </script>
 </body>
 </html>
-
-
 
 
 
