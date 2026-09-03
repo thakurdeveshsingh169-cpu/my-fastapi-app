@@ -161,7 +161,7 @@
         <span class="font-fraktur font-bold text-sm">𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓</span>
       </div>
       <div class="bg-white dark:bg-cardBgDark rounded-2xl rounded-tl-sm p-4 shadow-sm border border-gray-100 dark:border-gray-800 text-sm leading-relaxed max-w-[88%] search-target">
-        Hello! Enter any word to get dictionary definitions via <strong>Datamuse API</strong>. If it's not found or you need more context, tap the circular <strong class="text-brandYellowDark dark:text-brandYellow font-fraktur">𝕯𝖊𝖘𝖍 𝐀𝖎</strong> icon to generate concise Hindi/English meanings & examples!
+        Hello! Enter any word to get dictionary meaning via <strong>𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓</strong>. If it's not found or you need more context, tap the circular <strong class="text-brandYellowDark dark:text-brandYellow font-fraktur">𝕯𝖊𝖘𝖍 𝐀𝖎</strong> icon to generate concise Hindi/English meanings & examples!
       </div>
     </div>
 
@@ -782,7 +782,7 @@
 
       const messageText = isServerBusy
         ? `it seems like server is busy. word '${escapeHtml(word)}' not found, please try <button onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" class="font-fraktur font-bold text-brandYellowDark dark:text-brandYellow hover:underline ml-1">𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓</button>`
-        : `word '${escapeHtml(word)}' not found in dictionary <button onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" class="font-fraktur font-bold text-brandYellowDark dark:text-brandYellow hover:underline ml-1">𝖙𝖗𝖞 𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓</button>`;
+        : `word '${escapeHtml(word)}' not found in dictionary <button onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" class="font-fraktur font-bold text-brandYellowDark dark:text-brandYellow hover:underline ml-1">try 𝕯𝖊𝖘𝖍 𝐀𝖎</button>`;
 
       const cardDiv = document.createElement('div');
       cardDiv.className = 'flex flex-col items-start space-y-1 my-3';
@@ -890,7 +890,7 @@
       retryBlock.id = `retry-${parentCardId}`;
       retryBlock.className = 'mt-3 pt-2 border-t border-red-200 dark:border-red-900/50 flex items-center justify-between text-xs text-red-500 search-target';
       retryBlock.innerHTML = `
-        <span>Failed to get response from 𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓.</span>
+        <span>Failed to get response from 𝕯𝖊𝖘𝖍 𝐀𝖎.</span>
         <button 
           onclick="triggerDeshAI('${escapeHtml(word)}', '${parentCardId}')"
           class="flex items-center space-x-1 px-2.5 py-1 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 font-medium hover:bg-red-100 transition-colors text-red-600 dark:text-red-400"
@@ -969,7 +969,7 @@
         <div class="flex items-center justify-between text-xs font-bold text-brandYellowDark dark:text-brandYellow mb-1">
           <div class="flex items-center space-x-1">
             <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-            <span class="font-fraktur font-bold">𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓 Answer (deshai.in/ask)</span>
+            <span class="font-fraktur font-bold">by ~𝕯𝖊𝖘𝖍 𝐀𝖎</span>
           </div>
           <!-- Speaker Button for AI Response -->
           <button 
