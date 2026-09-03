@@ -1,208 +1,1025 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>𝕯𝖊𝕾𝖍 𝗔𝐢 Dictionary</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f6e9ef;
-}
-
-.app{
-  max-width:400px;
-  margin:30px auto;
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-}
-
-h2{
-  text-align:center;
-  color:#ff4f8b;
-}
-
-textarea, select{
-  width:65%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:14px;
-  border:1px solid #ccc;
-  font-size:15px;
-}
-
-button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:18px;
-  background:#ff4f8b;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.result{
-  margin-top:15px;
-  line-height:1.6;
-}
-
-.speakBtn{
-  margin-top:8px;
-  
-  background:#000000;
-  width: auto;
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 12px;
-}
-
-/* AI Floating Button */
-#aiBtn{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  width:64px;
-  height:64px;
-  border-radius:18px;
-  display:none;
-  cursor:pointer;
-  box-shadow:0 0 25px #ff00cc;
-  animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.08)}
-  100%{transform:scale(1)}
-}
-
-#aiExplain{
-  max-width:400px;
-  margin:20px auto;
-  background:white;
-  padding:20px;
-  border-radius:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,.2);
-  display:none;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>𝕯𝖎𝖈. 𝐀𝖎</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brandYellow: '#F5B041',
+            brandYellowDark: '#D68910',
+            appBgLight: '#FAFAFA',
+            appBgDark: '#121212',
+            cardBgDark: '#1E1E1E',
+          },
+          keyframes: {
+            dotWave: {
+              '0%, 100%': { transform: 'translateY(0px)', opacity: '0.4' },
+              '50%': { transform: 'translateY(-6px)', opacity: '1' },
+            },
+            blinkRed3: {
+              '0%, 100%': { borderColor: 'transparent', boxShadow: 'none' },
+              '50%': { borderColor: '#EF4444', boxShadow: '0 0 16px rgba(239, 68, 68, 1)' }
+            },
+            pulseRedSpeaker: {
+              '0%, 100%': { color: '#EF4444', borderColor: '#EF4444', boxShadow: '0 0 8px rgba(239, 68, 68, 0.6)' },
+              '50%': { color: '#9CA3AF', borderColor: 'transparent', boxShadow: 'none' }
+            },
+            waterDropRipple: {
+              '0%': { boxShadow: '0 0 0 0px rgba(156, 163, 175, 0.6)' },
+              '70%': { boxShadow: '0 0 0 14px rgba(156, 163, 175, 0)' },
+              '100%': { boxShadow: '0 0 0 0px rgba(156, 163, 175, 0)' }
+            }
+          },
+          animation: {
+            dot1: 'dotWave 1s ease-in-out infinite 0s',
+            dot2: 'dotWave 1s ease-in-out infinite 0.2s',
+            dot3: 'dotWave 1s ease-in-out infinite 0.4s',
+            blinkRed3Times: 'blinkRed3 1s ease-in-out 3',
+            speakingPulse: 'pulseRedSpeaker 0.8s ease-in-out infinite',
+            waterDrop: 'waterDropRipple 1.2s ease-out infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 9999px;
+    }
+    .custom-shape-bottom-right {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+    }
+    .font-fraktur {
+      font-family: 'UnifrakturMaguntia', cursive, serif;
+    }
+    /* Highlight search styling */
+    mark.chat-search-highlight {
+      background-color: #fef08a;
+      color: #000;
+      border-bottom: 2px solid #ef4444;
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+    dark mark.chat-search-highlight {
+      background-color: #854d0e;
+      color: #fff;
+      border-bottom: 2px solid #ef4444;
+    }
+    mark.chat-search-highlight.active-search-match {
+      background-color: #fde047;
+      outline: 2px solid #ef4444;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 </head>
+<body class="bg-appBgLight dark:bg-appBgDark text-gray-800 dark:text-gray-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
 
-<body>
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-30 bg-white/80 dark:bg-cardBgDark/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 py-3 shadow-sm transition-colors">
+    <div class="max-w-md mx-auto flex items-center justify-between relative">
+      <!-- Title Branding -->
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center p-1">
+          <!-- Logo Icon SVG -->
+          <svg viewBox="0 0 100 100" class="w-full h-full">
+            <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+            <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+            <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold font-fraktur tracking-wide">𝕯𝖎𝖈. 𝐀𝖎</h1>
+      </div>
 
-<div class="app">
-  <h2>𝕯𝖊𝕾𝖍 Dictionary</h2>
+      <!-- Controls Right (Search Icon & Theme Toggle) -->
+      <div class="flex items-center space-x-1">
+        <!-- Search Toggle SVG Button (Hidden on startup, shown on first question send) -->
+        <button id="toggleSearchBtn" onclick="toggleSearchHeader()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors hidden" title="Search in Chat">
+          <i data-lucide="search" class="w-5 h-5"></i>
+        </button>
 
-  <textarea id="inputText" placeholder="Enter word or sentence..."></textarea>
+        <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors" title="Toggle Light/Dark Theme">
+          <i data-lucide="moon" id="themeIcon" class="w-5 h-5"></i>
+        </button>
+      </div>
 
-  <select id="language">
-    <option value="en">English</option>
-    <option value="hi">Hindi</option>
-    <option value="fr">French</option>
-    <option value="es">Spanish</option>
-    <option value="de">German</option>
-    <option value="ta">Tamil</option>
-  </select>
+      <!-- Inline Search Input Bar (Hidden by default) -->
+      <div id="chatSearchBar" class="absolute inset-0 bg-white dark:bg-cardBgDark flex items-center px-2 space-x-2 hidden z-40 transition-all">
+        <div class="relative flex-1 flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-2 py-1">
+          <i data-lucide="search" class="w-4 h-4 text-gray-400 mr-2 flex-shrink-0"></i>
+          <input 
+            type="text" 
+            id="chatSearchInput" 
+            oninput="performChatSearch()" 
+            placeholder="Search words & answers..." 
+            class="w-full bg-transparent text-xs text-gray-800 dark:text-gray-100 border-none focus:outline-none"
+          />
+          <span id="searchMatchCount" class="text-[10px] text-gray-400 ml-1 whitespace-nowrap">0/0</span>
+        </div>
 
-  <button onclick="searchDictionary()">Search Meaning</button>
-  <button class="speakBtn" onclick="speakText()">🔊</button>
+        <!-- Navigation Up/Down Arrows -->
+        <div id="searchNavBtns" class="flex items-center space-x-0.5 hidden">
+          <button onclick="navigateSearchMatch(-1)" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300" title="Previous Match">
+            <i data-lucide="chevron-up" class="w-4 h-4"></i>
+          </button>
+          <button onclick="navigateSearchMatch(1)" class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300" title="Next Match">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </button>
+        </div>
 
-  <div class="result" id="result"></div>
-</div>
+        <!-- Cut/Close Button -->
+        <button id="clearSearchBtn" onclick="closeChatSearch()" class="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400" title="Close Search">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
 
-<div id="aiExplain"></div>
+  <!-- CHAT CONTAINER -->
+  <main class="flex-1 max-w-md w-full mx-auto p-4 pb-28 overflow-y-auto space-y-4" id="chatContainer">
+    
+    <!-- Welcome Bot Message -->
+    <div class="flex flex-col items-start space-y-1">
+      <div class="flex items-center space-x-2 mb-1">
+        <div class="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800 p-0.5">
+          <svg viewBox="0 0 100 100" class="w-full h-full">
+            <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+            <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+            <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+          </svg>
+        </div>
+        <span class="font-fraktur font-bold text-sm">𝕯𝖎𝖈. 𝐀𝖎</span>
+      </div>
+      <div class="bg-white dark:bg-cardBgDark rounded-2xl rounded-tl-sm p-4 shadow-sm border border-gray-100 dark:border-gray-800 text-sm leading-relaxed max-w-[88%] search-target">
+        Hello! Enter any word to get dictionary definitions via <strong>Datamuse API</strong>. If it's not found or you need more context, tap the circular <strong class="text-brandYellowDark dark:text-brandYellow">DeSh AI</strong> icon to generate concise Hindi/English meanings & examples!
+      </div>
+    </div>
 
-<img src="/static/logo.png" id="aiBtn" alt="DESH-AI">
+  </main>
 
-<script>
-const input = document.getElementById("inputText");
-const result = document.getElementById("result");
-const aiBtn = document.getElementById("aiBtn");
-const aiExplain = document.getElementById("aiExplain");
-const langSel = document.getElementById("language");
+  <!-- FLOATING SCROLL BUTTON -->
+  <button id="scrollBtn" onclick="handleScrollClick()" class="fixed right-5 bottom-20 z-20 w-10 h-10 rounded-full bg-white dark:bg-cardBgDark shadow-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 transition-all transform hover:scale-105 active:scale-95 hidden">
+    <i data-lucide="arrow-down" id="scrollIcon" class="w-5 h-5"></i>
+  </button>
 
-/* Speak Function */
-function speak(text, lang){
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  speechSynthesis.speak(u);
-}
+  <!-- INPUT AREA -->
+  <div class="fixed bottom-0 left-0 right-0 z-20 bg-white/90 dark:bg-appBgDark/90 backdrop-blur-md border-t border-gray-100 dark:border-gray-800 p-3 transition-colors">
+    <form id="searchForm" onsubmit="handleFormSubmit(event)" class="max-w-md mx-auto flex items-center space-x-2">
+      <!-- Input Field Container -->
+      <div id="inputBoxContainer" class="relative flex-1 flex items-center bg-gray-100 dark:bg-cardBgDark rounded-full px-2 py-1 transition-all">
+        <!-- Voice / Mic Button Inside Input (Initial Grey Color) -->
+        <button 
+          type="button" 
+          id="micBtn"
+          onclick="toggleVoiceRecognition()"
+          title="Speak to enter word"
+          class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:opacity-80 transition-all flex items-center justify-center flex-shrink-0"
+        >
+          <i data-lucide="mic" id="micIcon" class="w-5 h-5"></i>
+        </button>
 
-function speakText(){
-  if(!input.value) return;
-  speak(input.value, langSel.value);
-}
+        <input 
+          type="text" 
+          id="wordInput" 
+          oninput="handleInputChange(event)"
+          placeholder="Ask 𝕯𝖊𝖘𝖍 𝐀𝖎..." 
+          class="w-full bg-transparent text-gray-800 dark:text-gray-100 px-2 py-2 border-none focus:outline-none text-sm placeholder:font-fraktur"
+          autocomplete="off"
+        />
+      </div>
 
-/* Dictionary */
-async function searchDictionary(){
-  const word = input.value.trim();
-  if(!word) return;
+      <!-- Action Button (Send Arrow / Pause) Outside Container -->
+      <button 
+        type="button" 
+        id="actionBtn"
+        onclick="handleActionClick()"
+        class="p-3 rounded-full bg-brandYellow hover:bg-brandYellowDark text-white shadow-md transition-all active:scale-95 items-center justify-center flex-shrink-0 hidden"
+      >
+        <i data-lucide="arrow-up" id="actionIcon" class="w-5 h-5"></i>
+      </button>
+    </form>
+  </div>
 
-  result.innerHTML = "🔍 Searching...";
-  aiBtn.style.display = "none";
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
 
-  try{
-    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-    const data = await res.json();
+    // Application State
+    let isDarkMode = false;
+    let isScrollAtBottom = true;
+    let isGenerating = false;
+    let currentAbortController = null;
 
-    const meaning = data[0].meanings[0];
-    const def = meaning.definitions[0].definition;
-    const example = meaning.definitions[0].example || "No example Try 𝕯𝖊𝕾𝖍 𝗔𝐢";
+    // Speech Synthesis State
+    let activeSpeakerBtn = null;
 
-    result.innerHTML = `
-      <b>Meaning:</b> ${def}<br>
-      <b>Part of Speech:</b> ${meaning.partOfSpeech}<br>
-      <b>Example:</b> ${example}
-    `;
+    // Speech Recognition State
+    let recognition = null;
+    let isListening = false;
 
-    aiBtn.style.display = "block";
+    // Chat Search & Highlight State
+    let searchMatches = [];
+    let currentMatchIndex = -1;
 
-  }catch{
-    result.innerHTML = "⚠️ Word not found. Try 𝕯𝖊𝕾𝖍 𝗔𝐢";
-    aiBtn.style.display = "block";
-  }
-}
+    // Reveal Search Header Icon on first user question
+    function ensureSearchHeaderVisible() {
+      const searchBtn = document.getElementById('toggleSearchBtn');
+      if (searchBtn && searchBtn.classList.contains('hidden')) {
+        searchBtn.classList.remove('hidden');
+      }
+    }
 
-/* DESH-AI Explanation */
-aiBtn.onclick = async () => {
-  aiExplain.style.display = "block";
+    // Convert **bold** markdown to <strong>bold</strong>
+    function parseMarkdownBold(text) {
+      if (!text) return '';
+      return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    }
 
-  let dots = 0;
-  const loading = setInterval(()=>{
-    dots=(dots+1)%4;
-    aiExplain.innerText = "DESH-AI is thinking" + ".".repeat(dots);
-  },500);
+    // Input Change Handler for Dynamic Button Visibility
+    function handleInputChange(e) {
+      const actionBtn = document.getElementById('actionBtn');
+      const val = e.target.value.trim();
 
-  const prompt = `
-Explain this word/sentence in 2-3 lines:
-"${input.value}"
-Language: ${langSel.options[langSel.selectedIndex].text}
-`;
+      if (isGenerating) return; // Keep Pause state active while generating
 
-  try{
-    const res = await fetch("https://desh-ai.onrender.com/ask",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ question: prompt })
-    });
+      if (val.length > 0) {
+        actionBtn.classList.remove('hidden');
+        actionBtn.classList.add('flex');
+        setActionBtnIcon('send');
+      } else {
+        actionBtn.classList.add('hidden');
+        actionBtn.classList.remove('flex');
+      }
+    }
 
-    const data = await res.json();
-    clearInterval(loading);
+    // Set Gemini-style Up Arrow for Send or Pause icon
+    function setActionBtnIcon(type) {
+      const actionIcon = document.getElementById('actionIcon');
+      if (type === 'pause') {
+        actionIcon.setAttribute('data-lucide', 'pause');
+      } else {
+        actionIcon.setAttribute('data-lucide', 'arrow-up');
+      }
+      lucide.createIcons();
+    }
 
-    aiExplain.innerHTML = data.answer;
-    speak(data.answer, langSel.value);
+    function handleActionClick() {
+      if (isGenerating) {
+        // Pause current request
+        if (currentAbortController) {
+          currentAbortController.abort();
+          currentAbortController = null;
+        }
+        removeLoader();
+        isGenerating = false;
+        const input = document.getElementById('wordInput');
+        if (input.value.trim().length > 0) {
+          setActionBtnIcon('send');
+        } else {
+          const actionBtn = document.getElementById('actionBtn');
+          actionBtn.classList.add('hidden');
+          actionBtn.classList.remove('flex');
+        }
+      } else {
+        // Trigger submit
+        const form = document.getElementById('searchForm');
+        form.requestSubmit();
+      }
+    }
 
-  }catch{
-    clearInterval(loading);
-    aiExplain.innerText = "⚠️ DESH-AI server unreachable";
-  }
-};
-</script>
+    // Toggle Top Search Header
+    function toggleSearchHeader() {
+      const searchBar = document.getElementById('chatSearchBar');
+      const searchInput = document.getElementById('chatSearchInput');
+      if (searchBar.classList.contains('hidden')) {
+        searchBar.classList.remove('hidden');
+        searchInput.focus();
+      } else {
+        closeChatSearch();
+      }
+    }
 
+    function closeChatSearch() {
+      const searchBar = document.getElementById('chatSearchBar');
+      const searchInput = document.getElementById('chatSearchInput');
+      searchBar.classList.add('hidden');
+      searchInput.value = '';
+      clearChatHighlights();
+    }
+
+    // Perform Search & Highlight in Chat
+    function performChatSearch() {
+      clearChatHighlights();
+      const query = document.getElementById('chatSearchInput').value.trim();
+      const navBtns = document.getElementById('searchNavBtns');
+      const matchCounter = document.getElementById('searchMatchCount');
+
+      if (!query) {
+        navBtns.classList.add('hidden');
+        matchCounter.innerText = '0/0';
+        return;
+      }
+
+      const targets = document.querySelectorAll('.search-target');
+      const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escapedQuery})`, 'gi');
+
+      targets.forEach(el => {
+        highlightNode(el, regex);
+      });
+
+      searchMatches = Array.from(document.querySelectorAll('mark.chat-search-highlight'));
+
+      if (searchMatches.length > 0) {
+        navBtns.classList.remove('hidden');
+        currentMatchIndex = 0;
+        updateActiveMatch();
+      } else {
+        navBtns.classList.add('hidden');
+        matchCounter.innerText = '0/0';
+      }
+    }
+
+    function highlightNode(node, regex) {
+      if (node.nodeType === 3) { // Text node
+        const val = node.nodeValue;
+        if (regex.test(val)) {
+          const span = document.createElement('span');
+          span.innerHTML = val.replace(regex, '<mark class="chat-search-highlight">$1</mark>');
+          node.parentNode.replaceChild(span, node);
+        }
+      } else if (node.nodeType === 1 && node.childNodes && !/^(mark|script|style|button|input)$/i.test(node.tagName)) {
+        Array.from(node.childNodes).forEach(child => highlightNode(child, regex));
+      }
+    }
+
+    function clearChatHighlights() {
+      const marks = document.querySelectorAll('mark.chat-search-highlight');
+      marks.forEach(mark => {
+        const parent = mark.parentNode;
+        parent.replaceChild(document.createTextNode(mark.textContent), mark);
+        parent.normalize();
+      });
+      searchMatches = [];
+      currentMatchIndex = -1;
+      document.getElementById('searchMatchCount').innerText = '0/0';
+    }
+
+    function navigateSearchMatch(direction) {
+      if (searchMatches.length === 0) return;
+      currentMatchIndex += direction;
+      if (currentMatchIndex < 0) currentMatchIndex = searchMatches.length - 1;
+      if (currentMatchIndex >= searchMatches.length) currentMatchIndex = 0;
+      updateActiveMatch();
+    }
+
+    function updateActiveMatch() {
+      searchMatches.forEach((m, idx) => {
+        if (idx === currentMatchIndex) {
+          m.classList.add('active-search-match');
+          m.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          m.classList.remove('active-search-match');
+        }
+      });
+      document.getElementById('searchMatchCount').innerText = `${currentMatchIndex + 1}/${searchMatches.length}`;
+    }
+
+    // Voice Recognition Setup with Red Button & Water-drop Ripple
+    function toggleVoiceRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
+      }
+
+      if (isListening) {
+        if (recognition) recognition.stop();
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = function() {
+        startVoiceUI();
+      };
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript.replace(/\.$/, '');
+        const input = document.getElementById('wordInput');
+        input.value = transcript;
+        handleInputChange({ target: input });
+      };
+
+      recognition.onerror = function(event) {
+        console.error("Speech recognition error:", event.error);
+        stopVoiceRecognitionUI();
+      };
+
+      recognition.onend = function() {
+        stopVoiceRecognitionUI();
+      };
+
+      try {
+        recognition.start();
+      } catch (err) {
+        stopVoiceRecognitionUI();
+      }
+    }
+
+    function startVoiceUI() {
+      isListening = true;
+      const micBtn = document.getElementById('micBtn');
+      const inputBox = document.getElementById('inputBoxContainer');
+
+      if (micBtn) {
+        micBtn.classList.remove('text-gray-500', 'dark:text-gray-400');
+        micBtn.classList.add('text-red-500', 'dark:text-red-500', 'animate-pulse');
+      }
+      if (inputBox) {
+        inputBox.classList.add('animate-waterDrop');
+      }
+    }
+
+    function stopVoiceRecognitionUI() {
+      isListening = false;
+      const micBtn = document.getElementById('micBtn');
+      const inputBox = document.getElementById('inputBoxContainer');
+
+      if (micBtn) {
+        micBtn.classList.remove('text-red-500', 'dark:text-red-500', 'animate-pulse');
+        micBtn.classList.add('text-gray-500', 'dark:text-gray-400');
+      }
+      if (inputBox) {
+        inputBox.classList.remove('animate-waterDrop');
+      }
+    }
+
+    // Text-To-Speech (Offline TTS) Handler
+    function handleSpeech(btn, textToSpeak) {
+      if (!('speechSynthesis' in window)) {
+        alert("Text-to-Speech is not supported in your browser.");
+        return;
+      }
+
+      // If currently speaking this exact button
+      if (activeSpeakerBtn === btn && window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        stopSpeakerAnimation(btn);
+        activeSpeakerBtn = null;
+        return;
+      }
+
+      // If speaking something else, stop it first
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        if (activeSpeakerBtn) stopSpeakerAnimation(activeSpeakerBtn);
+      }
+
+      // Clean HTML tags from speech string
+      const cleanText = textToSpeak.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!cleanText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 0.95;
+
+      utterance.onstart = function() {
+        activeSpeakerBtn = btn;
+        startSpeakerAnimation(btn);
+      };
+
+      utterance.onend = function() {
+        stopSpeakerAnimation(btn);
+        activeSpeakerBtn = null;
+      };
+
+      utterance.onerror = function() {
+        stopSpeakerAnimation(btn);
+        activeSpeakerBtn = null;
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function startSpeakerAnimation(btn) {
+      btn.classList.add('animate-speakingPulse', 'border', 'rounded-full');
+    }
+
+    function stopSpeakerAnimation(btn) {
+      btn.classList.remove('animate-speakingPulse', 'border', 'rounded-full');
+    }
+
+    // Theme Management
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      const htmlEl = document.documentElement;
+      const themeIcon = document.getElementById('themeIcon');
+
+      if (isDarkMode) {
+        htmlEl.classList.add('dark');
+        themeIcon.setAttribute('data-lucide', 'sun');
+      } else {
+        htmlEl.classList.remove('dark');
+        themeIcon.setAttribute('data-lucide', 'moon');
+      }
+      lucide.createIcons();
+    }
+
+    // Scroll Detection
+    window.addEventListener('scroll', handleScrollState);
+
+    function handleScrollState() {
+      const scrollBtn = document.getElementById('scrollBtn');
+      const scrollIcon = document.getElementById('scrollIcon');
+      const totalHeight = document.documentElement.scrollHeight;
+      const currentScroll = window.innerHeight + window.scrollY;
+
+      if (totalHeight - currentScroll > 150) {
+        scrollBtn.classList.remove('hidden');
+        scrollIcon.setAttribute('data-lucide', 'arrow-down');
+        isScrollAtBottom = false;
+      } else if (window.scrollY > 200) {
+        scrollBtn.classList.remove('hidden');
+        scrollIcon.setAttribute('data-lucide', 'arrow-up');
+        isScrollAtBottom = true;
+      } else {
+        scrollBtn.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function handleScrollClick() {
+      if (isScrollAtBottom) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+      }
+    }
+
+    function scrollToBottom() {
+      setTimeout(() => {
+        window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+      }, 50);
+    }
+
+    // Render User Message
+    function appendUserMessage(text) {
+      const chat = document.getElementById('chatContainer');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'flex justify-end my-2';
+      msgDiv.innerHTML = `
+        <div class="bg-brandYellow text-white font-medium px-4 py-2.5 rounded-2xl rounded-tr-xs shadow-sm max-w-[80%] text-sm leading-relaxed search-target">
+          ${escapeHtml(text)}
+        </div>
+      `;
+      chat.appendChild(msgDiv);
+      scrollToBottom();
+    }
+
+    // Render Loader Animation
+    function createLoader() {
+      const chat = document.getElementById('chatContainer');
+      const loaderDiv = document.createElement('div');
+      loaderDiv.id = 'activeLoader';
+      loaderDiv.className = 'flex flex-col items-start space-y-1 my-2';
+      loaderDiv.innerHTML = `
+        <div class="flex items-center space-x-2 mb-1">
+          <div class="w-5 h-5 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800 p-0.5">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+              <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+              <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+            </svg>
+          </div>
+          <span class="font-fraktur text-xs font-semibold text-gray-500">Formulating response...</span>
+        </div>
+        <div class="bg-white dark:bg-cardBgDark px-4 py-2.5 rounded-2xl rounded-tl-sm shadow-sm border border-gray-100 dark:border-gray-800 flex items-center space-x-2 h-9">
+          <span class="text-xl font-extrabold text-black dark:text-white animate-dot1 leading-none">.</span>
+          <span class="text-xl font-extrabold text-black dark:text-white animate-dot2 leading-none">.</span>
+          <span class="text-xl font-extrabold text-black dark:text-white animate-dot3 leading-none">.</span>
+        </div>
+      `;
+      chat.appendChild(loaderDiv);
+      scrollToBottom();
+    }
+
+    function removeLoader() {
+      const loader = document.getElementById('activeLoader');
+      if (loader) loader.remove();
+    }
+
+    // Helper: Escaping HTML
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
+    // Form Submit Handler using Datamuse API
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('wordInput');
+      const rawWord = input.value.trim();
+
+      if (!rawWord || isGenerating) return;
+
+      // Immediately show header search button once first question is sent
+      ensureSearchHeaderVisible();
+
+      input.value = '';
+      appendUserMessage(rawWord);
+
+      // Transition Button to Pause State
+      isGenerating = true;
+      setActionBtnIcon('pause');
+
+      createLoader();
+
+      currentAbortController = new AbortController();
+
+      // Set 10-second timeout for Datamuse API call
+      let isTimedOut = false;
+      const timeoutId = setTimeout(() => {
+        isTimedOut = true;
+        if (currentAbortController) {
+          currentAbortController.abort();
+        }
+      }, 10000);
+
+      try {
+        const res = await fetch(`https://api.datamuse.com/words?sp=${encodeURIComponent(rawWord)}&md=d&max=1`, {
+          signal: currentAbortController.signal
+        });
+
+        clearTimeout(timeoutId);
+        removeLoader();
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0 && data[0].defs && data[0].defs.length > 0) {
+            renderDatamuseResult(rawWord, data[0]);
+          } else {
+            renderNotFoundResult(rawWord, false);
+          }
+        } else {
+          renderNotFoundResult(rawWord, false);
+        }
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError' && isTimedOut) {
+          removeLoader();
+          renderNotFoundResult(rawWord, true); // Server Busy Timeout
+        } else if (err.name !== 'AbortError') {
+          removeLoader();
+          renderNotFoundResult(rawWord, false);
+        }
+      } finally {
+        isGenerating = false;
+        currentAbortController = null;
+        const actionBtn = document.getElementById('actionBtn');
+        actionBtn.classList.add('hidden');
+        actionBtn.classList.remove('flex');
+
+        // Re-evaluate search if search active
+        if (document.getElementById('chatSearchInput').value.trim()) {
+          performChatSearch();
+        }
+      }
+    }
+
+    // Map Datamuse POS codes to friendly display
+    function formatDatamusePOS(pos) {
+      const map = {
+        'n': 'noun',
+        'v': 'verb',
+        'adj': 'adjective',
+        'adv': 'adverb',
+        'u': 'unknown'
+      };
+      return map[pos] || pos;
+    }
+
+    // Render Datamuse API Result
+    function renderDatamuseResult(word, item) {
+      const chat = document.getElementById('chatContainer');
+      const msgId = 'res-' + Date.now();
+
+      let definitionsHtml = '';
+      let speechContent = `${word}. `;
+
+      if (item.defs && item.defs.length > 0) {
+        item.defs.slice(0, 3).forEach(defStr => {
+          const parts = defStr.split('\t');
+          const pos = parts[0] ? formatDatamusePOS(parts[0]) : 'definition';
+          const defText = parts[1] || defStr;
+
+          speechContent += `${pos}: ${defText}. `;
+
+          definitionsHtml += `
+            <div class="mt-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-brandYellowDark dark:text-brandYellow bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded">${pos}</span>
+              <p class="text-sm mt-1 text-gray-700 dark:text-gray-200">${parseMarkdownBold(escapeHtml(defText))}</p>
+            </div>
+          `;
+        });
+      }
+
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'flex flex-col items-start space-y-1 my-3';
+
+      cardDiv.innerHTML = `
+        <div class="flex items-center space-x-2 mb-1">
+          <div class="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800 p-0.5">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+              <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+              <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+            </svg>
+          </div>
+          <span class="font-fraktur font-bold text-sm">𝕯𝖎𝖈. 𝐀𝖎</span>
+        </div>
+        <div id="${msgId}" class="relative bg-white dark:bg-cardBgDark rounded-2xl rounded-tl-sm p-4 pb-8 shadow-sm border border-gray-100 dark:border-gray-800 max-w-[90%] w-full transition-all search-target">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold capitalize">${escapeHtml(word)}</h3>
+            <!-- Speaker SVG Button for Offline TTS -->
+            <button 
+              onclick="handleSpeech(this, '${escapeHtml(speechContent)}')"
+              title="Speak definition"
+              class="p-1.5 text-gray-500 hover:text-brandYellow transition-all rounded-full"
+            >
+              <i data-lucide="volume-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          ${definitionsHtml}
+
+          <!-- Small Circular Logo Button (DeSh AI deshai.in/ask) -->
+          <div 
+            id="logo-${msgId}"
+            onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" 
+            title="Ask DeSh AI (deshai.in/ask)"
+            class="custom-shape-bottom-right w-8 h-8 rounded-full bg-white dark:bg-cardBgDark p-1 shadow-md border-2 border-transparent hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center transition-all"
+          >
+            <div class="w-full h-full rounded-full overflow-hidden flex-shrink-0">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+                <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+                <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      `;
+
+      chat.appendChild(cardDiv);
+      lucide.createIcons();
+      scrollToBottom();
+    }
+
+    // Render "word not found" or "server busy" State
+    function renderNotFoundResult(word, isServerBusy) {
+      const chat = document.getElementById('chatContainer');
+      const msgId = 'res-' + Date.now();
+
+      const messageText = isServerBusy
+        ? `it seems like server is busy. word '${escapeHtml(word)}' not found, please try <button onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" class="font-fraktur font-bold text-brandYellowDark dark:text-brandYellow hover:underline ml-1">𝕯𝖊𝖘𝖍 𝐀𝖎</button>`
+        : `word '${escapeHtml(word)}' not found in dictionary <button onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" class="font-fraktur font-bold text-brandYellowDark dark:text-brandYellow hover:underline ml-1">𝖙𝖗𝖞 𝕯𝖊𝖘𝖍 𝐀𝖎</button>`;
+
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'flex flex-col items-start space-y-1 my-3';
+
+      cardDiv.innerHTML = `
+        <div class="flex items-center space-x-2 mb-1">
+          <div class="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-800 p-0.5">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+              <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+              <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+            </svg>
+          </div>
+          <span class="font-fraktur font-bold text-sm">𝕯𝖎𝖈. 𝐀𝖎</span>
+        </div>
+        <div id="${msgId}" class="relative bg-white dark:bg-cardBgDark rounded-2xl rounded-tl-sm p-4 pb-8 shadow-sm border border-gray-100 dark:border-gray-800 max-w-[90%] w-full search-target">
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            ${messageText}
+          </p>
+
+          <!-- Circular Logo Button with Red Blinking border -->
+          <div 
+            id="logo-${msgId}"
+            onclick="triggerDeshAI('${escapeHtml(word)}', '${msgId}')" 
+            title="Ask DeSh AI (deshai.in/ask)"
+            class="custom-shape-bottom-right w-8 h-8 rounded-full bg-white dark:bg-cardBgDark p-1 shadow-md border-2 border-transparent hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center transition-all animate-blinkRed3Times"
+          >
+            <div class="w-full h-full rounded-full overflow-hidden flex-shrink-0">
+              <svg viewBox="0 0 100 100" class="w-full h-full">
+                <circle cx="40" cy="55" r="30" fill="#3B82F6"/>
+                <path d="M 40 25 A 30 30 0 0 1 70 55 A 15 15 0 0 1 55 70 L 40 70 Z" fill="#22C55E"/>
+                <path d="M 50 15 C 60 5, 80 10, 75 25 C 65 25, 55 20, 50 15 Z" fill="#EAB308"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      `;
+
+      chat.appendChild(cardDiv);
+      lucide.createIcons();
+      scrollToBottom();
+    }
+
+    // Trigger DeSh AI Action (Calls deshai.in/ask)
+    async function triggerDeshAI(word, cardMsgId) {
+      if (isGenerating) return;
+
+      ensureSearchHeaderVisible();
+
+      const logoBtn = document.getElementById(`logo-${cardMsgId}`);
+      if (logoBtn) {
+        logoBtn.classList.remove('animate-blinkRed3Times');
+        void logoBtn.offsetWidth;
+        logoBtn.classList.add('animate-blinkRed3Times');
+      }
+
+      // Hide potential old retry button if any
+      const oldRetry = document.getElementById(`retry-${cardMsgId}`);
+      if (oldRetry) oldRetry.remove();
+
+      isGenerating = true;
+      const actionBtn = document.getElementById('actionBtn');
+      actionBtn.classList.remove('hidden');
+      actionBtn.classList.add('flex');
+      setActionBtnIcon('pause');
+
+      createLoader();
+
+      currentAbortController = new AbortController();
+
+      const isEnglish = /^[a-zA-Z\s]+$/.test(word);
+
+      try {
+        const responseText = await queryDeshAIModel(word, isEnglish, currentAbortController.signal);
+        removeLoader();
+        
+        // Append AI answer to card
+        appendAiResponse(cardMsgId, word, responseText);
+
+        // Success: Hide DeSh AI logo button after answer comes from AI
+        if (logoBtn) {
+          logoBtn.style.display = 'none';
+        }
+
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          removeLoader();
+          // AI request failed -> Show Retry button in card
+          renderAiFailureWithRetry(cardMsgId, word);
+        }
+      } finally {
+        isGenerating = false;
+        currentAbortController = null;
+        const input = document.getElementById('wordInput');
+        if (input.value.trim().length === 0) {
+          actionBtn.classList.add('hidden');
+          actionBtn.classList.remove('flex');
+        } else {
+          setActionBtnIcon('send');
+        }
+
+        // Refresh search index if active
+        if (document.getElementById('chatSearchInput').value.trim()) {
+          performChatSearch();
+        }
+      }
+    }
+
+    // Render AI Failure with Retry Option
+    function renderAiFailureWithRetry(parentCardId, word) {
+      const parentCard = document.getElementById(parentCardId);
+      if (!parentCard) return;
+
+      const retryBlock = document.createElement('div');
+      retryBlock.id = `retry-${parentCardId}`;
+      retryBlock.className = 'mt-3 pt-2 border-t border-red-200 dark:border-red-900/50 flex items-center justify-between text-xs text-red-500 search-target';
+      retryBlock.innerHTML = `
+        <span>Failed to get response from DeSh AI.</span>
+        <button 
+          onclick="triggerDeshAI('${escapeHtml(word)}', '${parentCardId}')"
+          class="flex items-center space-x-1 px-2.5 py-1 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 font-medium hover:bg-red-100 transition-colors text-red-600 dark:text-red-400"
+        >
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span>Retry</span>
+        </button>
+      `;
+
+      parentCard.appendChild(retryBlock);
+      lucide.createIcons();
+      scrollToBottom();
+    }
+
+    // Query AI Model directly asking deshai.in/ask endpoint with robust fallback
+    async function queryDeshAIModel(word, isEnglish, signal) {
+      const promptRule = isEnglish ? "Give 1-line Hindi meaning + 1 example sentence" : "Give 1-line English meaning + 1 example sentence";
+      
+      // Direct API Request to https://deshai.in/ask endpoint
+      try {
+        const deshRes = await fetch('https://deshai.in/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: signal,
+          body: JSON.stringify({
+            question: word,
+            prompt: `Word: "${word}". Rule: ${promptRule}. Keep concise and use **bold** text where appropriate.`,
+            isEnglish: isEnglish
+          })
+        });
+
+        if (deshRes.ok) {
+          const data = await deshRes.json();
+          const deshText = data.answer || data.response || data.result || data.text;
+          if (deshText) return parseMarkdownBold(deshText);
+        }
+      } catch (e) {
+        // Fallback to backup model if network or CORS prevents direct deshai.in/ask endpoint
+      }
+
+      // Gemini Model Fallback
+      const apiKey = "";
+      const systemPrompt = "You are DeSh AI assistant (deshai.in/ask). Respond concisely: If the query is English, provide 1-line Hindi meaning and 1 short example sentence. If the query is Hindi/Gujarati/Marathi, provide 1-line English meaning and 1 short example sentence. Use markdown **bold** tags for emphasis.";
+      const userPrompt = `Word: "${word}". Rule: ${promptRule}. Keep concise and use **bold** text where appropriate.`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: signal,
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: userPrompt }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("DeSh AI API Error");
+      }
+
+      const result = await response.json();
+      const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text || "Meaning generated.";
+      return parseMarkdownBold(rawText);
+    }
+
+    // Append AI Response under previous answer block
+    function appendAiResponse(parentCardId, word, aiText) {
+      const parentCard = document.getElementById(parentCardId);
+      if (!parentCard) return;
+
+      const aiBlock = document.createElement('div');
+      aiBlock.className = 'mt-3 pt-3 border-t border-dashed border-amber-200 dark:border-amber-900/60 text-sm leading-relaxed search-target';
+      
+      const speechText = aiText.replace(/<[^>]*>/g, '');
+
+      aiBlock.innerHTML = `
+        <div class="flex items-center justify-between text-xs font-bold text-brandYellowDark dark:text-brandYellow mb-1">
+          <div class="flex items-center space-x-1">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>By~ 𝕯𝖊𝖘𝖍 𝐀𝖎</span>
+          </div>
+          <!-- Speaker SVG for AI Response -->
+          <button 
+            onclick="handleSpeech(this, '${escapeHtml(speechText)}')"
+            title="Speak AI Answer"
+            class="p-1 text-gray-500 hover:text-brandYellow transition-all rounded-full"
+          >
+            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+        <div class="text-gray-800 dark:text-gray-200">${aiText.replace(/\n/g, '<br/>')}</div>
+      `;
+
+      parentCard.appendChild(aiBlock);
+      lucide.createIcons();
+      scrollToBottom();
+    }
+  </script>
 </body>
 </html>
+
