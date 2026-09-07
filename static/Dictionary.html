@@ -906,54 +906,193 @@
     }
 
     // Query AI Model directly asking deshai.in/ask endpoint with robust fallback
-    async function queryDeshAIModel(word, isEnglish, signal) {
-      const promptRule = isEnglish ? "Give 1-line Hindi meaning + 1 example sentence" : "Give 1-line English meaning + 1 example sentence";
-      
-      // Request to https://deshai.in/ask
-      try {
-        const deshRes = await fetch('https://deshai.in/ask', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: signal,
-          body: JSON.stringify({
-            question: word,
-            prompt: `Word: "${word}". Rule: ${promptRule}. Keep concise and use **bold** text where appropriate.`,
-            isEnglish: isEnglish
-          })
-        });
+async function queryDeshAIModel(word, isEnglish, signal) {
 
-        if (deshRes.ok) {
-          const data = await deshRes.json();
-          const deshText = data.answer || data.response || data.result || data.text;
-          if (deshText) return parseMarkdownBold(deshText);
-        }
-      } catch (e) {
-        // Fallback to Gemini model endpoint if deshai.in/ask is unreachable/CORS blocked
+  const dictionaryInstruction = `
+You are 𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓 — a dictionary meaning assistant.
+
+The user's input is:
+"${word}"
+
+IMPORTANT RULES:
+
+1. NEVER respond conversationally.
+2. NEVER reply to the user's word as if they are talking to you.
+3. NEVER say things like:
+   "Hey, how are you?"
+   "You're welcome!"
+   "Hello!"
+   "Sure!"
+   "How can I help?"
+4. Your job is ONLY to explain the meaning of the requested word/phrase.
+
+LANGUAGE RULE:
+
+A) IF THE INPUT IS ENGLISH:
+- Give a concise English definition.
+- Give its Hindi meaning in ONLY ONE Hindi word.
+- Give EXACTLY ONE short, natural English example sentence.
+- The exact requested word must be **bold** inside the example.
+
+Format:
+**Meaning:** [English definition]
+**Hindi:** [ONE Hindi word]
+**Example:** [Sentence containing **${word}**]
+
+B) IF THE INPUT IS NOT ENGLISH:
+- Give ONLY its English meaning/translation.
+- DO NOT give a Hindi meaning.
+- Give EXACTLY ONE short, natural English example sentence.
+- The original requested word must be **bold** inside the example.
+
+Format:
+**Meaning:** [English meaning/translation]
+**Example:** [Sentence containing **${word}**]
+
+SPECIAL CASE — GREETINGS:
+
+If the input is "hi", do NOT reply to the greeting.
+
+Instead explain it as a dictionary entry.
+
+For example:
+
+Input: hi
+
+**Meaning:** A casual greeting used to say hello.
+**Hindi:** नमस्ते
+**Example:** **Hi**, how are you?
+
+Similarly:
+
+Input: hello
+
+**Meaning:** A greeting used when meeting or addressing someone.
+**Hindi:** नमस्ते
+**Example:** **Hello**, how are you?
+
+OTHER RULES:
+- "thanks" → explain that it is an expression of gratitude; do NOT say "You're welcome."
+- "sorry" → explain that it expresses apology; do NOT apologize back.
+- "bye" → explain that it is used when leaving; do NOT say goodbye.
+- If the word has multiple meanings, give the most common meaning only.
+- Exactly ONE example. Never give two examples.
+- Keep the answer concise.
+- Do not add unnecessary explanations.
+- Do not add pronunciation unless specifically requested.
+- Do not add synonyms unless specifically requested.
+- Do not add multiple Hindi words.
+- Use **bold** exactly where requested.
+`;
+
+  // ================================
+  // DESH AI BACKEND
+  // ================================
+  try {
+    const deshRes = await fetch('https://deshai.in/ask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      signal: signal,
+      body: JSON.stringify({
+        question: word,
+
+        prompt: dictionaryInstruction,
+
+        isEnglish: isEnglish
+      })
+    });
+
+    if (deshRes.ok) {
+      const data = await deshRes.json();
+
+      const deshText =
+        data.answer ||
+        data.response ||
+        data.result ||
+        data.text;
+
+      if (deshText) {
+        return parseMarkdownBold(deshText);
       }
-
-      // Gemini Fallback
-      const apiKey = "";
-      const systemPrompt = "You are 𝕯𝖊𝖘𝖍 𝖑𝖊𝖝𝖎𝖈𝖔𝖓 assistant (deshai.in/ask). Respond concisely: If the query is English, provide 1-line Hindi meaning and 1 short example sentence. If the query is Hindi/Gujarati/Marathi, provide 1-line English meaning and 1 short example sentence. Use markdown **bold** tags for emphasis.";
-      const userPrompt = `Word: "${word}". Rule: ${promptRule}. Keep concise and use **bold** text where appropriate.`;
-
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: signal,
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: userPrompt }] }],
-          systemInstruction: { parts: [{ text: systemPrompt }] }
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error("𝕯𝖊𝖘𝖍 𝐀𝖎 API Error");
-      }
-
-      const result = await response.json();
-      const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text || "Meaning generated.";
-      return parseMarkdownBold(rawText);
     }
+
+  } catch (e) {
+    // Continue to Gemini fallback
+  }
+
+
+  // ================================
+  // GEMINI FALLBACK
+  // ================================
+  const apiKey = "";
+
+  const systemPrompt = dictionaryInstruction;
+
+  const userPrompt = `
+Dictionary lookup:
+
+"${word}"
+
+Determine the language yourself.
+
+If it is English:
+→ English definition
+→ ONE-WORD Hindi meaning
+→ EXACTLY ONE English example
+
+If it is not English:
+→ English meaning/translation ONLY
+→ EXACTLY ONE English example
+
+The requested word must be **bold** in the example.
+
+DO NOT respond conversationally.
+`;
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      signal: signal,
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: userPrompt
+              }
+            ]
+          }
+        ],
+
+        systemInstruction: {
+          parts: [
+            {
+              text: systemPrompt
+            }
+          ]
+        }
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("𝕯𝖊𝖘𝖍 𝐀𝖎 API Error");
+  }
+
+  const result = await response.json();
+
+  const rawText =
+    result.candidates?.[0]?.content?.parts?.[0]?.text ||
+    "Meaning could not be generated.";
+
+  return parseMarkdownBold(rawText);
+        }
 
     // Append AI Response under previous answer block
     function appendAiResponse(parentCardId, word, aiText) {
