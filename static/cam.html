@@ -1,155 +1,264 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP-Gated Group Chat</title>
+    <title>Ephemeral IP-Gated Group Chat</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS v2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- QRCode JS CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        .blur-locked { filter: blur(8px); pointer-events: none; user-select: none; }
+        .blur-locked {
+            filter: blur(10px);
+            pointer-events: none;
+            user-select: none;
+        }
+        /* Custom scrollbar for chat */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4 font-sans">
 
     <!-- MAIN CONTAINER -->
-    <div class="w-full max-w-md bg-slate-800 rounded-xl shadow-2xl overflow-hidden border border-slate-700 relative">
+    <div class="w-full max-w-md bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-800 flex flex-col h-[650px] relative">
         
         <!-- HEADER -->
-        <div class="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
-            <h1 id="chat-title" class="font-bold text-lg text-emerald-400">Group Portal</h1>
-            <div class="flex gap-2">
-                <button id="admin-btn" onclick="toggleAdminPanel()" class="hidden px-2 py-1 text-xs bg-amber-600 hover:bg-amber-500 rounded font-semibold">Requests</button>
-                <button id="qr-btn" onclick="toggleQRModal()" class="hidden px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700">QR Code</button>
+        <div class="p-4 bg-slate-950/90 backdrop-blur border-b border-slate-800 flex justify-between items-center z-30">
+            <div>
+                <h1 id="chat-title" class="font-extrabold text-lg tracking-tight text-emerald-400">Group Portal</h1>
+                <p id="group-subtitle" class="text-[11px] text-slate-400">IP Identity Secured</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="admin-btn" onclick="toggleAdminPanel()" class="hidden px-2.5 py-1.5 text-xs bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded-lg border border-amber-500/30 font-bold transition flex items-center gap-1">
+                    <span>👑</span> Requests <span id="request-badge" class="hidden bg-amber-500 text-slate-950 text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span>
+                </button>
+                <button id="qr-btn" onclick="toggleQRModal()" class="hidden px-2.5 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition">
+                    📱 QR
+                </button>
+                <button id="leave-btn" onclick="leaveGroup()" class="hidden px-2.5 py-1.5 text-xs bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 rounded-lg border border-rose-500/30 font-bold transition">
+                    Exit
+                </button>
             </div>
         </div>
 
-        <!-- AUTH / ENTRY FORM -->
-        <div id="auth-view" class="p-6 space-y-4">
+        <!-- AUTH / ENTRY VIEW -->
+        <div id="auth-view" class="p-6 flex-1 flex flex-col justify-center space-y-4 overflow-y-auto">
+            <div class="text-center mb-2">
+                <div class="inline-flex p-3 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-emerald-400 mb-2">
+                    💬
+                </div>
+                <h2 class="text-xl font-bold text-white">Join or Create Chat</h2>
+                <p class="text-xs text-slate-400">Enter group details below to request entry</p>
+            </div>
+
             <div>
-                <label class="block text-xs uppercase text-slate-400 mb-1">Group ID</label>
-                <input id="input-group-id" type="text" placeholder="e.g. K7X92P" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded focus:outline-none focus:border-emerald-500 text-white">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Group ID</label>
+                <input id="input-group-id" type="text" placeholder="e.g. FRIENDS123" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-white placeholder-slate-600 text-sm">
             </div>
+
             <div>
-                <label class="block text-xs uppercase text-slate-400 mb-1">Group Password</label>
-                <input id="input-password" type="password" placeholder="••••••••" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded focus:outline-none focus:border-emerald-500 text-white">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Group Password</label>
+                <input id="input-password" type="password" placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-white placeholder-slate-600 text-sm">
             </div>
+
             <div>
-                <label class="block text-xs uppercase text-slate-400 mb-1">Your Display Name</label>
-                <input id="input-username" type="text" placeholder="e.g. Rahul" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded focus:outline-none focus:border-emerald-500 text-white">
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Your Display Name</label>
+                <input id="input-username" type="text" placeholder="e.g. Rahul" class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-white placeholder-slate-600 text-sm">
             </div>
-            <div class="flex gap-2 pt-2">
-                <button onclick="handleEnterGroup()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 rounded font-semibold transition">Enter / Request Join</button>
-                <button onclick="handleCreateGroup()" class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 rounded font-semibold transition">Create Group</button>
+
+            <div class="flex gap-2 pt-3">
+                <button onclick="handleEnterGroup()" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-950/50 transition">
+                    Enter / Join Request
+                </button>
+                <button onclick="handleCreateGroup()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold text-sm border border-slate-700 transition">
+                    Create New
+                </button>
             </div>
+            
+            <p id="auth-status" class="text-center text-xs text-amber-400 min-h-[16px]"></p>
         </div>
 
         <!-- CHAT VIEW CONTAINER -->
-        <div id="chat-container" class="hidden relative">
+        <div id="chat-container" class="hidden flex-1 flex flex-col relative overflow-hidden">
             
-            <!-- BLURRED CHAT INTERFACE -->
-            <div id="chat-view" class="flex flex-col h-[500px] blur-locked transition-all duration-300">
-                <div id="messages-list" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
-                <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
-                    <input id="input-message" type="text" placeholder="Write a message..." class="flex-1 px-3 py-2 bg-slate-900 border border-slate-700 rounded focus:outline-none focus:border-emerald-500 text-white" onkeydown="if(event.key==='Enter') sendMessage()">
-                    <button onclick="sendMessage()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded font-semibold">Send</button>
+            <!-- CHAT MESSAGES & INPUT (Can be blurred) -->
+            <div id="chat-view" class="flex-1 flex flex-col h-full blur-locked transition-all duration-500">
+                <!-- Messages List -->
+                <div id="messages-list" class="flex-1 p-4 overflow-y-auto space-y-3">
+                    <div class="text-center text-xs text-slate-500 my-4">Loading messages...</div>
+                </div>
+
+                <!-- Input Box -->
+                <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2 items-center">
+                    <input id="input-message" type="text" placeholder="Write a message..." class="flex-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-white text-sm" onkeydown="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-sm transition">
+                        Send
+                    </button>
                 </div>
             </div>
 
-            <!-- LOCK OVERLAY FOR UNAPPROVED USERS -->
-            <div id="lock-overlay" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center space-y-3 z-10">
-                <div class="p-3 bg-amber-500/10 rounded-full border border-amber-500/30 text-amber-400">
+            <!-- LOCK OVERLAY (FOR UNAPPROVED / PENDING / REJECTED USERS) -->
+            <div id="lock-overlay" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4 z-20 transition-all">
+                <div id="lock-icon-container" class="p-4 bg-amber-500/10 rounded-full border border-amber-500/30 text-amber-400 text-2xl animate-pulse">
                     🔒
                 </div>
-                <h3 class="text-lg font-bold text-white">Approval Pending</h3>
-                <p class="text-xs text-slate-400">Your request has been submitted to the group admin. The screen will unlock automatically once approved.</p>
-                <div class="bg-slate-900 px-4 py-2 rounded-lg border border-slate-700 text-xs">
-                    Unique Request ID: <span id="display-unique-no" class="font-mono font-bold text-emerald-400">---</span>
+                <div>
+                    <h3 id="lock-title" class="text-lg font-bold text-white">Approval Required</h3>
+                    <p id="lock-desc" class="text-xs text-slate-400 max-w-xs mt-1">Your request has been submitted to the group admin. Screen unlocks automatically once approved.</p>
                 </div>
+                
+                <div class="bg-slate-900/90 px-5 py-2.5 rounded-xl border border-slate-800 text-xs flex flex-col items-center gap-1 shadow-inner">
+                    <span class="text-slate-500 uppercase tracking-wider text-[10px] font-bold">Your Request ID</span>
+                    <span id="display-unique-no" class="font-mono text-base font-black text-emerald-400 tracking-wider">---</span>
+                </div>
+
+                <button onclick="leaveGroup()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold transition">
+                    Cancel Request
+                </button>
             </div>
 
         </div>
 
-        <!-- ADMIN REQUESTS PANEL (MODAL) -->
-        <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-20">
-            <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 w-full max-w-sm space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                    <h3 class="font-bold text-amber-400">Pending Requests</h3>
-                    <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white">✕</button>
+        <!-- ADMIN REQUESTS MODAL -->
+        <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 w-full max-w-sm space-y-4 shadow-2xl">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-amber-400">👑</span>
+                        <h3 class="font-bold text-white">Join Requests</h3>
+                    </div>
+                    <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white text-lg font-bold px-2">✕</button>
                 </div>
-                <div id="requests-list" class="max-h-60 overflow-y-auto space-y-2">
+                
+                <div id="requests-list" class="max-h-64 overflow-y-auto space-y-2 pr-1">
                     <!-- Dynamic Requests Rendered Here -->
                 </div>
             </div>
         </div>
 
         <!-- QR MODAL -->
-        <div id="qr-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-20">
-            <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 text-center space-y-4 max-w-xs w-full">
-                <h2 class="text-lg font-bold">Group QR Code</h2>
-                <div id="qrcode" class="flex justify-center bg-white p-4 rounded"></div>
-                <button onclick="toggleQRModal()" class="w-full py-2 bg-slate-700 hover:bg-slate-600 rounded">Close</button>
+        <div id="qr-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 text-center space-y-4 max-w-xs w-full shadow-2xl">
+                <h2 class="text-lg font-bold text-white">Group QR Code</h2>
+                <div id="qrcode" class="flex justify-center bg-white p-4 rounded-xl shadow-inner"></div>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Scan to open chat link directly. Group password must be shared separately.</p>
+                <button onclick="toggleQRModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition">
+                    Close
+                </button>
             </div>
         </div>
 
     </div>
 
     <script>
+        // ==========================================
+        // SUPABASE CONFIGURATION
+        // ==========================================
         const SUPABASE_URL = 'https://yjrskrapomaxopffzlxf.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_fVxEacBEBrICbXaT1od_dQ_I8vL6Nvg';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let supabase = null;
+        if (SUPABASE_URL !== 'SUPABASE_URL') {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
 
+        // APP STATE
         let currentGroupId = null;
         let currentUsername = null;
         let userIpHash = null;
         let isAdmin = false;
+        let memberRealtimeChannel = null;
+        let messageRealtimeChannel = null;
 
-        // INITIALIZATION
+        // ==========================================
+        // INITIALIZATION & IP IDENTIFIER
+        // ==========================================
         window.addEventListener('DOMContentLoaded', async () => {
             userIpHash = await getHashedIP();
+            
+            // Auto-fill Group ID from URL parameter
             const params = new URLSearchParams(window.location.search);
             if (params.has('group')) {
-                document.getElementById('input-group-id').value = params.get('group');
+                document.getElementById('input-group-id').value = params.get('group').trim();
             }
         });
 
-        // IP RESOLUTION AND HASHING
+        // Resolve visitor IP address and compute SHA-256 hash
         async function getHashedIP() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
                 return await sha256(data.ip);
             } catch (e) {
-                return await sha256(navigator.userAgent + Math.random());
+                // Fallback identifier if IP API fails
+                let fallback = localStorage.getItem('device_fallback_id');
+                if (!fallback) {
+                    fallback = navigator.userAgent + Math.random();
+                    localStorage.setItem('device_fallback_id', fallback);
+                }
+                return await sha256(fallback);
             }
         }
 
+        // Standard SHA-256 Crypto Function
         async function sha256(str) {
             const buffer = new TextEncoder().encode(str);
             const hash = await crypto.subtle.digest('SHA-256', buffer);
             return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // CREATE GROUP (Creator automatically becomes Admin)
+        function showStatus(msg, isError = true) {
+            const el = document.getElementById('auth-status');
+            el.innerText = msg;
+            el.className = `text-center text-xs mt-1 ${isError ? 'text-amber-400' : 'text-emerald-400'}`;
+        }
+
+        // ==========================================
+        // GROUP CREATION & ENTRY LOGIC
+        // ==========================================
+        
+        // 1. CREATE GROUP (Creator automatically becomes Admin)
         async function handleCreateGroup() {
-            const groupId = document.getElementById('input-group-id').value.trim();
+            if (!checkSupabaseConfig()) return;
+
+            const groupId = document.getElementById('input-group-id').value.trim().toUpperCase();
             const password = document.getElementById('input-password').value.trim();
             const username = document.getElementById('input-username').value.trim();
 
-            if (!groupId || !password || !username) return alert('Fill all fields');
+            if (!groupId || !password || !username) {
+                return showStatus('Please fill all three fields.');
+            }
+
+            showStatus('Creating group...', false);
 
             const hashedPassword = await sha256(password);
-            const { error } = await supabase.from('groups').insert([{
+
+            // Insert Group
+            const { error: groupErr } = await supabase.from('groups').insert([{
                 id: groupId,
                 name: groupId,
                 password_hash: hashedPassword,
                 admin_ip_hash: userIpHash
             }]);
 
-            if (error) return alert('Group exists or error: ' + error.message);
+            if (groupErr) {
+                return showStatus(groupErr.code === '23505' ? 'Group ID already exists! Try another.' : groupErr.message);
+            }
 
-            // Admin self-approval entry
+            // Insert Creator as Approved Admin Member
             await supabase.from('members').insert([{
                 group_id: groupId,
                 username: username,
@@ -158,99 +267,149 @@
                 status: 'approved'
             }]);
 
+            showStatus('Group created successfully!', false);
             await handleEnterGroup();
         }
 
-        // ENTER / REQUEST GROUP JOIN
+        // 2. ENTER GROUP / REQUEST JOIN
         async function handleEnterGroup() {
-            const groupId = document.getElementById('input-group-id').value.trim();
+            if (!checkSupabaseConfig()) return;
+
+            const groupId = document.getElementById('input-group-id').value.trim().toUpperCase();
             const password = document.getElementById('input-password').value.trim();
             const username = document.getElementById('input-username').value.trim();
 
-            if (!groupId || !password) return alert('Group ID & Password required');
+            if (!groupId || !password) {
+                return showStatus('Group ID and Password are required.');
+            }
 
-            // Validate Group Credentials
+            showStatus('Verifying credentials...', false);
+
             const hashedPassword = await sha256(password);
-            const { data: group, error } = await supabase.from('groups').select('*').eq('id', groupId).single();
 
-            if (error || !group || group.password_hash !== hashedPassword) {
-                return alert('Invalid group ID or password.');
+            // Verify Group Password
+            const { data: group, error: fetchErr } = await supabase.from('groups')
+                .select('*')
+                .eq('id', groupId)
+                .single();
+
+            if (fetchErr || !group || group.password_hash !== hashedPassword) {
+                return showStatus('Invalid Group ID or Password.');
             }
 
             currentGroupId = groupId;
             isAdmin = (group.admin_ip_hash === userIpHash);
 
-            // Check existing member status via IP Hash
+            // Check if member already exists by IP Hash
             let { data: member } = await supabase.from('members')
                 .select('*')
                 .eq('group_id', groupId)
                 .eq('user_ip_hash', userIpHash)
                 .single();
 
+            // If new user, create a pending request
             if (!member) {
-                if (!username) return alert('Username required for new join request');
-                const uniqueNo = 'REQ-' + Math.floor(1000 + Math.random() * 9000);
-                
-                const { data: newMem } = await supabase.from('members').insert([{
+                if (!username) {
+                    return showStatus('Display Name is required to request entry.');
+                }
+
+                const randomCode = Math.floor(1000 + Math.random() * 9000);
+                const uniqueNo = `REQ-${randomCode}`;
+
+                const { data: newMember, error: memErr } = await supabase.from('members').insert([{
                     group_id: groupId,
                     username: username,
                     user_ip_hash: userIpHash,
                     unique_no: uniqueNo,
                     status: isAdmin ? 'approved' : 'pending'
                 }]).select().single();
-                
-                member = newMem;
+
+                if (memErr) {
+                    return showStatus('Error sending join request: ' + memErr.message);
+                }
+                member = newMember;
             }
 
             currentUsername = member.username;
 
-            // Switch Views
+            // Switch to Chat View
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('chat-container').classList.remove('hidden');
             document.getElementById('qr-btn').classList.remove('hidden');
-            document.getElementById('chat-title').innerText = `Group: ${groupId}`;
+            document.getElementById('leave-btn').classList.remove('hidden');
+            document.getElementById('chat-title').innerText = `${groupId}`;
+            document.getElementById('group-subtitle').innerText = isAdmin ? '👑 Admin Mode' : 'Member Portal';
 
-            if (isAdmin) document.getElementById('admin-btn').classList.remove('hidden');
+            if (isAdmin) {
+                document.getElementById('admin-btn').classList.remove('hidden');
+            }
 
             evaluateAccess(member);
             subscribeToMemberUpdates();
             generateQRCode();
         }
 
-        // ACCESS EVALUATION & UNLOCKING
+        // ==========================================
+        // ACCESS CONTROL & REALTIME LOCK SCREEN
+        // ==========================================
         function evaluateAccess(member) {
             document.getElementById('display-unique-no').innerText = member.unique_no;
 
+            const lockOverlay = document.getElementById('lock-overlay');
+            const chatView = document.getElementById('chat-view');
+            const lockTitle = document.getElementById('lock-title');
+            const lockDesc = document.getElementById('lock-desc');
+            const lockIcon = document.getElementById('lock-icon-container');
+
             if (member.status === 'approved') {
-                document.getElementById('lock-overlay').classList.add('hidden');
-                document.getElementById('chat-view').classList.remove('blur-locked');
+                lockOverlay.classList.add('hidden');
+                chatView.classList.remove('blur-locked');
                 load7DayMessages();
                 subscribeToMessages();
-            } else {
-                document.getElementById('lock-overlay').classList.remove('hidden');
-                document.getElementById('chat-view').classList.add('blur-locked');
+            } else if (member.status === 'rejected') {
+                lockOverlay.classList.remove('hidden');
+                chatView.classList.add('blur-locked');
+                lockTitle.innerText = "Access Rejected";
+                lockDesc.innerText = "The group admin has declined your request to join this room.";
+                lockIcon.innerText = "❌";
+                lockIcon.className = "p-4 bg-rose-500/10 rounded-full border border-rose-500/30 text-rose-400 text-2xl";
+            } else { // 'pending'
+                lockOverlay.classList.remove('hidden');
+                chatView.classList.add('blur-locked');
+                lockTitle.innerText = "Approval Pending";
+                lockDesc.innerText = "Your request has been submitted to the group admin. Screen unlocks automatically once approved.";
+                lockIcon.innerText = "🔒";
+                lockIcon.className = "p-4 bg-amber-500/10 rounded-full border border-amber-500/30 text-amber-400 text-2xl animate-pulse";
             }
         }
 
-        // REAL-TIME STATUS LISTENER (AUTO-UNLOCK WHEN ADMIN APPROVES)
+        // Listen for real-time status updates on members table
         function subscribeToMemberUpdates() {
-            supabase
-                .channel(`members-${currentGroupId}`)
+            if (memberRealtimeChannel) supabase.removeChannel(memberRealtimeChannel);
+
+            memberRealtimeChannel = supabase
+                .channel(`members-room-${currentGroupId}`)
                 .on('postgres_changes', {
                     event: '*',
                     schema: 'public',
                     table: 'members',
                     filter: `group_id=eq.${currentGroupId}`
                 }, payload => {
+                    // Auto unlock/update if status changed for this user
                     if (payload.new && payload.new.user_ip_hash === userIpHash) {
                         evaluateAccess(payload.new);
                     }
-                    if (isAdmin) loadPendingRequests();
+                    // Refresh Admin pending requests queue
+                    if (isAdmin) {
+                        loadPendingRequests();
+                    }
                 })
                 .subscribe();
         }
 
-        // ADMIN: LOAD & PROCESS PENDING REQUESTS
+        // ==========================================
+        // ADMIN APPROVAL QUEUE FUNCTIONS
+        // ==========================================
         async function loadPendingRequests() {
             const { data: requests } = await supabase.from('members')
                 .select('*')
@@ -258,31 +417,44 @@
                 .eq('status', 'pending');
 
             const list = document.getElementById('requests-list');
+            const badge = document.getElementById('request-badge');
             list.innerHTML = '';
 
+            const count = requests ? requests.length : 0;
+            if (count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
             if (!requests || requests.length === 0) {
-                list.innerHTML = '<p class="text-xs text-slate-400">No pending requests.</p>';
+                list.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No pending join requests.</p>';
                 return;
             }
 
             requests.forEach(req => {
                 const div = document.createElement('div');
-                div.className = 'p-2 bg-slate-900 rounded flex justify-between items-center text-xs border border-slate-700';
+                div.className = 'p-3 bg-slate-950 rounded-xl flex justify-between items-center text-xs border border-slate-800 shadow-sm';
                 div.innerHTML = `
                     <div>
-                        <span class="font-bold text-white block">${escapeHtml(req.username)}</span>
-                        <span class="font-mono text-[10px] text-emerald-400">${req.unique_no}</span>
+                        <span class="font-bold text-white text-sm block">${escapeHtml(req.username)}</span>
+                        <span class="font-mono text-[11px] text-emerald-400">${req.unique_no}</span>
                     </div>
-                    <div class="flex gap-1">
-                        <button onclick="updateStatus('${req.id}', 'approved')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 rounded text-white font-bold">Approve</button>
-                        <button onclick="updateStatus('${req.id}', 'rejected')" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 rounded text-white font-bold">Reject</button>
+                    <div class="flex gap-1.5">
+                        <button onclick="updateMemberStatus('${req.id}', 'approved')" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition">
+                            Approve
+                        </button>
+                        <button onclick="updateMemberStatus('${req.id}', 'rejected')" class="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg font-bold transition">
+                            Reject
+                        </button>
                     </div>
                 `;
                 list.appendChild(div);
             });
         }
 
-        async function updateStatus(memberId, status) {
+        async function updateMemberStatus(memberId, status) {
             await supabase.from('members').update({ status }).eq('id', memberId);
             loadPendingRequests();
         }
@@ -290,12 +462,17 @@
         function toggleAdminPanel() {
             const modal = document.getElementById('admin-modal');
             modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) loadPendingRequests();
+            if (!modal.classList.contains('hidden')) {
+                loadPendingRequests();
+            }
         }
 
-        // CHAT FUNCTIONS
+        // ==========================================
+        // REALTIME CHAT MESSAGING
+        // ==========================================
         async function load7DayMessages() {
             const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+            
             const { data: messages } = await supabase.from('messages')
                 .select('*')
                 .eq('group_id', currentGroupId)
@@ -304,18 +481,27 @@
 
             const list = document.getElementById('messages-list');
             list.innerHTML = '';
-            if (messages) messages.forEach(renderMessage);
+
+            if (!messages || messages.length === 0) {
+                list.innerHTML = '<div class="text-center text-xs text-slate-500 my-auto">No messages yet. Say hello! 👋</div>';
+            } else {
+                messages.forEach(renderMessage);
+            }
         }
 
         function subscribeToMessages() {
-            supabase
-                .channel(`messages-${currentGroupId}`)
+            if (messageRealtimeChannel) supabase.removeChannel(messageRealtimeChannel);
+
+            messageRealtimeChannel = supabase
+                .channel(`messages-room-${currentGroupId}`)
                 .on('postgres_changes', {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'messages',
                     filter: `group_id=eq.${currentGroupId}`
-                }, payload => renderMessage(payload.new))
+                }, payload => {
+                    renderMessage(payload.new);
+                })
                 .subscribe();
         }
 
@@ -323,24 +509,36 @@
             const input = document.getElementById('input-message');
             const text = input.value.trim();
             if (!text) return;
+
             input.value = '';
-            await supabase.from('messages').insert([{
+            
+            const { error } = await supabase.from('messages').insert([{
                 group_id: currentGroupId,
                 username: currentUsername,
                 user_ip_hash: userIpHash,
                 message: text
             }]);
+
+            if (error) {
+                alert('Failed to send message: ' + error.message);
+            }
         }
 
         function renderMessage(msg) {
             const list = document.getElementById('messages-list');
+            
+            // Remove empty state message if present
+            if (list.querySelector('.text-slate-500')) {
+                list.innerHTML = '';
+            }
+
             const isMe = msg.user_ip_hash === userIpHash;
 
             const div = document.createElement('div');
             div.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
             div.innerHTML = `
-                <span class="text-[10px] text-slate-400 mb-0.5">${escapeHtml(msg.username)}</span>
-                <div class="px-3 py-2 rounded-lg max-w-[80%] text-sm ${isMe ? 'bg-emerald-600 text-white' : 'bg-slate-700 text-slate-200'}">
+                <span class="text-[10px] font-semibold text-slate-400 mb-0.5 px-1">${escapeHtml(msg.username)}</span>
+                <div class="px-3.5 py-2 rounded-2xl max-w-[82%] text-sm break-words shadow-sm ${isMe ? 'bg-emerald-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-200 border border-slate-700/60 rounded-tl-none'}">
                     ${escapeHtml(msg.message)}
                 </div>
             `;
@@ -348,19 +546,53 @@
             list.scrollTop = list.scrollHeight;
         }
 
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
+        // ==========================================
+        // UTILITIES & NAVIGATION
+        // ==========================================
         function generateQRCode() {
             const container = document.getElementById('qrcode');
             container.innerHTML = '';
             const shareUrl = `${window.location.origin}${window.location.pathname}?group=${currentGroupId}`;
-            new QRCode(container, { text: shareUrl, width: 180, height: 180 });
+            new QRCode(container, {
+                text: shareUrl,
+                width: 170,
+                height: 170,
+                colorDark: "#020617",
+                colorLight: "#ffffff"
+            });
         }
 
         function toggleQRModal() {
             document.getElementById('qr-modal').classList.toggle('hidden');
+        }
+
+        function leaveGroup() {
+            if (memberRealtimeChannel) supabase.removeChannel(memberRealtimeChannel);
+            if (messageRealtimeChannel) supabase.removeChannel(messageRealtimeChannel);
+            
+            currentGroupId = null;
+            isAdmin = false;
+
+            document.getElementById('chat-container').classList.add('hidden');
+            document.getElementById('auth-view').classList.remove('hidden');
+            document.getElementById('admin-btn').classList.add('hidden');
+            document.getElementById('qr-btn').classList.add('hidden');
+            document.getElementById('leave-btn').classList.add('hidden');
+            document.getElementById('chat-title').innerText = 'Group Portal';
+            document.getElementById('group-subtitle').innerText = 'IP Identity Secured';
+            showStatus('');
+        }
+
+        function checkSupabaseConfig() {
+            if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+                alert('Please configure your SUPABASE_URL and SUPABASE_ANON_KEY inside index.html!');
+                return false;
+            }
+            return true;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
 </body>
